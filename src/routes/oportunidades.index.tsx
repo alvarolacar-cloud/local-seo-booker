@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   MapPin, ArrowRight, Search, Briefcase, ChevronRight, Phone,
-  BarChart3, Target, Rocket, FileSearch,
+  BarChart3, Target, Rocket,
   TrendingUp, TrendingDown, Minus, ShieldCheck, DollarSign, ArrowUpRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -175,72 +175,6 @@ function OportunidadesIndex() {
           </div>
         </section>
 
-        {/* Qué contiene el informe */}
-        <section className="border border-border rounded-lg p-6 md:p-8 bg-card">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-8 items-center">
-            <div>
-              <span className="inline-flex items-center gap-1 bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">
-                <FileSearch className="h-3 w-3" /> Informe de oportunidad
-              </span>
-              <h2 className="text-2xl font-bold mt-2 mb-2">Esto es lo que ves al abrir una oportunidad</h2>
-              <p className="text-muted-foreground mb-4">
-                Cada informe es un análisis concreto de tu sector en tu ciudad. Sin plantillas genéricas: los números vienen de Google y de nuestro propio crawler.
-              </p>
-              <ul className="space-y-2 text-sm">
-                {[
-                  "Búsquedas mensuales y evolución de los últimos 12 meses",
-                  "Palabras clave que más facturan en tu sector y ciudad",
-                  "Barrios y distritos con más potencial sin explotar",
-                  "Competidores que ya están posicionados y por qué",
-                  "Plan de acción priorizado para entrar al Map Pack",
-                ].map((t) => (
-                  <li key={t} className="flex items-start gap-2">
-                    <ChevronRight className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                    <span>{t}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-5 flex gap-2 flex-wrap">
-                <Button asChild className="bg-primary hover:bg-[var(--brand-deep)]">
-                  <Link to="/oportunidades/$slug" params={{ slug: "fontaneros-madrid" }}>Ver informe de ejemplo</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link to="/como-funciona">Cómo trabajamos</Link>
-                </Button>
-              </div>
-            </div>
-            <div className="bg-secondary rounded-md p-5 border border-border">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Vista previa</p>
-              <h3 className="font-bold text-lg mb-3">Fontaneros en Madrid</h3>
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                <div className="bg-background rounded p-2 text-center">
-                  <p className="text-xs text-muted-foreground">Búsq./mes</p>
-                  <p className="font-bold text-primary">14.800</p>
-                </div>
-                <div className="bg-background rounded p-2 text-center">
-                  <p className="text-xs text-muted-foreground">Score</p>
-                  <p className="font-bold text-primary">82/100</p>
-                </div>
-                <div className="bg-background rounded p-2 text-center">
-                  <p className="text-xs text-muted-foreground">CPC</p>
-                  <p className="font-bold text-primary">3,2 €</p>
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground mb-1">Top barrios</p>
-              <div className="space-y-1">
-                {[{ n: "Centro", p: 92 }, { n: "Salamanca", p: 88 }, { n: "Chamberí", p: 84 }, { n: "Tetuán", p: 76 }].map((d) => (
-                  <div key={d.n} className="flex items-center gap-2">
-                    <span className="text-xs w-20">{d.n}</span>
-                    <div className="flex-1 h-1.5 bg-background rounded overflow-hidden">
-                      <div className="h-full bg-primary" style={{ width: `${d.p}%` }} />
-                    </div>
-                    <span className="text-xs font-semibold w-8 text-right">{d.p}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Casos */}
         <section>
