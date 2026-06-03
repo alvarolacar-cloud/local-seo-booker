@@ -48,8 +48,8 @@ function OportunidadesIndex() {
     return Math.round(((last - first) / first) * 100);
   };
 
-  const hotWeek = useMemo(
-    () => [...opportunities].sort((a, b) => trendPct(b) - trendPct(a)).slice(0, 3),
+  const topTicket = useMemo(
+    () => [...opportunities].sort((a, b) => (ticketBySector[b.sectorSlug] ?? 0) - (ticketBySector[a.sectorSlug] ?? 0)).slice(0, 3),
     [],
   );
   const bestRoi = useMemo(
