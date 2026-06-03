@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, ClipboardList, Rocket, BarChart3, Repeat, Phone, MapPin, Globe, MessageSquare, Star, Camera, FileText, Link2, Smartphone, Gauge, Calendar, ShieldCheck, TrendingUp, Users, Megaphone, PenTool, Wrench, Eye, Target, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
+import { NavChips } from "@/components/site/NavChips";
 import { SiteFooter } from "@/components/site/Footer";
 import imgSeoLocal from "@/assets/service-seo-local.jpg";
 import imgWeb from "@/assets/service-web.jpg";
