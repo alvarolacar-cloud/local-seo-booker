@@ -157,17 +157,23 @@ function Home() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-              <img src={sectorAbogados1} alt="Despacho de abogados en Madrid" loading="lazy" width={800} height={640} className="w-full h-full object-cover" />
-              <img src={sectorAbogados2} alt="Abogados firmando un acuerdo" loading="lazy" width={800} height={640} className="w-full h-full object-cover" />
+              <div className="relative">
+                <img src={sectorAbogados1} alt="Despacho de abogados en Madrid" loading="lazy" width={800} height={640} className="w-full h-full object-cover" />
+                <span className="absolute top-2 left-2 bg-black/80 text-white text-[11px] font-bold px-2.5 py-1 rounded">1.300 búsq/mes · abogados</span>
+              </div>
+              <div className="relative">
+                <img src={sectorAbogados2} alt="Abogados firmando un acuerdo" loading="lazy" width={800} height={640} className="w-full h-full object-cover" />
+                <span className="absolute top-2 left-2 bg-black/80 text-white text-[11px] font-bold px-2.5 py-1 rounded">Competencia media-baja</span>
+              </div>
             </div>
             <div className="pointer-events-none absolute left-4 top-4 md:left-6 md:top-6 flex items-center gap-2">
               <span className="bg-accent text-accent-foreground font-extrabold px-2 py-0.5 rounded text-xs">RANKIN</span>
               <span className="bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded">Oportunidad destacada</span>
             </div>
             <div className="pointer-events-none absolute left-4 bottom-4 md:left-6 md:bottom-6 max-w-2xl">
-              <h2 className="text-white text-2xl md:text-4xl font-extrabold leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+              <span className="inline-block bg-black/80 text-white text-xl md:text-3xl font-extrabold leading-tight px-4 py-2.5 rounded-lg">
                 Abogados en Madrid — 480 búsquedas/mes sin cubrir
-              </h2>
+              </span>
             </div>
             <Button asChild className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white text-foreground hover:bg-white/90 font-semibold shadow-lg">
               <Link to="/oportunidades">Más información</Link>
