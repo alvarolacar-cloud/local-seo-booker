@@ -4,6 +4,7 @@ import {
   Search, Briefcase, Star, Info, Shield, Clock, Sparkles, BadgeCheck, Zap, Phone,
   ChevronLeft, BookOpen,
 } from "lucide-react";
+// Note: CheckCircle2 removed (unused).
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
