@@ -100,7 +100,7 @@ function Home() {
 
 
           <h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl">
-            Miles de búsquedas en Google sin cubrir. Encuentra la tuya.
+            Miles de oportunidades en Google sin cubrir. Encuentra la tuya.
           </h1>
 
           {/* Buscador grande */}
