@@ -330,41 +330,26 @@ function OportunidadesIndex() {
         </section>
 
         {/* Cómo encontrar la mejor oportunidad */}
-        <section className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-10 items-start">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Cómo encontrar tu mejor oportunidad de SEO local</h2>
-            <p className="text-muted-foreground mb-5 leading-relaxed">
-              No todos los sectores ni todas las ciudades convienen para invertir en SEO local. La clave está en cruzar tres datos: cuánta gente busca tu servicio cada mes, cómo de difícil es entrar al top 3 y cuánto vale cada cliente que captes. Estos son los pasos que seguimos:
-            </p>
-            <div className="space-y-3">
-              {[
-                { t: "Empieza por el volumen real", d: "Sin búsquedas, no hay SEO. Filtra primero por sectores con +500 búsquedas/mes en tu ciudad." },
-                { t: "Mira la competencia local, no la nacional", d: "Lo que rankea por «fontanero» no es lo mismo que por «fontanero Tetuán». Mucha menos competencia." },
-                { t: "Calcula tu retorno con el ticket medio", d: "10 clientes nuevos al mes a 180€ son 1.800€. ¿Cuánto te cuesta el SEO? Esa es tu cuenta." },
-                { t: "Ataca primero los barrios premium", d: "Empieza por 2-3 distritos con poder adquisitivo y replica el modelo después." },
-              ].map((s, i) => (
-                <div key={s.t} className="flex gap-3 p-4 border border-border rounded-lg bg-card">
-                  <div className="h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">{i + 1}</div>
-                  <div>
-                    <p className="font-bold text-sm">{s.t}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{s.d}</p>
-                  </div>
+        <section className="max-w-3xl">
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Cómo encontrar tu mejor oportunidad de SEO local</h2>
+          <p className="text-muted-foreground mb-5 leading-relaxed">
+            No todos los sectores ni todas las ciudades convienen para invertir. La clave: cuánta gente busca tu servicio, cómo de difícil es entrar al top 3 y cuánto vale cada cliente.
+          </p>
+          <div className="space-y-3">
+            {[
+              { t: "Empieza por el volumen real", d: "Sin búsquedas, no hay SEO. Filtra primero por sectores con +500 búsquedas/mes en tu ciudad." },
+              { t: "Mira la competencia local, no la nacional", d: "Lo que rankea por «fontanero» no es lo mismo que por «fontanero Tetuán». Mucha menos competencia." },
+              { t: "Calcula tu retorno con el ticket medio", d: "10 clientes nuevos al mes a 180€ son 1.800€. ¿Cuánto te cuesta el SEO? Esa es tu cuenta." },
+              { t: "Ataca primero los barrios premium", d: "Empieza por 2-3 distritos con poder adquisitivo y replica el modelo después." },
+            ].map((s, i) => (
+              <div key={s.t} className="flex gap-3 p-4 border border-border rounded-lg bg-card">
+                <div className="h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">{i + 1}</div>
+                <div>
+                  <p className="font-bold text-sm">{s.t}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{s.d}</p>
                 </div>
-              ))}
-            </div>
-          </div>
-          <div className="lg:sticky lg:top-6">
-            <div className="rounded-xl overflow-hidden border border-border shadow-[var(--shadow-card)]">
-              <img src={localBusiness} alt="" className="w-full h-48 object-cover" />
-              <div className="p-5 bg-card">
-                <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Casos reales</p>
-                <h3 className="font-bold text-lg leading-tight mb-2">Mira cómo lo hicieron otros negocios como el tuyo</h3>
-                <p className="text-sm text-muted-foreground mb-4">6 historias completas con cifras reales: visitas, llamadas, ingresos y agenda.</p>
-                <Button asChild className="w-full bg-primary hover:bg-primary/90 font-bold">
-                  <Link to="/casos-exito">Ver casos de éxito <ArrowRight className="h-4 w-4 ml-1" /></Link>
-                </Button>
               </div>
-            </div>
+            ))}
           </div>
         </section>
 
