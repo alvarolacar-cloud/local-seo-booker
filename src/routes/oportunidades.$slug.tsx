@@ -387,37 +387,28 @@ function OpportunityDetail() {
           </section>
         )}
 
-        {/* ZONA GEOGRÁFICA (mapa estilizado + cards) */}
+        {/* ZONA GEOGRÁFICA (mapa pequeño + barrios) */}
         <section>
           <div className="flex items-end justify-between gap-3 mb-4 flex-wrap">
             <div>
-              <h2 className="text-2xl font-extrabold">Zona geográfica <span className="text-primary">{(opp.score / 20).toFixed(1)}</span></h2>
-              <p className="text-sm text-muted-foreground">{opp.cityName} concentra demanda en {opp.districts.length} distritos. Estos son los puntos de entrada con menos competencia.</p>
+              <h2 className="text-2xl font-extrabold">Zona geográfica</h2>
+              <p className="text-sm text-muted-foreground">Barrios de {opp.cityName} con demanda destacada en {opp.sectorName.toLowerCase()}.</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
-            <div className="relative rounded-xl overflow-hidden border border-border h-80 lg:h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-4">
+            <div className="relative rounded-xl overflow-hidden border border-border h-48">
               <img src={imgMap} alt={`Mapa de ${opp.cityName}`} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
               <div className="absolute top-3 left-3 bg-card/95 backdrop-blur rounded-lg px-3 py-2 shadow-md inline-flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-primary" />
                 <span className="text-sm font-bold">{opp.cityName}</span>
               </div>
             </div>
-            <div className="space-y-2">
-              {opp.districts.slice(0, 4).map((d, i) => (
-                <div key={d.name} className="flex items-center gap-3 border border-border rounded-lg p-3 bg-card">
-                  <div className="text-sm font-extrabold text-muted-foreground/50 w-6">#{i + 1}</div>
-                  <MapPin className="h-4 w-4 text-primary shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm">{d.name}</p>
-                    <div className="mt-1 h-1.5 bg-secondary rounded overflow-hidden">
-                      <div className="h-full bg-primary" style={{ width: `${d.potential}%` }} />
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-extrabold text-primary leading-none">{d.potential}</p>
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">potencial</p>
-                  </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+              {opp.districts.map((d, i) => (
+                <div key={d.name} className="flex items-center gap-2 border border-border rounded-lg px-3 py-2.5 bg-card">
+                  <span className="text-xs font-bold text-muted-foreground/60">#{i + 1}</span>
+                  <MapPin className="h-3.5 w-3.5 text-primary shrink-0" />
+                  <span className="text-sm font-semibold truncate">{d.name}</span>
                 </div>
               ))}
             </div>

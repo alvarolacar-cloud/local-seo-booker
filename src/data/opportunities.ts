@@ -111,8 +111,10 @@ export const opportunities: Opportunity[] = [
     searches: 9700, cpc: 3.9, competition: "Media", score: 84,
     trend: trend(7200, 0.06),
     districts: [
-      { name: "Centro Histórico", potential: 89 }, { name: "Teatinos", potential: 84 },
-      { name: "Pedregalejo", potential: 78 }, { name: "Carretera de Cádiz", potential: 71 },
+      { name: "El Palo", potential: 89 }, { name: "Huelin", potential: 84 },
+      { name: "La Trinidad", potential: 78 }, { name: "Cruz de Humilladero", potential: 71 },
+      { name: "Churriana", potential: 68 }, { name: "Campanillas", potential: 64 },
+      { name: "Málaga Este", potential: 82 }, { name: "Teatinos", potential: 79 },
     ],
     topKeywords: [
       { kw: "reformas integrales málaga", volume: 2900 }, { kw: "reforma cocina málaga", volume: 1300 },
