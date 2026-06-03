@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   Search, MapPin, Briefcase, Compass,
   BookOpen, Trophy, Route as RouteIcon, Home as HomeIcon,
-  ChevronDown, ChevronRight,
+  ChevronDown, ChevronRight, FileSearch,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
