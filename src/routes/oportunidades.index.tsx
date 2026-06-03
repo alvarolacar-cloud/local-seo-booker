@@ -80,8 +80,10 @@ function OportunidadesIndex() {
           <div className="mx-auto max-w-7xl bg-card text-foreground rounded-md shadow-2xl p-2">
             <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1.1fr_1fr_1fr_auto] gap-2">
               <FieldSelect label="Sector" icon={<Briefcase className="h-4 w-4" />} value={sectorSlug} onChange={setSectorSlug}
+                placeholder="Selecciona industria"
                 options={sectors.map((s) => ({ value: s.slug, label: s.name }))} />
               <FieldSelect label="Ciudad" icon={<MapPin className="h-4 w-4" />} value={citySlug} onChange={setCitySlug}
+                placeholder="Selecciona ciudad"
                 options={cities.map((c) => ({ value: c.slug, label: c.name }))} />
               <Field label="Zona / barrios" value="Todos los distritos" />
               <Field label="Volumen mínimo" value="500 búsq/mes · Cualquiera" />
