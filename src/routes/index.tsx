@@ -20,6 +20,10 @@ import cityValencia from "@/assets/city-valencia.jpg";
 import citySevilla from "@/assets/city-sevilla.jpg";
 import cityBilbao from "@/assets/city-bilbao.jpg";
 import cityMalaga from "@/assets/city-malaga.jpg";
+import sectorFontaneros from "@/assets/sector-fontaneros.jpg";
+import sectorDentistas from "@/assets/sector-dentistas.jpg";
+import sectorAbogadosImg from "@/assets/sector-abogados.jpg";
+import sectorPeluquerias from "@/assets/sector-peluquerias.jpg";
 import editorialImg from "@/assets/report-map.jpg";
 
 export const Route = createFileRoute("/")({
@@ -48,6 +52,13 @@ const navItems = [
 const cityImageMap: Record<string, string> = {
   madrid: cityMadrid, barcelona: cityBarcelona, valencia: cityValencia,
   sevilla: citySevilla, bilbao: cityBilbao, malaga: cityMalaga,
+};
+
+const sectorImageMap: Record<string, string> = {
+  fontaneros: sectorFontaneros,
+  dentistas: sectorDentistas,
+  abogados: sectorAbogadosImg,
+  peluquerias: sectorPeluquerias,
 };
 
 const faqs = [
@@ -305,7 +316,7 @@ function Home() {
           <p className="text-sm text-muted-foreground mb-6">Búsquedas reales que nadie está cubriendo bien en Google Maps.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {opportunities.slice(0, 4).map((o) => {
-              const img = cityImageMap[o.citySlug];
+              const img = sectorImageMap[o.sectorSlug] ?? cityImageMap[o.citySlug];
               return (
                 <Link
                   key={o.slug}
@@ -315,7 +326,7 @@ function Home() {
                 >
                   <div className="relative h-40 overflow-hidden">
                     {img && (
-                      <img src={img} alt={o.cityName} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                      <img src={img} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                     <div className="absolute bottom-3 left-3 text-white">
