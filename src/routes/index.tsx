@@ -24,7 +24,7 @@ import editorialImg from "@/assets/report-map.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rankin — Miles de búsquedas en Google sin cubrir. Encuentra la tuya." },
+      { title: "Rankin — Miles de oportunidades en Google sin cubrir. Encuentra la tuya." },
       { name: "description", content: "Detectamos los huecos de Google donde tu sector tiene demanda real y la competencia está floja. Informes de oportunidad para negocios locales." },
       { property: "og:title", content: "Rankin — Oportunidades de SEO local" },
       { property: "og:description", content: "Sector + ciudad + datos reales. Encuentra el hueco." },
