@@ -45,7 +45,7 @@ function compIcon(c: "Baja" | "Media" | "Alta") {
 }
 
 function OpportunityDetail() {
-  const { opp } = Route.useLoaderData();
+  const { opp } = Route.useLoaderData() as { opp: Opportunity };
   const related = cases.filter((c) => c.sectorSlug === opp.sectorSlug);
   const maxKw = Math.max(...opp.topKeywords.map((k) => k.volume));
 
