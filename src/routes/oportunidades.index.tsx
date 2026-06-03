@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ChevronRight, TrendingUp, TrendingDown, Minus, MapPin, ArrowRight,
-  Search, Briefcase, Star, Info, Shield, Clock, Sparkles, BadgeCheck, Zap, Phone,
-  ChevronLeft,
+  MapPin, ArrowRight, Search, Briefcase, Clock, Star,
+  PiggyBank, Sparkles, Database, BadgeCheck, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
@@ -11,7 +10,10 @@ import { opportunities } from "@/data/opportunities";
 import { cities } from "@/data/cities";
 import { sectors } from "@/data/sectors";
 import { useMemo, useState } from "react";
-import cityMadrid from "@/assets/city-madrid.jpg";
+import localBusiness from "@/assets/local-business.jpg";
+import serviceGmb from "@/assets/service-gmb.jpg";
+import serviceAudit from "@/assets/service-audit.jpg";
+import serviceContent from "@/assets/service-content.jpg";
 
 export const Route = createFileRoute("/oportunidades/")({
   head: () => ({
@@ -20,18 +22,11 @@ export const Route = createFileRoute("/oportunidades/")({
       { name: "description", content: "Descubre en 5 segundos qué oportunidad de SEO local tiene tu sector en tu ciudad: búsquedas/mes, competencia y score real." },
       { property: "og:title", content: "Oportunidades de SEO local" },
       { property: "og:description", content: "Selecciona sector + ciudad y descubre tu oportunidad SEO local con datos reales." },
-      { property: "og:url", content: "/oportunidades" },
     ],
     links: [{ rel: "canonical", href: "/oportunidades" }],
   }),
   component: OportunidadesIndex,
 });
-
-function compBadge(c: "Baja" | "Media" | "Alta") {
-  if (c === "Baja") return { cls: "bg-primary/10 text-primary", icon: <TrendingDown className="h-3 w-3" /> };
-  if (c === "Alta") return { cls: "bg-destructive/15 text-destructive", icon: <TrendingUp className="h-3 w-3" /> };
-  return { cls: "bg-accent/30 text-accent-foreground", icon: <Minus className="h-3 w-3" /> };
-}
 
 const ticketBySector: Record<string, number> = {
   fontaneros: 180, electricistas: 160, reformas: 8500, dentistas: 750, abogados: 1200,
@@ -39,355 +34,202 @@ const ticketBySector: Record<string, number> = {
   estetica: 70, veterinarias: 95, academias: 120, fotografos: 1800,
 };
 
-function estimateOpportunity(sectorSlug: string, citySlug: string) {
-  const exact = opportunities.find((o) => o.sectorSlug === sectorSlug && o.citySlug === citySlug);
-  if (exact) return { kind: "exact" as const, opp: exact };
-  const sector = sectors.find((s) => s.slug === sectorSlug);
-  const city = cities.find((c) => c.slug === citySlug);
-  if (!sector || !city) return null;
-  const cityWeight: Record<string, number> = { madrid: 1, barcelona: 0.85, valencia: 0.45, sevilla: 0.4, malaga: 0.35, bilbao: 0.3 };
-  const w = cityWeight[citySlug] ?? 0.3;
-  const searches = Math.round(sector.monthlySearches * w);
-  return { kind: "estimate" as const, sectorName: sector.name, cityName: city.name, citySlug, searches };
-}
-
-const topSectorsMadrid = [
-  { name: "Restaurantes", searches: 33400, comp: "Alta" as const, score: 76 },
-  { name: "Clínicas dentales", searches: 22300, comp: "Alta" as const, score: 78 },
-  { name: "Inmobiliarias", searches: 18500, comp: "Media" as const, score: 81 },
-];
-
-
-const faqs = [
-  { q: "¿De dónde salen estos datos?", a: "Cruzamos Google Keyword Planner, Search Console real de nuestros clientes y análisis SERP por ciudad." },
-  { q: "¿Qué es el score de oportunidad?", a: "Nota 0-100 que mezcla volumen, dificultad para entrar al top 3, CPC e intención comercial." },
-  { q: "¿Y si mi sector o ciudad no aparece?", a: "Te lo preparamos a medida en 48h sin coste. Solo dinos sector, ciudad y barrios." },
-  { q: "¿Esto sustituye a una auditoría SEO?", a: "No. Es el paso previo: te dice si vale la pena invertir." },
-  { q: "¿Cuánto tarda en notarse el SEO local?", a: "Las primeras llamadas desde Google Maps suelen llegar entre 30 y 60 días." },
-  { q: "¿Necesito tener web para posicionar?", a: "Para Maps no es imprescindible, pero una ficha + landing local rinde mucho más." },
-  { q: "¿Trabajáis con autónomos o solo empresas?", a: "Ambos. Tenemos planes desde 290€/mes pensados para autónomos." },
-];
+const flashImages = [localBusiness, serviceGmb, serviceAudit, serviceContent];
 
 function OportunidadesIndex() {
   const [sectorSlug, setSectorSlug] = useState<string>(sectors[0]?.slug ?? "");
   const [citySlug, setCitySlug] = useState<string>(cities[0]?.slug ?? "");
-  const result = useMemo(() => estimateOpportunity(sectorSlug, citySlug), [sectorSlug, citySlug]);
 
-  const sectorName = result ? (result.kind === "exact" ? result.opp.sectorName : result.sectorName) : "";
-  const cityName = result ? (result.kind === "exact" ? result.opp.cityName : result.cityName) : "";
-  const searches = result ? (result.kind === "exact" ? result.opp.searches : result.searches) : 0;
-  const ticket = ticketBySector[sectorSlug] ?? 100;
+  const flash = useMemo(() => opportunities.slice(0, 3), []);
+  const todoIncluido = useMemo(() => opportunities.slice(3, 6), []);
 
   return (
     <div className="min-h-screen bg-background">
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <img src={cityMadrid} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/95 via-primary/85 to-primary/95" />
-        <div className="relative">
-          <SiteHeader variant="transparent" />
-          <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 md:pt-14 md:pb-20 text-primary-foreground">
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] max-w-3xl">
-              Descubre tu oportunidad de <span className="text-accent">SEO local</span>
+      {/* HERO — estilo lastminute */}
+      <section className="relative bg-primary">
+        <SiteHeader variant="transparent" />
+        <div className="mx-auto max-w-7xl px-4 pt-6 pb-28 md:pt-10 md:pb-32 text-primary-foreground relative">
+          <div className="flex items-start justify-between gap-6 flex-wrap">
+            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
+              Encuentra tu Sector + Ciudad
             </h1>
-            <p className="mt-4 text-lg text-white/85 max-w-2xl">
-              Elige tu sector y tu ciudad. Te decimos cuánta gente lo busca y cuánto vale cada cliente.
-            </p>
-
-            <div className="mt-8 bg-card text-foreground rounded-xl shadow-2xl border border-border/40 p-2 md:p-2.5">
-              <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_auto] gap-2 items-stretch">
-                <label className="relative flex items-center bg-background rounded-lg border border-border/60 px-4 h-14 focus-within:border-primary transition">
-                  <Briefcase className="h-4 w-4 text-muted-foreground mr-3 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <span className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Sector</span>
-                    <select value={sectorSlug} onChange={(e) => setSectorSlug(e.target.value)} className="w-full bg-transparent text-base font-semibold focus:outline-none cursor-pointer -ml-0.5">
-                      {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
-                    </select>
-                  </div>
-                </label>
-                <label className="relative flex items-center bg-background rounded-lg border border-border/60 px-4 h-14 focus-within:border-primary transition">
-                  <MapPin className="h-4 w-4 text-muted-foreground mr-3 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <span className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Ciudad</span>
-                    <select value={citySlug} onChange={(e) => setCitySlug(e.target.value)} className="w-full bg-transparent text-base font-semibold focus:outline-none cursor-pointer -ml-0.5">
-                      {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                    </select>
-                  </div>
-                </label>
-                <Button className="h-14 px-7 bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-base rounded-lg">
-                  <Search className="h-5 w-5 mr-1.5" /> Buscar
-                </Button>
-              </div>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 px-2 pt-3 pb-1 text-xs text-foreground/70">
-                <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" defaultChecked className="accent-primary" /> Incluir barrios y distritos</label>
-                <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="accent-primary" /> Solo ciudades con &lt;3 competidores top</label>
-              </div>
+            <div className="text-right text-xs">
+              <p className="opacity-70">Powered by</p>
+              <p className="bg-accent text-accent-foreground inline-block px-2 py-1 rounded font-extrabold mt-1">rankin.es</p>
             </div>
-
-            {result && (
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3">
-                <div className="bg-card text-foreground rounded-xl p-5 border border-border/40 shadow-lg">
-                  <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Búsquedas al mes</p>
-                  <p className="text-4xl font-extrabold text-primary mt-1">{searches.toLocaleString("es-ES")}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Personas buscando «{sectorName.toLowerCase()}» en {cityName}</p>
-                </div>
-                <div className="bg-card text-foreground rounded-xl p-5 border border-border/40 shadow-lg">
-                  <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Ticket medio del servicio</p>
-                  <p className="text-4xl font-extrabold text-primary mt-1">{ticket.toLocaleString("es-ES")} €</p>
-                  <p className="text-xs text-muted-foreground mt-1">Valor medio por cliente captado</p>
-                </div>
-                {result.kind === "exact" ? (
-                  <Button asChild className="h-auto md:w-44 bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-base rounded-xl shadow-lg flex-col gap-1 py-5">
-                    <Link to="/oportunidades/$slug" params={{ slug: result.opp.slug }}>Ver informe<ArrowRight className="h-5 w-5" /></Link>
-                  </Button>
-                ) : (
-                  <Button asChild className="h-auto md:w-44 bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-base rounded-xl shadow-lg flex-col gap-1 py-5">
-                    <Link to="/como-funciona">Informe a medida<ArrowRight className="h-5 w-5" /></Link>
-                  </Button>
-                )}
-              </div>
-            )}
           </div>
+        </div>
 
-          {/* Notice strip pegado al hero */}
-          <div className="relative -mb-8">
-            <div className="mx-auto max-w-6xl px-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                {[
-                  { icon: <Info className="h-4 w-4" />, title: "Datos actualizados en mayo 2026", text: "Google Keyword Planner + Search Console real de nuestros 480 clientes." },
-                  { icon: <Sparkles className="h-4 w-4" />, title: "84 nuevos cruces sector × ciudad", text: "Hemos añadido nuevos sectores de servicios profesionales este mes." },
-                  { icon: <BadgeCheck className="h-4 w-4" />, title: "Sin registro, sin tarjeta", text: "Toda la información de oportunidad es 100% gratuita y consultable al momento." },
-                ].map((n) => (
-                  <div key={n.title} className="bg-card border border-border rounded-lg p-3.5 flex gap-3 shadow-[var(--shadow-card)]">
-                    <div className="h-8 w-8 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0">{n.icon}</div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-bold leading-tight">{n.title}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{n.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {/* Search bar superpuesta */}
+        <div className="absolute left-0 right-0 -bottom-10 px-4">
+          <div className="mx-auto max-w-7xl bg-card text-foreground rounded-md shadow-2xl p-2">
+            <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1.1fr_1fr_1fr_auto] gap-2">
+              <FieldSelect label="Sector" icon={<Briefcase className="h-4 w-4" />} value={sectorSlug} onChange={setSectorSlug}
+                options={sectors.map((s) => ({ value: s.slug, label: s.name }))} />
+              <FieldSelect label="Ciudad" icon={<MapPin className="h-4 w-4" />} value={citySlug} onChange={setCitySlug}
+                options={cities.map((c) => ({ value: c.slug, label: c.name }))} />
+              <Field label="Zona / barrios" value="Todos los distritos" />
+              <Field label="Volumen mínimo" value="500 búsq/mes · Cualquiera" />
+              <Button asChild className="h-full md:w-14 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md">
+                <Link to="/oportunidades/$slug" params={{ slug: opportunities[0].slug }}>
+                  <Search className="h-5 w-5" />
+                </Link>
+              </Button>
             </div>
+            <label className="flex items-center gap-2 text-xs text-foreground/70 px-3 pt-3 pb-1 cursor-pointer">
+              <input type="checkbox" className="accent-primary" /> Mostrar solo sectores con baja competencia local
+            </label>
           </div>
         </div>
       </section>
 
-      <main className="mx-auto max-w-6xl px-4 mt-20 mb-16 space-y-20">
-        {/* Encuentra oportunidades cerca de ti — product cards estilo Skyscanner */}
+      <main className="mx-auto max-w-7xl px-4 mt-20 mb-16 space-y-16">
+        {/* Oportunidades de Sector + Ciudad — destination grid */}
         <section>
-          <SectionHeader title="Encuentra oportunidades de SEO local cerca de ti" subtitle="Cruces sector × ciudad analizados con datos reales de Google." />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {opportunities.map((o) => {
-              const badge = compBadge(o.competition);
-              const ticketVal = ticketBySector[o.sectorSlug] ?? 100;
+          <h2 className="text-2xl font-extrabold">Oportunidades de Sector + Ciudad</h2>
+          <p className="text-sm text-muted-foreground mb-6">Descubre nuestras ciudades más populares.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {cities.map((c) => {
+              const opp = opportunities.find((o) => o.citySlug === c.slug) ?? opportunities[0];
               return (
-                <Link key={o.slug} to="/oportunidades/$slug" params={{ slug: o.slug }}
-                  className="group block border border-border rounded-xl bg-card shadow-[var(--shadow-card)] hover:border-primary hover:-translate-y-0.5 transition">
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <MapPin className="h-3 w-3 text-primary" /> {o.cityName}
-                      </div>
-                      <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded ${badge.cls}`}>
-                        {badge.icon} {o.competition}
-                      </span>
-                    </div>
-                    <h3 className="font-bold text-base leading-snug group-hover:text-primary transition">
-                      {o.sectorName} en {o.cityName}
-                    </h3>
-                    <div className="mt-3 flex items-end justify-between">
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Búsquedas/mes</p>
-                        <p className="text-2xl font-extrabold text-primary leading-none">{o.searches.toLocaleString("es-ES")}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Ticket medio</p>
-                        <p className="text-base font-bold">{ticketVal.toLocaleString("es-ES")} €</p>
-                      </div>
-                    </div>
-                    <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">Score <span className="font-bold text-foreground">{o.score}/100</span></span>
-                      <span className="inline-flex items-center font-semibold text-primary">
-                        Ver informe <ChevronRight className="h-3.5 w-3.5 ml-0.5 group-hover:translate-x-0.5 transition" />
-                      </span>
-                    </div>
-                  </div>
+                <Link key={c.slug} to="/oportunidades/$slug" params={{ slug: opp.slug }}
+                  className="group relative h-44 rounded-md overflow-hidden block">
+                  <img src={c.img} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <span className="absolute top-3 right-3 bg-white text-foreground text-xs font-bold px-2.5 py-1 rounded shadow">
+                    desde {opp.searches.toLocaleString("es-ES")} búsq/mes
+                  </span>
+                  <span className="absolute bottom-3 left-3 text-white font-extrabold text-lg drop-shadow">
+                    {c.name}
+                  </span>
                 </Link>
               );
             })}
           </div>
         </section>
 
-
-        {/* Trabaja con tranquilidad — 6 trust cards */}
+        {/* Ofertas Flash Sales — 3 grandes con imagen */}
         <section>
-          <SectionHeader title="Trabaja con nosotros con total tranquilidad" subtitle="Lo que incluye cada análisis y cada plan de SEO local con Rankin." />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {[
-              { icon: <Shield />, t: "Datos reales, no estimaciones", d: "Volúmenes, CPC y dificultad sacados de Google + Search Console de clientes reales." },
-              { icon: <Clock />, t: "Informes en 48h máximo", d: "Si tu sector o ciudad no aparece, te lo preparamos a medida en menos de dos días." },
-              { icon: <BadgeCheck />, t: "Sin permanencia, sin letra pequeña", d: "Trabajamos mes a mes. Si no funciona en 90 días, te devolvemos la última cuota." },
-              { icon: <Sparkles />, t: "Plan accionable, no PDF de adorno", d: "Cada informe termina con 4 pasos concretos para tu negocio, tu ciudad y tu barrio." },
-              { icon: <Zap />, t: "Resultados desde el día 30", d: "Las primeras llamadas desde Google Maps suelen llegar antes de que termine el primer mes." },
-              { icon: <Phone />, t: "Tu account manager, una persona", d: "Sin tickets, sin chatbots. Tienes su teléfono y responde el mismo día." },
-            ].map((f) => (
-              <div key={f.t} className="border border-border rounded-lg p-5 bg-card">
-                <div className="h-9 w-9 rounded-md bg-primary/10 text-primary flex items-center justify-center mb-3">{f.icon}</div>
-                <h3 className="font-bold mb-1">{f.t}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{f.d}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Mejores sectores ahora mismo */}
-        <section>
-          <div className="flex items-end justify-between gap-3 mb-5 flex-wrap">
-            <SectionHeader title="Los sectores con más demanda en Madrid ahora mismo" subtitle="Ranking actualizado mensualmente según búsquedas reales en Google." compact />
-            <div className="flex gap-1">
-              <button className="h-8 w-8 border border-border rounded flex items-center justify-center hover:border-primary"><ChevronLeft className="h-4 w-4" /></button>
-              <button className="h-8 w-8 border border-border rounded flex items-center justify-center hover:border-primary"><ChevronRight className="h-4 w-4" /></button>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {topSectorsMadrid.map((s, i) => {
-              const b = compBadge(s.comp);
-              return (
-                <div key={s.name} className="border border-border rounded-xl bg-card p-5 shadow-[var(--shadow-card)]">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="text-3xl font-extrabold text-primary">#{i + 1}</div>
-                      <div>
-                        <p className="font-bold leading-tight">{s.name}</p>
-                        <p className="text-xs text-muted-foreground">Madrid</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-sm font-bold px-2 py-1 rounded">
-                        <Star className="h-3.5 w-3.5 fill-current" /> {(s.score / 10).toFixed(1)}
-                      </div>
-                      <p className="text-[10px] text-muted-foreground mt-1">Score oportunidad</p>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5 text-sm">
-                    <Row label="Búsquedas/mes" value={s.searches.toLocaleString("es-ES")} />
-                    <Row label="Competencia" value={<span className={`inline-flex items-center gap-1 text-xs font-semibold px-1.5 py-0.5 rounded ${b.cls}`}>{b.icon} {s.comp}</span>} />
-                    <Row label="Top 3 alcanzable" value="3-6 meses" />
-                  </div>
-                  <Button variant="outline" className="w-full mt-4 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-bold">
-                    Ver detalle <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
+          <h2 className="text-2xl font-extrabold">Oportunidades Flash</h2>
+          <p className="text-sm text-muted-foreground mb-6">Cruces con mayor score este mes.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {flash.map((o, i) => (
+              <article key={o.slug} className="border border-border rounded-md bg-card overflow-hidden flex flex-col">
+                <div className="relative h-52">
+                  <img src={flashImages[i % flashImages.length]} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover" />
+                  <span className="absolute top-3 right-3 bg-foreground text-background text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
+                    <Sparkles className="h-3 w-3" /> Sector + Ciudad
+                  </span>
+                  <span className="absolute top-12 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
+                    <Clock className="h-3 w-3" /> Top opp. del mes
+                  </span>
+                  <span className="absolute bottom-3 left-3 text-white text-xs font-semibold inline-flex items-center gap-1 drop-shadow">
+                    <MapPin className="h-3.5 w-3.5" /> {o.cityName}, España
+                  </span>
                 </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Datos de interés */}
-        <section>
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Datos de interés sobre SEO local</h2>
-          <p className="text-sm text-muted-foreground mb-6">Lo que más nos preguntan los negocios antes de empezar.</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { v: "46%", l: "de las búsquedas en Google tienen intención local" },
-              { v: "78%", l: "de quien busca local llama o visita en 24h" },
-              { v: "3,5x", l: "más conversión que un anuncio de Google Ads" },
-              { v: "30-60", l: "días para ver las primeras llamadas reales" },
-            ].map((s) => (
-              <div key={s.l} className="border border-border rounded-lg p-5 bg-card text-center">
-                <p className="text-3xl md:text-4xl font-extrabold text-primary">{s.v}</p>
-                <p className="text-xs text-muted-foreground mt-2 leading-snug">{s.l}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Cómo encontrar la mejor oportunidad */}
-        <section className="max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Cómo encontrar tu mejor oportunidad de SEO local</h2>
-          <p className="text-muted-foreground mb-5 leading-relaxed">
-            No todos los sectores ni todas las ciudades convienen para invertir. La clave: cuánta gente busca tu servicio, cómo de difícil es entrar al top 3 y cuánto vale cada cliente.
-          </p>
-          <div className="space-y-3">
-            {[
-              { t: "Empieza por el volumen real", d: "Sin búsquedas, no hay SEO. Filtra primero por sectores con +500 búsquedas/mes en tu ciudad." },
-              { t: "Mira la competencia local, no la nacional", d: "Lo que rankea por «fontanero» no es lo mismo que por «fontanero Tetuán». Mucha menos competencia." },
-              { t: "Calcula tu retorno con el ticket medio", d: "10 clientes nuevos al mes a 180€ son 1.800€. ¿Cuánto te cuesta el SEO? Esa es tu cuenta." },
-              { t: "Ataca primero los barrios premium", d: "Empieza por 2-3 distritos con poder adquisitivo y replica el modelo después." },
-            ].map((s, i) => (
-              <div key={s.t} className="flex gap-3 p-4 border border-border rounded-lg bg-card">
-                <div className="h-7 w-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">{i + 1}</div>
-                <div>
-                  <p className="font-bold text-sm">{s.t}</p>
-                  <p className="text-xs text-muted-foreground mt-1">{s.d}</p>
+                <div className="p-4 flex flex-col flex-1">
+                  <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
+                    Cruce {o.sectorName.toLowerCase()} × {o.cityName} con datos de Google Keyword Planner y Search Console real.
+                  </p>
+                  <p className="font-bold mt-2">{o.sectorName} en {o.cityName}</p>
+                  <div className="flex items-center gap-2 mt-1 text-xs">
+                    <div className="flex text-accent">
+                      {Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}
+                    </div>
+                    <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
+                    <span className="text-muted-foreground">Score ({(o.searches / 10).toFixed(0)})</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-2 space-y-0.5">
+                    <p>{o.searches.toLocaleString("es-ES")} búsq/mes · Competencia {o.competition}</p>
+                    <p>Datos incluidos · {o.cityName}</p>
+                  </div>
+                  <div className="mt-auto pt-3">
+                    <p className="text-xs text-muted-foreground">ticket medio</p>
+                    <p className="text-lg"><span className="font-extrabold text-foreground">{(ticketBySector[o.sectorSlug] ?? 100).toLocaleString("es-ES")} €</span> <span className="text-xs text-muted-foreground">/ cliente</span></p>
+                  </div>
                 </div>
+              </article>
+            ))}
+          </div>
+          <div className="flex justify-center mt-6">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 h-11 rounded-md">
+              Cargar más oportunidades
+            </Button>
+          </div>
+        </section>
+
+        {/* 3 cajas info estilo lastminute */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { icon: <Database className="h-6 w-6" />, t: "Datos reales", d: "No estimaciones. Google Keyword Planner + Search Console de 480 clientes reales." },
+            { icon: <PiggyBank className="h-6 w-6" />, t: "Sin permanencia", d: "Mes a mes. Si no funciona en 90 días, te devolvemos la última cuota." },
+            { icon: <BadgeCheck className="h-6 w-6" />, t: "Informe a tu medida", d: "Si tu sector o ciudad no aparece, te lo preparamos en menos de 48h." },
+          ].map((b) => (
+            <div key={b.t} className="border border-border rounded-md p-5 flex gap-4 bg-card">
+              <div className="text-primary shrink-0">{b.icon}</div>
+              <div>
+                <p className="font-bold text-primary">{b.t}</p>
+                <p className="text-sm text-muted-foreground mt-1 leading-snug">{b.d}</p>
               </div>
+            </div>
+          ))}
+        </section>
+
+        {/* Sectores top — estilo "Todo incluido" */}
+        <section>
+          <h2 className="text-2xl font-extrabold">Sectores con más demanda</h2>
+          <p className="text-sm text-muted-foreground mb-6">Las apuestas más rentables ahora mismo.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {todoIncluido.map((o, i) => (
+              <article key={o.slug} className="border border-border rounded-md bg-card overflow-hidden flex flex-col">
+                <div className="relative h-48">
+                  <img src={flashImages[(i + 1) % flashImages.length]} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover" />
+                  <span className="absolute top-3 right-3 bg-foreground text-background text-[11px] font-bold px-2 py-1 rounded">
+                    Sector destacado
+                  </span>
+                  <span className="absolute bottom-3 left-3 text-white text-xs font-semibold inline-flex items-center gap-1 drop-shadow">
+                    <MapPin className="h-3.5 w-3.5" /> {o.cityName}, España
+                  </span>
+                </div>
+                <div className="p-4 flex flex-col flex-1">
+                  <p className="font-bold">{o.sectorName}</p>
+                  <div className="flex items-center gap-2 mt-1 text-xs">
+                    <div className="flex text-accent">{Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}</div>
+                    <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {o.searches.toLocaleString("es-ES")} búsq/mes · Competencia {o.competition}<br />
+                    Datos incluidos · {o.cityName}<br />
+                    Plan accionable
+                  </p>
+                  <div className="mt-auto pt-3 flex items-end justify-between">
+                    <div>
+                      <p className="text-xs text-muted-foreground">ticket medio</p>
+                      <p className="text-lg font-extrabold">{(ticketBySector[o.sectorSlug] ?? 100).toLocaleString("es-ES")} €</p>
+                    </div>
+                    <Button asChild size="sm" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold">
+                      <Link to="/oportunidades/$slug" params={{ slug: o.slug }}>Ver informe <ChevronRight className="h-4 w-4 ml-1" /></Link>
+                    </Button>
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
         </section>
 
-        {/* FAQ */}
-        <section>
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Preguntas frecuentes sobre oportunidades de SEO local</h2>
-          <p className="text-sm text-muted-foreground mb-6">Resolvemos las dudas más habituales antes de pedir tu informe.</p>
-          <div className="border border-border rounded-lg bg-card divide-y divide-border">
-            {faqs.map((f) => (
-              <details key={f.q} className="group">
-                <summary className="cursor-pointer list-none p-5 flex items-center justify-between gap-4 font-semibold text-sm hover:bg-secondary/50 transition">
-                  <span>{f.q}</span>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground group-open:rotate-90 transition shrink-0" />
-                </summary>
-                <div className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed">{f.a}</div>
-              </details>
-            ))}
+        {/* CTA final */}
+        <section className="bg-primary text-primary-foreground rounded-md p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <h2 className="text-2xl font-extrabold mb-1">¿No ves tu sector o tu ciudad?</h2>
+            <p className="text-white/85 text-sm max-w-xl">Informe a medida en 48h. Te decimos cuántas búsquedas tiene tu servicio en tu zona y cómo de difícil sería posicionarte top 3.</p>
           </div>
-        </section>
-
-        {/* CTA final sin imagen */}
-        <section className="relative bg-primary text-primary-foreground rounded-xl p-8 md:p-12 overflow-hidden">
-          <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{
-            backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-            backgroundSize: "20px 20px",
-          }} />
-          <div className="relative max-w-3xl">
-            <span className="inline-flex items-center gap-1 bg-accent text-accent-foreground text-xs font-bold px-2.5 py-1 rounded mb-4">
-              Informe a medida · 48h · Gratis
-            </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold mb-3 leading-tight">¿No ves tu sector o tu ciudad?</h2>
-            <p className="text-white/85 mb-5 text-sm leading-relaxed max-w-xl">Hacemos informes a medida en 48h. Te decimos cuántas búsquedas tiene tu servicio en tu zona y cómo de difícil sería posicionarte top 3.</p>
-            <div className="flex flex-wrap gap-2">
-              <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold">
-                <Link to="/como-funciona">Pedir informe a medida</Link>
-              </Button>
-              <Button asChild variant="outline" className="bg-transparent border-white/30 text-primary-foreground hover:bg-white/10 font-semibold">
-                <Link to="/casos-exito">Ver casos</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Bottom popular searches grid — estilo footer Skyscanner */}
-        <section>
-          <SectionHeader title="Búsquedas populares en Rankin" subtitle="Los cruces sector × ciudad que más se consultan." />
-          <div className="border border-border rounded-lg bg-card p-5">
-            <div className="flex gap-2 flex-wrap border-b border-border pb-3 mb-4">
-              {sectors.slice(0, 6).map((s, i) => (
-                <button key={s.slug} onClick={() => setSectorSlug(s.slug)}
-                  className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition ${sectorSlug === s.slug || (i === 0 && !sectorSlug) ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary"}`}>
-                  {s.short}
-                </button>
-              ))}
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2 text-sm">
-              {cities.flatMap((c) =>
-                sectors.slice(0, 5).map((s) => (
-                  <button key={`${s.slug}-${c.slug}`} onClick={() => { setSectorSlug(s.slug); setCitySlug(c.slug); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                    className="text-left text-muted-foreground hover:text-primary truncate">
-                    {s.short} en {c.name}
-                  </button>
-                ))
-              )}
-            </div>
+          <div className="flex gap-2 shrink-0">
+            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold">
+              <Link to="/como-funciona">Pedir informe <ArrowRight className="h-4 w-4 ml-1" /></Link>
+            </Button>
+            <Button asChild variant="outline" className="bg-transparent border-white/30 text-primary-foreground hover:bg-white/10 font-semibold">
+              <Link to="/casos-exito">Ver casos</Link>
+            </Button>
           </div>
         </section>
       </main>
@@ -397,20 +239,29 @@ function OportunidadesIndex() {
   );
 }
 
-function SectionHeader({ title, subtitle, compact = false }: { title: string; subtitle?: string; compact?: boolean }) {
+function Field({ label, value }: { label: string; value: string }) {
   return (
-    <div className={compact ? "" : "mb-6"}>
-      <h2 className="text-2xl md:text-3xl font-extrabold leading-tight">{title}</h2>
-      {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
+    <div className="bg-secondary/50 rounded-md px-4 py-2 h-14 flex flex-col justify-center">
+      <span className="text-[11px] text-muted-foreground">{label}</span>
+      <span className="text-sm font-semibold truncate">{value}</span>
     </div>
   );
 }
 
-function Row({ label, value }: { label: string; value: React.ReactNode }) {
+function FieldSelect({ label, icon, value, onChange, options }: {
+  label: string; icon: React.ReactNode; value: string; onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
   return (
-    <div className="flex items-center justify-between gap-3">
-      <span className="text-muted-foreground text-xs">{label}</span>
-      <span className="font-semibold text-sm">{value}</span>
-    </div>
+    <label className="bg-secondary/50 rounded-md px-4 py-2 h-14 flex items-center gap-3 cursor-pointer">
+      <span className="text-muted-foreground shrink-0">{icon}</span>
+      <div className="flex flex-col min-w-0 flex-1">
+        <span className="text-[11px] text-muted-foreground">{label}</span>
+        <select value={value} onChange={(e) => onChange(e.target.value)}
+          className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5">
+          {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+      </div>
+    </label>
   );
 }
