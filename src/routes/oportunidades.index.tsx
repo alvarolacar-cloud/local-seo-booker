@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  MapPin, ArrowRight, Search, Briefcase, Star,
+  MapPin, ArrowRight, Search, Briefcase,
   PiggyBank, Flame, Database, BadgeCheck, ChevronRight,
   TrendingUp, Target, Banknote,
 } from "lucide-react";
@@ -142,9 +142,6 @@ function OportunidadesIndex() {
                     </p>
                     <p className="font-bold mt-2">{o.sectorName} en {o.cityName}</p>
                     <div className="flex items-center gap-2 mt-1 text-xs">
-                      <div className="flex text-accent">
-                        {Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}
-                      </div>
                       <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
                       <span className="text-muted-foreground">Score ({(o.searches / 10).toFixed(0)})</span>
                     </div>
@@ -214,7 +211,6 @@ function OportunidadesIndex() {
                   <div className="p-4 flex flex-col flex-1">
                     <p className="font-bold">{o.sectorName} en {o.cityName}</p>
                     <div className="flex items-center gap-2 mt-1 text-xs">
-                      <div className="flex text-accent">{Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}</div>
                       <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">
@@ -263,7 +259,6 @@ function OportunidadesIndex() {
                   <div className="p-4 flex flex-col flex-1">
                     <p className="font-bold">{o.sectorName} en {o.cityName}</p>
                     <div className="flex items-center gap-2 mt-1 text-xs">
-                      <div className="flex text-accent">{Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}</div>
                       <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-2">
