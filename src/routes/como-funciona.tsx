@@ -3,6 +3,10 @@ import { Search, ClipboardList, Rocket, BarChart3, Repeat, Phone, MapPin, Globe,
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
+import imgSeoLocal from "@/assets/service-seo-local.jpg";
+import imgWeb from "@/assets/service-web.jpg";
+import imgContent from "@/assets/service-content.jpg";
+import imgAnalytics from "@/assets/service-analytics.jpg";
 
 export const Route = createFileRoute("/como-funciona")({
   head: () => ({
@@ -76,6 +80,7 @@ const faqs = [
 const services = [
   {
     icon: MapPin,
+    image: imgSeoLocal,
     color: "bg-blue-500/10 text-blue-700",
     title: "SEO Local & Google Maps",
     tagline: "Que tu negocio salga el primero cuando alguien busca cerca",
@@ -92,6 +97,7 @@ const services = [
   },
   {
     icon: Globe,
+    image: imgWeb,
     color: "bg-amber-500/10 text-amber-700",
     title: "Web que convierte",
     tagline: "No queremos visitas bonitas, queremos llamadas y formularios",
@@ -108,6 +114,7 @@ const services = [
   },
   {
     icon: Megaphone,
+    image: imgContent,
     color: "bg-emerald-500/10 text-emerald-700",
     title: "Contenido & Reputación",
     tagline: "Cada mes Google ve que tu negocio está vivo y la gente lo recomienda",
@@ -124,6 +131,7 @@ const services = [
   },
   {
     icon: BarChart3,
+    image: imgAnalytics,
     color: "bg-rose-500/10 text-rose-700",
     title: "Medición & Estrategia",
     tagline: "Sabrás exactamente qué euro vuelve y cuál no",
@@ -154,36 +162,6 @@ function ComoFunciona() {
       </section>
 
       <main className="mx-auto max-w-7xl px-4 mt-10 space-y-12 mb-16">
-        {/* Timeline */}
-        <section className="space-y-5">
-          {steps.map((s) => {
-            const Icon = s.icon;
-            return (
-              <article key={s.n} className="border border-border rounded-lg p-6 bg-card grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6">
-                <div className="flex md:flex-col items-center md:items-start gap-3 md:w-40">
-                  <div className="h-14 w-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0">
-                    <Icon className="h-7 w-7" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Paso {s.n}</p>
-                    <p className="text-sm font-semibold">{s.time}</p>
-                  </div>
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold mb-1">{s.title}</h2>
-                  <p className="text-sm text-accent-foreground bg-accent/30 inline-block px-2 py-0.5 rounded mb-3">{s.deliverable}</p>
-                  <p className="text-sm text-foreground mb-4">{s.desc}</p>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                    {s.items.map((i) => (
-                      <li key={i} className="flex items-start gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary mt-2 shrink-0" />{i}</li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            );
-          })}
-        </section>
-
         {/* Servicios — qué incluye cada plan */}
         <section>
           <div className="text-center max-w-3xl mx-auto mb-8">
@@ -197,14 +175,23 @@ function ComoFunciona() {
               const Icon = s.icon;
               return (
                 <article key={s.title} className="border border-border rounded-xl bg-card overflow-hidden flex flex-col">
-                  <div className="p-6 border-b border-border">
-                    <div className="flex items-start gap-4">
-                      <div className={`h-12 w-12 rounded-lg flex items-center justify-center shrink-0 ${s.color}`}>
-                        <Icon className="h-6 w-6" />
+                  <div className="relative h-44 w-full overflow-hidden bg-muted">
+                    <img
+                      src={s.image}
+                      alt={s.title}
+                      loading="lazy"
+                      width={1024}
+                      height={640}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute bottom-3 left-4 right-4 flex items-center gap-3">
+                      <div className={`h-11 w-11 rounded-lg flex items-center justify-center shrink-0 bg-white ${s.color.split(' ')[1]}`}>
+                        <Icon className="h-5 w-5" />
                       </div>
-                      <div>
-                        <h3 className="text-lg font-bold">{s.title}</h3>
-                        <p className="text-sm text-muted-foreground mt-0.5">{s.tagline}</p>
+                      <div className="text-white">
+                        <h3 className="text-lg font-bold leading-tight">{s.title}</h3>
+                        <p className="text-xs text-white/85">{s.tagline}</p>
                       </div>
                     </div>
                   </div>
@@ -245,6 +232,42 @@ function ComoFunciona() {
             </Button>
           </div>
         </section>
+
+        {/* Timeline — proceso paso a paso */}
+        <section className="space-y-5">
+          <div className="text-center max-w-3xl mx-auto mb-2">
+            <p className="text-sm font-semibold text-accent-foreground bg-accent/40 inline-block px-3 py-1 rounded-full mb-3">El proceso, paso a paso</p>
+            <h2 className="text-2xl md:text-3xl font-extrabold">Así organizamos todo ese trabajo</h2>
+            <p className="mt-2 text-muted-foreground">Desde la primera llamada hasta el informe mensual. Plazos claros y entregables concretos en cada paso.</p>
+          </div>
+          {steps.map((s) => {
+            const Icon = s.icon;
+            return (
+              <article key={s.n} className="border border-border rounded-lg p-6 bg-card grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6">
+                <div className="flex md:flex-col items-center md:items-start gap-3 md:w-40">
+                  <div className="h-14 w-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0">
+                    <Icon className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Paso {s.n}</p>
+                    <p className="text-sm font-semibold">{s.time}</p>
+                  </div>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold mb-1">{s.title}</h2>
+                  <p className="text-sm text-accent-foreground bg-accent/30 inline-block px-2 py-0.5 rounded mb-3">{s.deliverable}</p>
+                  <p className="text-sm text-foreground mb-4">{s.desc}</p>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                    {s.items.map((i) => (
+                      <li key={i} className="flex items-start gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary mt-2 shrink-0" />{i}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            );
+          })}
+        </section>
+
 
 
 
