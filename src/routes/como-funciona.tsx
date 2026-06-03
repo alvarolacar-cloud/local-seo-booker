@@ -97,6 +97,7 @@ const services = [
   },
   {
     icon: Globe,
+    image: imgWeb,
     color: "bg-amber-500/10 text-amber-700",
     title: "Web que convierte",
     tagline: "No queremos visitas bonitas, queremos llamadas y formularios",
