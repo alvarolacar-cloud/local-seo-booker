@@ -12,6 +12,7 @@ import { SiteFooter } from "@/components/site/Footer";
 import { opportunities } from "@/data/opportunities";
 import { cities } from "@/data/cities";
 import { cases } from "@/data/cases";
+import { sectors } from "@/data/sectors";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -283,20 +284,29 @@ function Index() {
           </div>
         </section>
 
-        {/* Ciudades cubiertas */}
+        {/* Sectores con oportunidades activas */}
         <section>
-          <h2 className="text-2xl font-bold mb-1">Ciudades con oportunidades activas</h2>
-          <p className="text-sm text-muted-foreground mb-4">Tenemos informes públicos para estas ciudades. Trabajamos en toda España bajo demanda.</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {cities.map((c) => (
-              <Link key={c.slug} to="/oportunidades" className="block group">
-                <div className="aspect-square overflow-hidden rounded-full mb-2">
-                  <img src={c.img} alt={`Oportunidades de SEO local en ${c.name}`} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
-                </div>
-                <p className="font-semibold text-center group-hover:text-primary">{c.name}</p>
-                <p className="text-xs text-muted-foreground text-center">{c.note}</p>
-              </Link>
-            ))}
+          <h2 className="text-2xl font-bold mb-1">Sectores con oportunidades activas</h2>
+          <p className="text-sm text-muted-foreground mb-4">Estos son los sectores donde hemos detectado hueco real en Google. Trabajamos con cualquier negocio local bajo demanda.</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {sectors.map((s) => {
+              const Icon = s.icon;
+              return (
+                <Link key={s.slug} to="/oportunidades" className="group block border border-border rounded-lg p-4 bg-card shadow-[var(--shadow-card)] hover:shadow-lg hover:border-primary transition">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
+                      <Icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <h3 className="font-bold text-sm leading-tight group-hover:text-primary transition">{s.short}</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{s.desc}</p>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="bg-primary/10 text-primary font-semibold px-1.5 py-0.5 rounded">{s.monthlySearches.toLocaleString("es-ES")} búsq./mes</span>
+                    <span className="text-muted-foreground">{s.cities.length} ciudades</span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
