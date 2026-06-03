@@ -462,7 +462,7 @@ function Home() {
 
 function FieldStatic({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-card border border-border rounded-md px-4 h-14 flex flex-col justify-center">
+    <div className="bg-card text-foreground border border-border rounded-md px-4 h-14 flex flex-col justify-center">
       <span className="text-[11px] text-muted-foreground">{label}</span>
       <span className="text-sm font-semibold truncate">{value}</span>
     </div>
@@ -474,12 +474,12 @@ function FieldSelect({ label, icon: _icon, value, onChange, options, placeholder
   options: { value: string; label: string }[]; placeholder?: string;
 }) {
   return (
-    <label className="bg-card border border-border rounded-md px-4 h-14 flex flex-col justify-center cursor-pointer focus-within:border-[#0066ff] hover:border-foreground/40 transition-colors">
+    <label className="bg-card text-foreground border border-border rounded-md px-4 h-14 flex flex-col justify-center cursor-pointer focus-within:border-[#0066ff] hover:border-foreground/40 transition-colors">
       <span className="text-[11px] text-muted-foreground">{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5 truncate"
+        className="bg-transparent text-foreground text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5 truncate"
       >
         {placeholder && <option value="" disabled>{placeholder}</option>}
         {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
