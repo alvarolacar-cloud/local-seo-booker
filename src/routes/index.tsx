@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
-  Search, MapPin, Briefcase, TrendingUp, Building2, Compass,
-  Wrench, Stethoscope, Hammer, Scale,
+  Search, MapPin, Briefcase, Compass,
+  BookOpen, Trophy, Route as RouteIcon,
   ChevronDown, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,20 +33,13 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const tabs = [
-  { id: "sector", label: "Por sector", icon: Briefcase, novelty: false },
-  { id: "ciudad", label: "Por ciudad", icon: MapPin, novelty: true },
-  { id: "barrio", label: "Por barrio", icon: Building2, novelty: false },
-  { id: "tendencia", label: "Tendencias", icon: TrendingUp, novelty: false },
+const navItems = [
+  { id: "oportunidades", label: "Oportunidades locales", icon: Compass, to: "/oportunidades" as const, novelty: true },
+  { id: "casos", label: "Casos de éxito", icon: Trophy, to: "/casos-exito" as const, novelty: false },
+  { id: "como-funciona", label: "Cómo funciona", icon: RouteIcon, to: "/como-funciona" as const, novelty: false },
+  { id: "guias", label: "Guías", icon: BookOpen, to: "/guias" as const, novelty: false },
 ];
 
-const quickChips = [
-  { label: "Fontaneros", icon: Wrench, to: "/oportunidades" as const },
-  { label: "Dentistas", icon: Stethoscope, to: "/oportunidades" as const },
-  { label: "Reformas", icon: Hammer, to: "/oportunidades" as const },
-  { label: "Abogados", icon: Scale, to: "/oportunidades" as const },
-  { label: "Explora todo", icon: Compass, to: "/oportunidades" as const },
-];
 
 const cityImageMap: Record<string, string> = {
   madrid: cityMadrid, barcelona: cityBarcelona, valencia: cityValencia,
@@ -65,7 +58,7 @@ const faqs = [
 const cityTabsList = ["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga"];
 
 function Home() {
-  const [tab, setTab] = useState("sector");
+  
   const [sectorSlug, setSectorSlug] = useState(sectors[0]?.slug ?? "");
   const [citySlug, setCitySlug] = useState(cities[0]?.slug ?? "");
   const [activeCity, setActiveCity] = useState("Madrid");
@@ -79,20 +72,16 @@ function Home() {
       <section className="bg-primary text-primary-foreground">
         <SiteHeader variant="transparent" />
         <div className="mx-auto max-w-7xl px-4 pt-6 pb-10 md:pt-10">
-          {/* Tabs categorías */}
+          {/* Tabs categorías = navegación principal */}
           <div className="flex flex-wrap items-center gap-2 mb-6">
-            {tabs.map((t) => {
+            {navItems.map((t) => {
               const Icon = t.icon;
-              const active = tab === t.id;
               return (
-                <button
+                <Link
                   key={t.id}
-                  onClick={() => setTab(t.id)}
-                  className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold transition ${
-                    active
-                      ? "bg-[#0066ff] border-[#0066ff] text-white"
-                      : "border-white/30 text-white hover:bg-white/10"
-                  }`}
+                  to={t.to}
+                  className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/30 text-white hover:bg-white/10 text-sm font-semibold transition"
+                  activeProps={{ className: "!bg-[#0066ff] !border-[#0066ff]" }}
                 >
                   <Icon className="h-4 w-4" />
                   {t.label}
@@ -101,10 +90,11 @@ function Home() {
                       Novedad
                     </span>
                   )}
-                </button>
+                </Link>
               );
             })}
           </div>
+
 
           <h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl">
             Miles de búsquedas locales sin cubrir. Encuentra la tuya.
@@ -185,12 +175,12 @@ function Home() {
       {/* Chips de acceso rápido */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {quickChips.map((c) => {
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {navItems.map((c) => {
               const Icon = c.icon;
               return (
                 <Link
-                  key={c.label}
+                  key={c.id}
                   to={c.to}
                   className="flex items-center gap-3 bg-primary text-primary-foreground rounded-md px-4 py-4 font-semibold text-sm hover:bg-[var(--brand-deep)] transition"
                 >
@@ -200,6 +190,7 @@ function Home() {
               );
             })}
           </div>
+
         </div>
       </section>
 
