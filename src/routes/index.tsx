@@ -12,7 +12,8 @@ import { SiteFooter } from "@/components/site/Footer";
 import { sectors } from "@/data/sectors";
 import { cities } from "@/data/cities";
 import { opportunities } from "@/data/opportunities";
-import heroBanner from "@/assets/hero-banner.jpg";
+import sectorAbogados1 from "@/assets/sector-abogados-1.jpg";
+import sectorAbogados2 from "@/assets/sector-abogados-2.jpg";
 import cityMadrid from "@/assets/city-madrid.jpg";
 import cityBarcelona from "@/assets/city-barcelona.jpg";
 import cityValencia from "@/assets/city-valencia.jpg";
@@ -145,30 +146,32 @@ function Home() {
           </div>
         </div>
 
-        {/* Banner inmersivo grande */}
+        {/* Mosaico estilo informe: mapa real + 2 imágenes del sector */}
         <div className="mx-auto max-w-7xl px-4 pb-10">
-          <div className="relative rounded-lg overflow-hidden h-[360px] md:h-[440px]">
-            <img
-              src={heroBanner}
-              alt="Salamanca, Madrid"
-              className="absolute inset-0 w-full h-full object-cover"
-              width={1920}
-              height={1024}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
-            <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
-              <p className="text-white/85 text-sm font-semibold mb-2">Oportunidad destacada</p>
-              <h2 className="text-white text-3xl md:text-5xl font-extrabold leading-tight max-w-2xl">
-                Salamanca, Madrid — 312 búsquedas/mes sin cubrir
+          <div className="relative">
+            <div className="grid grid-cols-3 grid-rows-2 gap-2 h-[360px] md:h-[440px] rounded-lg overflow-hidden">
+              <iframe
+                title="Mapa de Madrid"
+                src="https://www.google.com/maps?q=Madrid,%20Espa%C3%B1a&output=embed"
+                className="col-span-2 row-span-2 w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <img src={sectorAbogados1} alt="Despacho de abogados en Madrid" loading="lazy" width={800} height={640} className="w-full h-full object-cover" />
+              <img src={sectorAbogados2} alt="Abogados firmando un acuerdo" loading="lazy" width={800} height={640} className="w-full h-full object-cover" />
+            </div>
+            <div className="pointer-events-none absolute left-4 top-4 md:left-6 md:top-6 flex items-center gap-2">
+              <span className="bg-accent text-accent-foreground font-extrabold px-2 py-0.5 rounded text-xs">RANKIN</span>
+              <span className="bg-black/70 text-white text-xs font-semibold px-2 py-1 rounded">Oportunidad destacada</span>
+            </div>
+            <div className="pointer-events-none absolute left-4 bottom-4 md:left-6 md:bottom-6 max-w-2xl">
+              <h2 className="text-white text-2xl md:text-4xl font-extrabold leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+                Abogados en Madrid — 480 búsquedas/mes sin cubrir
               </h2>
             </div>
-            <Button asChild className="absolute bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-foreground hover:bg-white/90 font-semibold">
+            <Button asChild className="absolute bottom-4 right-4 md:bottom-6 md:right-6 bg-white text-foreground hover:bg-white/90 font-semibold shadow-lg">
               <Link to="/oportunidades">Más información</Link>
             </Button>
-            <div className="absolute bottom-3 left-6 md:left-10 flex items-center gap-2 text-xs text-white/80">
-              <span className="bg-accent text-accent-foreground font-extrabold px-2 py-0.5 rounded">RANKIN</span>
-              <span>Con datos reales de Google Keyword Planner</span>
-            </div>
           </div>
         </div>
       </section>
