@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  MapPin, ArrowRight, Search, Briefcase, Star,
+  MapPin, ArrowRight, Search, Briefcase,
   PiggyBank, Flame, Database, BadgeCheck, ChevronRight,
   TrendingUp, Target, Banknote,
 } from "lucide-react";
