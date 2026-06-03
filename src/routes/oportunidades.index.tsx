@@ -396,22 +396,6 @@ function OportunidadesIndex() {
   );
 }
 
-function BigStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="bg-secondary rounded-lg px-3 py-3 text-center">
-      <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">{label}</p>
-      <p className="text-lg md:text-xl font-extrabold text-foreground mt-0.5">{value}</p>
-    </div>
-  );
-}
-
-function TrustItem({ icon, text }: { icon: React.ReactNode; text: string }) {
-  return (
-    <div className="flex items-center gap-2 text-white/85">
-      <span className="text-accent">{icon}</span> {text}
-    </div>
-  );
-}
 
 function MetricCard({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
   return (
