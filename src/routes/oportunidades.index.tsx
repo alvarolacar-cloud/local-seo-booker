@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ChevronRight, TrendingUp, TrendingDown, Minus, MapPin, ArrowRight, CheckCircle2,
+  ChevronRight, TrendingUp, TrendingDown, Minus, MapPin, ArrowRight,
   Search, Briefcase, Star, Info, Shield, Clock, Sparkles, BadgeCheck, Zap, Phone,
   ChevronLeft, BookOpen,
 } from "lucide-react";
-// Note: CheckCircle2 removed (unused).
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
