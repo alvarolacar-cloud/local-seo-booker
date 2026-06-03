@@ -200,27 +200,6 @@ function OportunidadesIndex() {
       </section>
 
       <main className="mx-auto max-w-6xl px-4 mt-20 mb-16 space-y-20">
-        {/* Destinos populares */}
-        <section>
-          <SectionHeader title="Ciudades populares para SEO local" subtitle="Donde más negocios están invirtiendo en posicionarse este mes." />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {popularDestinations.map((d) => (
-              <button key={d.citySlug} onClick={() => { setCitySlug(d.citySlug); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                className="group relative h-44 rounded-xl overflow-hidden border border-border hover:border-primary transition text-left">
-                <img src={cityImageMap[d.citySlug]} alt={d.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/30 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4 text-background">
-                  <p className="text-2xl font-extrabold">{d.name}</p>
-                  <div className="flex items-center justify-between mt-1 text-xs">
-                    <span className="opacity-85">{d.note}</span>
-                    <span className="bg-accent text-accent-foreground font-bold px-2 py-0.5 rounded">{d.searches}</span>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
-
         {/* Encuentra oportunidades cerca de ti — product cards estilo Skyscanner */}
         <section>
           <SectionHeader title="Encuentra oportunidades de SEO local cerca de ti" subtitle="Cruces sector × ciudad analizados con datos reales de Google." />
