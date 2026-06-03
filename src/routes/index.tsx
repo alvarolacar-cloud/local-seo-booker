@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Search, MapPin, Briefcase, Star, Globe, BarChart3, MessageSquare, FileText, Phone, ChevronRight, Check, Award, ShieldCheck } from "lucide-react";
+import { Search, MapPin, Star, BarChart3, MessageSquare, FileText, ChevronRight, Award, ShieldCheck, Wrench, Stethoscope, Scissors, Car, Scale, Home, UtensilsCrossed, Dumbbell, Sparkles, GraduationCap, PawPrint, Camera, TrendingUp, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -22,43 +22,51 @@ import localBusiness from "@/assets/local-business.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rankin.com — Reserva servicios de SEO local para tu negocio" },
-      { name: "description", content: "Compara y contrata agencias y freelancers de SEO local en España. Posiciona tu negocio en Google Maps, mejora reseñas y consigue más clientes." },
-      { property: "og:title", content: "Rankin.com — SEO local que llena tu negocio" },
-      { property: "og:description", content: "Compara agencias SEO en tu ciudad. Más visibilidad en Google, más reseñas, más clientes." },
+      { title: "Rankin — Agencia de SEO local para negocios de barrio" },
+      { name: "description", content: "Somos una agencia de SEO local especializada en posicionar fontaneros, clínicas dentales, peluquerías, talleres y otros negocios de barrio en Google y Google Maps." },
+      { property: "og:title", content: "Rankin — SEO local que llena tu agenda" },
+      { property: "og:description", content: "Posicionamos tu negocio local en Google para que los clientes de tu zona te encuentren a ti, no a tu competencia." },
     ],
   }),
   component: Index,
 });
 
-const cities = [
-  { name: "Madrid", img: cityMadrid, providers: "1.247 agencias" },
-  { name: "Barcelona", img: cityBarcelona, providers: "986 agencias" },
-  { name: "Valencia", img: cityValencia, providers: "412 agencias" },
-  { name: "Sevilla", img: citySevilla, providers: "356 agencias" },
-  { name: "Bilbao", img: cityBilbao, providers: "243 agencias" },
-  { name: "Málaga", img: cityMalaga, providers: "298 agencias" },
+const sectors = [
+  { name: "Fontanería", icon: Wrench, img: agency1, desc: "Aparece el primero cuando alguien busca 'fontanero urgente' en tu ciudad.", keyword: "fontanero 24h", clients: "+120 fontaneros" },
+  { name: "Clínicas dentales", icon: Stethoscope, img: agency2, desc: "Llena tu agenda de primeras visitas locales sin depender de Doctoralia.", keyword: "dentista cerca de mí", clients: "+85 clínicas" },
+  { name: "Peluquerías y barberías", icon: Scissors, img: agency3, desc: "Más reservas desde Google Maps y reseñas reales de clientes de tu barrio.", keyword: "barbería en [tu ciudad]", clients: "+200 salones" },
+  { name: "Talleres mecánicos", icon: Car, img: agency4, desc: "Que tu taller aparezca antes que las cadenas cuando buscan 'taller cerca'.", keyword: "taller mecánico cerca", clients: "+60 talleres" },
+  { name: "Abogados y gestorías", icon: Scale, img: serviceAudit, desc: "Capta clientes de tu provincia con SEO local y contenido jurídico.", keyword: "abogado laboralista [ciudad]", clients: "+45 despachos" },
+  { name: "Inmobiliarias", icon: Home, img: localBusiness, desc: "Posiciona tu inmobiliaria por cada barrio y tipo de inmueble.", keyword: "pisos en [barrio]", clients: "+70 inmobiliarias" },
+  { name: "Restaurantes y bares", icon: UtensilsCrossed, img: serviceContent, desc: "Más reservas directas desde Google y menos comisiones a TheFork.", keyword: "restaurante [zona]", clients: "+150 locales" },
+  { name: "Gimnasios y centros deportivos", icon: Dumbbell, img: serviceReviews, desc: "Capta socios de tu zona en lugar de competir con franquicias por Ads.", keyword: "gimnasio cerca de mí", clients: "+35 centros" },
+  { name: "Estética y belleza", icon: Sparkles, img: serviceGmb, desc: "Llena tu cabina con clientas de tu barrio gracias a Google y reseñas.", keyword: "centro estética [ciudad]", clients: "+90 centros" },
+  { name: "Academias y formación", icon: GraduationCap, img: cityValencia, desc: "Más matrículas locales sin depender de portales de cursos.", keyword: "academia inglés [ciudad]", clients: "+40 academias" },
+  { name: "Veterinarias y mascotas", icon: PawPrint, img: cityBilbao, desc: "Clientes fieles de tu zona buscando 'veterinario 24h' o 'peluquería canina'.", keyword: "veterinario cerca", clients: "+30 clínicas" },
+  { name: "Fotógrafos y eventos", icon: Camera, img: citySevilla, desc: "Posiciónate para 'fotógrafo de boda [ciudad]' y deja de pagar a plataformas.", keyword: "fotógrafo boda [ciudad]", clients: "+25 estudios" },
 ];
 
 const services = [
-  { title: "Google Business Profile", img: serviceGmb, desc: "Optimización de ficha y Maps", price: "Desde 149€/mes" },
-  { title: "Gestión de Reseñas", img: serviceReviews, desc: "Más estrellas, menos negativas", price: "Desde 89€/mes" },
-  { title: "Auditoría SEO Local", img: serviceAudit, desc: "Informe completo en 72h", price: "Desde 199€" },
-  { title: "Contenido geolocalizado", img: serviceContent, desc: "Landings por barrio/ciudad", price: "Desde 59€/artículo" },
+  { title: "Google Business Profile", img: serviceGmb, desc: "Optimizamos tu ficha para que aparezcas en el Map Pack", price: "Desde 149€/mes" },
+  { title: "Gestión de reseñas", img: serviceReviews, desc: "Más estrellas reales, menos negativas que duelen", price: "Desde 89€/mes" },
+  { title: "Auditoría SEO local", img: serviceAudit, desc: "Informe completo de tu visibilidad en 72h", price: "Desde 199€" },
+  { title: "Contenido geolocalizado", img: serviceContent, desc: "Landings por barrio, servicio y ciudad", price: "Desde 59€/artículo" },
 ];
 
-const agencies = [
-  { name: "LocalRank Studio", city: "Madrid, España", img: agency1, rating: 9.4, reviews: 312, label: "Top valorada", price: 349, oldPrice: 499 },
-  { name: "Mapa Visible", city: "Barcelona, España", img: agency2, rating: 9.2, reviews: 198, label: "Genius", price: 289, oldPrice: null },
-  { name: "Calle SEO Freelance", city: "Valencia, España", img: agency3, rating: 8.9, reviews: 87, label: "Nuevo en Rankin", price: 179, oldPrice: 220 },
-  { name: "Distrito Digital", city: "Sevilla, España", img: agency4, rating: 9.6, reviews: 421, label: "Premiada", price: 499, oldPrice: 650 },
+const caseStudies = [
+  { name: "Fontanería Ríos", city: "Madrid", img: agency1, before: "Posición 14", after: "Top 3 Maps", rating: 9.4, reviews: 312, growth: "+180% llamadas", sector: "Fontanería" },
+  { name: "Clínica Dental Sonríe", city: "Barcelona", img: agency2, before: "0 reseñas", after: "198 reseñas 4.9★", rating: 9.2, reviews: 198, growth: "+62 primeras visitas/mes", sector: "Odontología" },
+  { name: "Barbería El Capitán", city: "Valencia", img: agency3, before: "Invisible en Maps", after: "1º en su barrio", rating: 8.9, reviews: 87, growth: "Agenda llena 3 semanas", sector: "Barbería" },
+  { name: "Taller Distrito Norte", city: "Sevilla", img: agency4, before: "Sin web", after: "Top 5 'taller cerca'", rating: 9.6, reviews: 421, growth: "+210% presupuestos", sector: "Mecánica" },
 ];
 
-const weekendDeals = [
-  { name: "BarrioBoost — Pack Lanzamiento", city: "Madrid", img: agency1, rating: 9.1, price: 249, oldPrice: 399, badge: "Oferta semana" },
-  { name: "GeoRanker — Auditoría exprés", city: "Bilbao", img: agency4, rating: 8.8, price: 99, oldPrice: 199, badge: "Bestseller" },
-  { name: "ProximaSEO — Reseñas+", city: "Málaga", img: agency2, rating: 9.3, price: 129, oldPrice: 189, badge: "Genius" },
-  { name: "Pueblo Online — Web local", city: "Granada", img: agency3, rating: 9.0, price: 590, oldPrice: 790, badge: "Limitada" },
+const cities = [
+  { name: "Madrid", img: cityMadrid, note: "Cobertura por distritos" },
+  { name: "Barcelona", img: cityBarcelona, note: "Cobertura por barrios" },
+  { name: "Valencia", img: cityValencia, note: "Cobertura completa" },
+  { name: "Sevilla", img: citySevilla, note: "Cobertura completa" },
+  { name: "Bilbao", img: cityBilbao, note: "Cobertura completa" },
+  { name: "Málaga", img: cityMalaga, note: "Cobertura completa" },
 ];
 
 function Index() {
@@ -68,14 +76,14 @@ function Index() {
       <header className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold tracking-tight">Rankin<span className="text-accent">.</span>com</span>
+            <span className="text-2xl font-bold tracking-tight">Rankin<span className="text-accent">.</span></span>
           </div>
           <div className="hidden md:flex items-center gap-2 text-sm">
-            <button className="px-3 py-1.5 rounded hover:bg-white/10">EUR</button>
-            <button className="px-3 py-1.5 rounded hover:bg-white/10">ES</button>
-            <button className="px-3 py-1.5 rounded hover:bg-white/10">Soy agencia</button>
-            <button className="px-3 py-1.5 rounded border border-white/40 bg-white text-primary hover:bg-white/90">Crear cuenta</button>
-            <button className="px-3 py-1.5 rounded border border-white/40 bg-white text-primary hover:bg-white/90">Iniciar sesión</button>
+            <a href="#sectores" className="px-3 py-1.5 rounded hover:bg-white/10">Sectores</a>
+            <a href="#servicios" className="px-3 py-1.5 rounded hover:bg-white/10">Servicios</a>
+            <a href="#casos" className="px-3 py-1.5 rounded hover:bg-white/10">Casos de éxito</a>
+            <a href="#contacto" className="px-3 py-1.5 rounded hover:bg-white/10">Contacto</a>
+            <button className="px-3 py-1.5 rounded border border-white/40 bg-white text-primary hover:bg-white/90 font-semibold">Auditoría gratis</button>
           </div>
         </div>
 
@@ -83,11 +91,11 @@ function Index() {
         <div className="mx-auto max-w-7xl px-4 pb-4 flex gap-2 flex-wrap">
           {[
             { icon: MapPin, label: "SEO Local" },
-            { icon: Globe, label: "SEO Web" },
-            { icon: Star, label: "Reseñas" },
-            { icon: BarChart3, label: "Ads & Maps" },
-            { icon: FileText, label: "Contenido" },
-            { icon: Briefcase, label: "Agencias" },
+            { icon: Star, label: "Reseñas Google" },
+            { icon: BarChart3, label: "Google Maps" },
+            { icon: FileText, label: "Contenido local" },
+            { icon: TrendingUp, label: "Google Ads local" },
+            { icon: ShieldCheck, label: "Auditoría gratis" },
           ].map(({ icon: Icon, label }, i) => (
             <button
               key={label}
@@ -104,72 +112,104 @@ function Index() {
         {/* Hero */}
         <div className="mx-auto max-w-7xl px-4 pt-6 pb-16">
           <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
-            Posiciona tu negocio en tu ciudad
+            Que te encuentren los clientes de tu ciudad, no los de Google a 600 km
           </h1>
-          <p className="mt-2 text-lg text-white/85">
-            Compara agencias y freelancers de SEO local. Más visibilidad en Google, más clientes en tu puerta.
+          <p className="mt-2 text-lg text-white/85 max-w-3xl">
+            Somos una agencia de SEO local. Posicionamos negocios de barrio —fontaneros, dentistas, peluquerías, talleres— en Google y Google Maps para que tu agenda se llene sola.
           </p>
         </div>
       </header>
 
-      {/* Search bar */}
+      {/* Search bar -> Diagnóstico gratuito */}
       <div className="mx-auto max-w-7xl px-4 -mt-8 relative z-10">
         <div className="bg-accent rounded-md p-1 shadow-[var(--shadow-card)]">
           <div className="grid grid-cols-1 md:grid-cols-[2fr_2fr_1.5fr_auto] gap-1">
             <div className="bg-background rounded-sm flex items-center gap-2 px-3 py-3 border border-accent">
               <MapPin className="h-5 w-5 text-primary" />
               <Input
-                placeholder="¿En qué ciudad está tu negocio?"
+                placeholder="¿Dónde está tu negocio?"
                 className="border-0 shadow-none focus-visible:ring-0 px-0 text-base"
                 defaultValue="Madrid, España"
               />
             </div>
             <div className="bg-background rounded-sm flex items-center gap-2 px-3 py-3 border border-accent">
-              <Briefcase className="h-5 w-5 text-primary" />
+              <Wrench className="h-5 w-5 text-primary" />
               <Input
-                placeholder="Sector (restaurante, clínica, abogado…)"
+                placeholder="¿A qué te dedicas? (fontanero, dentista…)"
                 className="border-0 shadow-none focus-visible:ring-0 px-0 text-base"
               />
             </div>
             <div className="bg-background rounded-sm flex items-center gap-2 px-3 py-3 border border-accent">
-              <BarChart3 className="h-5 w-5 text-primary" />
-              <select className="w-full bg-transparent outline-none text-base">
-                <option>Presupuesto: cualquiera</option>
-                <option>Menos de 200€/mes</option>
-                <option>200 – 500€/mes</option>
-                <option>500 – 1.000€/mes</option>
-                <option>Más de 1.000€/mes</option>
-              </select>
+              <Phone className="h-5 w-5 text-primary" />
+              <Input
+                placeholder="Teléfono o email"
+                className="border-0 shadow-none focus-visible:ring-0 px-0 text-base"
+              />
             </div>
             <Button className="bg-primary hover:bg-[var(--brand-deep)] text-primary-foreground h-auto px-8 text-base font-semibold rounded-sm">
-              <Search className="h-5 w-5 mr-1" /> Buscar
+              <Search className="h-5 w-5 mr-1" /> Diagnóstico gratis
             </Button>
           </div>
         </div>
-        <label className="flex items-center gap-2 mt-3 text-sm text-foreground">
-          <input type="checkbox" className="accent-primary" />
-          Solo agencias con casos de éxito verificados
-        </label>
+        <p className="mt-3 text-sm text-foreground">
+          Te decimos en 48h qué posición ocupas hoy, quién te está adelantando y qué tendríamos que hacer. Sin compromiso.
+        </p>
       </div>
 
       <main className="mx-auto max-w-7xl px-4 mt-12 space-y-14">
-        {/* Ofertas */}
+        {/* Promesa */}
         <section>
-          <h2 className="text-xl font-bold mb-1">Ofertas</h2>
-          <p className="text-sm text-muted-foreground mb-4">Promociones, descuentos y planes para impulsar tu visibilidad local.</p>
+          <h2 className="text-xl font-bold mb-1">Sin permanencia, solo resultados</h2>
+          <p className="text-sm text-muted-foreground mb-4">Trabajamos por objetivos medibles: llamadas, formularios y citas reales en tu agenda.</p>
           <div className="border border-border rounded-lg p-5 flex flex-col md:flex-row gap-5 items-center bg-card">
             <div className="flex-1">
-              <h3 className="text-2xl font-bold">Sin permanencia, solo resultados</h3>
-              <p className="text-muted-foreground mt-1 mb-4">Mínimo 15% de descuento en planes seleccionados de SEO local. Cancela cuando quieras.</p>
-              <Button className="bg-primary hover:bg-[var(--brand-deep)]">Aprovechar oferta</Button>
+              <h3 className="text-2xl font-bold">Si en 90 días no subes posiciones, no pagas el siguiente mes</h3>
+              <p className="text-muted-foreground mt-1 mb-4">Te enseñamos cada mes el informe de Google Search Console y Google Business Profile. Lo que medimos, lo mejoramos.</p>
+              <Button className="bg-primary hover:bg-[var(--brand-deep)]">Quiero mi auditoría gratis</Button>
             </div>
-            <img src={localBusiness} alt="Negocio local" width={280} height={180} className="rounded-md object-cover w-full md:w-72 h-44" loading="lazy" />
+            <img src={localBusiness} alt="Negocio local posicionado en Google" width={280} height={180} className="rounded-md object-cover w-full md:w-72 h-44" loading="lazy" />
           </div>
         </section>
 
-        {/* Tipo de servicio */}
-        <section>
-          <h2 className="text-xl font-bold mb-4">Busca por tipo de servicio</h2>
+        {/* SECTORES — el bloque principal */}
+        <section id="sectores">
+          <h2 className="text-2xl font-bold mb-1">¿A qué se dedica tu negocio?</h2>
+          <p className="text-sm text-muted-foreground mb-6">Estos son los sectores donde mejor sabemos lo que funciona. Entra y mira cómo posicionamos a negocios como el tuyo.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {sectors.map((s) => {
+              const Icon = s.icon;
+              return (
+                <a key={s.name} href="#" className="group block border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-lg hover:border-primary transition">
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    <img src={s.img} alt={`SEO local para ${s.name}`} width={400} height={250} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    <div className="absolute bottom-2 left-2 flex items-center gap-2">
+                      <span className="bg-background rounded-full h-9 w-9 flex items-center justify-center">
+                        <Icon className="h-5 w-5 text-primary" />
+                      </span>
+                      <span className="text-white font-bold text-lg drop-shadow">{s.name}</span>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-sm text-foreground mb-3">{s.desc}</p>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="bg-primary/10 text-primary font-semibold px-2 py-1 rounded">"{s.keyword}"</span>
+                      <span className="text-muted-foreground">{s.clients}</span>
+                    </div>
+                    <p className="mt-3 text-sm font-semibold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Ver plan SEO para {s.name.toLowerCase()} <ChevronRight className="h-4 w-4" />
+                    </p>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Servicios */}
+        <section id="servicios">
+          <h2 className="text-xl font-bold mb-1">Lo que hacemos por tu negocio</h2>
+          <p className="text-sm text-muted-foreground mb-4">Servicios pensados para negocios locales que dependen de clientes de su zona.</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {services.map((s) => (
               <a key={s.title} href="#" className="group block">
@@ -184,49 +224,50 @@ function Index() {
           </div>
         </section>
 
-        {/* Planificador */}
+        {/* Cómo trabajamos */}
         <section>
-          <h2 className="text-xl font-bold mb-1">Planificador SEO rápido y sencillo</h2>
-          <p className="text-sm text-muted-foreground mb-4">Elige una ciudad y descubre las mejores agencias de SEO local en España.</p>
+          <h2 className="text-xl font-bold mb-1">Cómo trabajamos contigo</h2>
+          <p className="text-sm text-muted-foreground mb-4">Un proceso transparente y medible, sin humo de marketing.</p>
           <div className="flex gap-2 flex-wrap mb-5">
-            {["Ciudades grandes", "Pueblos y comarcas", "Sector restauración", "Sector salud", "Servicios profesionales", "E-commerce local"].map((t, i) => (
+            {["Diagnóstico", "Plan a 90 días", "Ejecución mensual", "Informe transparente"].map((t, i) => (
               <button
                 key={t}
                 className={`px-4 py-1.5 text-sm rounded-full border ${
                   i === 0 ? "border-primary text-primary bg-primary/5" : "border-border text-foreground hover:border-primary"
                 }`}
               >
-                {t}
+                {i + 1}. {t}
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {cities.map((c) => (
-              <a key={c.name} href="#" className="group">
-                <div className="aspect-square overflow-hidden rounded-full mb-2">
-                  <img src={c.img} alt={c.name} width={200} height={200} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
-                </div>
-                <p className="font-semibold text-center">{c.name}</p>
-                <p className="text-xs text-muted-foreground text-center">{c.providers}</p>
-              </a>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[
+              { t: "Auditoría gratuita", d: "Analizamos tu ficha de Google, tu web y tus 5 competidores locales más fuertes." },
+              { t: "Plan a 90 días", d: "Te entregamos un plan claro con objetivos medibles y palabras clave de tu ciudad." },
+              { t: "Ejecutamos cada mes", d: "Fichas, contenido, reseñas, enlaces locales y técnica. Tú sigues atendiendo clientes." },
+              { t: "Informe mensual", d: "Sabes en todo momento qué posición ocupas y cuántas llamadas trajo Google." },
+            ].map((step, i) => (
+              <div key={step.t} className="border border-border rounded-lg p-4 bg-card">
+                <div className="text-3xl font-extrabold text-primary mb-1">0{i + 1}</div>
+                <h3 className="font-bold mb-1">{step.t}</h3>
+                <p className="text-sm text-muted-foreground">{step.d}</p>
+              </div>
             ))}
           </div>
         </section>
 
-        {/* Agencias destacadas */}
-        <section>
-          <h2 className="text-xl font-bold mb-1">Contrata expertos con resultados probados</h2>
-          <p className="text-sm text-muted-foreground mb-4">Agencias, freelancers y consultores verificados por Rankin.</p>
+        {/* Casos de éxito */}
+        <section id="casos">
+          <h2 className="text-xl font-bold mb-1">Negocios como el tuyo, posicionados por nosotros</h2>
+          <p className="text-sm text-muted-foreground mb-4">Casos reales con números reales. Sin "estimaciones".</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {agencies.map((a) => (
+            {caseStudies.map((a) => (
               <article key={a.name} className="border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-lg transition">
                 <div className="relative aspect-[4/3]">
                   <img src={a.img} alt={a.name} width={400} height={300} className="h-full w-full object-cover" loading="lazy" />
-                  {a.label && (
-                    <span className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs font-semibold px-2 py-0.5 rounded">
-                      {a.label}
-                    </span>
-                  )}
+                  <span className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs font-semibold px-2 py-0.5 rounded">
+                    {a.sector}
+                  </span>
                 </div>
                 <div className="p-3">
                   <h3 className="font-bold text-base leading-tight">{a.name}</h3>
@@ -235,10 +276,10 @@ function Index() {
                     <span className="bg-primary text-primary-foreground text-xs font-bold px-1.5 py-1 rounded">{a.rating}</span>
                     <span className="text-xs"><strong>Excelente</strong> · {a.reviews} reseñas</span>
                   </div>
-                  <div className="text-right">
-                    {a.oldPrice && <span className="text-xs text-muted-foreground line-through mr-1">{a.oldPrice}€</span>}
-                    <span className="font-bold text-base">{a.price}€</span>
-                    <p className="text-[11px] text-muted-foreground">desde, por mes</p>
+                  <div className="text-xs space-y-1 border-t border-border pt-2">
+                    <p><span className="text-muted-foreground">Antes:</span> {a.before}</p>
+                    <p><span className="text-muted-foreground">Ahora:</span> <strong>{a.after}</strong></p>
+                    <p className="text-primary font-semibold mt-1">{a.growth}</p>
                   </div>
                 </div>
               </article>
@@ -246,116 +287,47 @@ function Index() {
           </div>
         </section>
 
-        {/* Sectores de moda - large hero cards */}
+        {/* Ciudades donde trabajamos */}
         <section>
-          <h2 className="text-xl font-bold mb-4">Sectores que están creciendo</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            {[
-              { city: "Restauración", img: agency2, flag: "🍽️" },
-              { city: "Clínicas y salud", img: agency1, flag: "🩺" },
-            ].map((c) => (
-              <a key={c.city} href="#" className="relative block aspect-[2/1] rounded-lg overflow-hidden group">
-                <img src={c.img} alt={c.city} width={800} height={400} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" />
-                <span className="absolute top-3 left-3 bg-background/95 rounded px-2 py-1 text-sm font-semibold flex items-center gap-1">
-                  {c.flag} {c.city}
-                </span>
-              </a>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { city: "Servicios legales", img: agency3, flag: "⚖️" },
-              { city: "Inmobiliarias", img: agency4, flag: "🏠" },
-              { city: "Tiendas locales", img: localBusiness, flag: "🛍️" },
-            ].map((c) => (
-              <a key={c.city} href="#" className="relative block aspect-[2/1] rounded-lg overflow-hidden group">
-                <img src={c.img} alt={c.city} width={600} height={300} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" />
-                <span className="absolute top-3 left-3 bg-background/95 rounded px-2 py-1 text-sm font-semibold flex items-center gap-1">
-                  {c.flag} {c.city}
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {/* Descubre España */}
-        <section>
-          <h2 className="text-xl font-bold mb-1">Descubre España</h2>
-          <p className="text-sm text-muted-foreground mb-4">Las ciudades donde más se está invirtiendo en SEO local.</p>
+          <h2 className="text-xl font-bold mb-1">Ciudades donde ya posicionamos negocios</h2>
+          <p className="text-sm text-muted-foreground mb-4">Trabajamos en toda España, con foco en estas zonas.</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              { name: "Oviedo", count: "57 agencias", img: cityBilbao },
-              { name: "San Sebastián", count: "134 agencias", img: cityBilbao },
-              { name: "León", count: "48 agencias", img: cityMadrid },
-              { name: "Santander", count: "76 agencias", img: cityMalaga },
-              { name: "Burgos", count: "42 agencias", img: cityBarcelona },
-              { name: "Alicante", count: "215 agencias", img: cityMalaga },
-            ].map((c) => (
+            {cities.map((c) => (
               <a key={c.name} href="#" className="group">
-                <div className="aspect-[4/3] overflow-hidden rounded-md mb-2">
-                  <img src={c.img} alt={c.name} width={300} height={225} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
+                <div className="aspect-square overflow-hidden rounded-full mb-2">
+                  <img src={c.img} alt={`SEO local en ${c.name}`} width={200} height={200} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
                 </div>
-                <p className="font-semibold">{c.name}</p>
-                <p className="text-xs text-muted-foreground">{c.count}</p>
+                <p className="font-semibold text-center">{c.name}</p>
+                <p className="text-xs text-muted-foreground text-center">{c.note}</p>
               </a>
             ))}
           </div>
         </section>
 
-        {/* Ofertas para el fin de semana */}
-        <section>
-          <h2 className="text-xl font-bold mb-1">Ofertas del mes</h2>
-          <p className="text-sm text-muted-foreground mb-4">Servicios destacados con descuento hasta el 30 de junio.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {weekendDeals.map((d) => (
-              <article key={d.name} className="border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)]">
-                <div className="relative aspect-[4/3]">
-                  <img src={d.img} alt={d.name} width={400} height={300} className="h-full w-full object-cover" loading="lazy" />
-                </div>
-                <div className="p-3">
-                  <span className="inline-block bg-accent text-accent-foreground text-[11px] font-semibold px-1.5 py-0.5 rounded mb-1">{d.badge}</span>
-                  <h3 className="font-bold text-sm leading-tight">{d.name}</h3>
-                  <p className="text-xs text-muted-foreground">{d.city}</p>
-                  <div className="flex items-center gap-1 my-2">
-                    <span className="bg-primary text-primary-foreground text-xs font-bold px-1.5 py-0.5 rounded">{d.rating}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs text-muted-foreground line-through mr-1">{d.oldPrice}€</span>
-                    <span className="font-bold">{d.price}€</span>
-                    <p className="text-[11px] text-muted-foreground">paquete inicial</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* Genius */}
+        {/* Genius -> Plan de fidelidad */}
         <section className="border border-border rounded-lg p-6 bg-card flex flex-col md:flex-row items-center gap-6">
           <div className="flex-1">
-            <h2 className="text-2xl font-bold mb-1">Crece más, paga menos</h2>
-            <p className="text-muted-foreground mb-4">Únete a Rankin Genius y accede a descuentos del 10–20% en agencias seleccionadas, soporte prioritario y auditorías gratuitas.</p>
+            <h2 className="text-2xl font-bold mb-1">Auditoría SEO local gratis para tu negocio</h2>
+            <p className="text-muted-foreground mb-4">En 48h te enviamos un informe con tu posición actual, tus competidores en Google Maps y 5 acciones concretas para mejorar. Sin compromiso, sin tarjeta.</p>
             <div className="flex gap-2">
-              <Button className="bg-primary hover:bg-[var(--brand-deep)]">Iniciar sesión</Button>
-              <Button variant="outline">Crear cuenta</Button>
+              <Button className="bg-primary hover:bg-[var(--brand-deep)]">Pedir auditoría gratis</Button>
+              <Button variant="outline">Hablar con un consultor</Button>
             </div>
           </div>
           <div className="bg-accent text-accent-foreground rounded-md px-6 py-4 flex items-center gap-2">
             <Award className="h-8 w-8" />
-            <span className="font-extrabold text-xl">Genius</span>
+            <span className="font-extrabold text-xl">Gratis</span>
           </div>
         </section>
 
         {/* Por qué Rankin */}
         <section>
-          <h2 className="text-xl font-bold mb-6 text-center">¿Por qué reservar con Rankin?</h2>
+          <h2 className="text-xl font-bold mb-6 text-center">¿Por qué elegirnos para tu SEO local?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: ShieldCheck, t: "Agencias verificadas", d: "Cada proveedor pasa por un control de identidad fiscal y revisión de casos." },
-              { icon: Star, t: "Reseñas reales", d: "Solo los clientes que han contratado pueden valorar al proveedor." },
-              { icon: MessageSquare, t: "Soporte 24/7 en español", d: "Estamos aquí cuando necesites ayuda con tu campaña o factura." },
+              { icon: ShieldCheck, t: "Solo SEO local", d: "No hacemos de todo. Vivimos del SEO de negocios de barrio desde hace años." },
+              { icon: Star, t: "Sin permanencia", d: "Si no ves resultados en 90 días, te vas sin penalización. Así de simple." },
+              { icon: MessageSquare, t: "Hablamos claro", d: "Nada de informes con humo. Cada mes ves posiciones, llamadas y reseñas." },
             ].map(({ icon: Icon, t, d }) => (
               <div key={t} className="text-center">
                 <div className="mx-auto mb-3 h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
@@ -368,11 +340,11 @@ function Index() {
           </div>
         </section>
 
-        {/* Popular */}
+        {/* Popular -> SEO por sector y ciudad */}
         <section>
-          <h2 className="text-xl font-bold mb-4">Popular entre la comunidad de negocios en España</h2>
-          <div className="flex gap-4 border-b border-border mb-4 text-sm">
-            {["Ciudades", "Sectores", "Servicios", "Packs", "Freelancers"].map((t, i) => (
+          <h2 className="text-xl font-bold mb-4">Servicios destacados de SEO local</h2>
+          <div className="flex gap-4 border-b border-border mb-4 text-sm flex-wrap">
+            {["Por ciudad", "Por sector", "Por servicio"].map((t, i) => (
               <button key={t} className={`pb-2 ${i === 0 ? "border-b-2 border-primary font-semibold text-primary" : "text-muted-foreground"}`}>
                 {t}
               </button>
@@ -380,14 +352,26 @@ function Index() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-2 gap-x-4 text-sm">
             {[
-              "SEO en Madrid", "SEO en Barcelona", "SEO en Valencia", "SEO en Sevilla", "SEO en Bilbao",
-              "SEO en Málaga", "SEO en Zaragoza", "SEO en Murcia", "SEO en Palma", "SEO en Granada",
-              "SEO en Alicante", "SEO en Vigo", "SEO en Gijón", "SEO en Córdoba", "SEO en Pamplona",
+              "SEO local en Madrid", "SEO local en Barcelona", "SEO local en Valencia", "SEO local en Sevilla", "SEO local en Bilbao",
+              "SEO para fontaneros", "SEO para dentistas", "SEO para peluquerías", "SEO para talleres", "SEO para abogados",
+              "SEO para restaurantes", "SEO para gimnasios", "SEO para inmobiliarias", "SEO para clínicas estéticas", "SEO para veterinarias",
             ].map((k) => (
               <a key={k} href="#" className="text-primary hover:underline flex items-center gap-1">
                 <ChevronRight className="h-3 w-3" /> {k}
               </a>
             ))}
+          </div>
+        </section>
+
+        {/* CTA final */}
+        <section id="contacto" className="bg-primary text-primary-foreground rounded-lg p-8 text-center">
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-2">¿Listo para que te encuentren en tu ciudad?</h2>
+          <p className="text-white/85 mb-5 max-w-2xl mx-auto">Cuéntanos a qué te dedicas y dónde. En 48h te decimos qué posición ocupas y qué haríamos por ti.</p>
+          <div className="flex gap-2 justify-center flex-wrap">
+            <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">Pedir auditoría gratis</Button>
+            <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary">
+              <Phone className="h-4 w-4 mr-1" /> 911 23 45 67
+            </Button>
           </div>
         </section>
       </main>
@@ -396,11 +380,11 @@ function Index() {
       <footer className="mt-20 bg-secondary border-t border-border">
         <div className="mx-auto max-w-7xl px-4 py-12 grid grid-cols-2 md:grid-cols-5 gap-8 text-sm">
           {[
-            { h: "Ayuda", items: ["Centro de ayuda", "Contactar con atención", "Recursos sobre seguridad"] },
-            { h: "Descubre", items: ["Programa de fidelización", "Ofertas y promociones", "Articulos de SEO", "Casos de éxito"] },
-            { h: "Términos", items: ["Configuración de cookies", "Política de privacidad", "Condiciones del servicio"] },
-            { h: "Para agencias", items: ["Regístrate como agencia", "Conviértete en partner", "Panel de proveedores"] },
-            { h: "Rankin", items: ["Sobre Rankin", "Empleo", "Centro de prensa", "Inversores"] },
+            { h: "Sectores", items: ["Fontanería", "Clínicas dentales", "Peluquerías", "Talleres", "Abogados", "Restaurantes"] },
+            { h: "Servicios", items: ["SEO local", "Google Business Profile", "Gestión de reseñas", "Contenido geolocalizado", "Auditoría SEO"] },
+            { h: "Ciudades", items: ["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga"] },
+            { h: "Agencia", items: ["Sobre Rankin", "Casos de éxito", "Blog SEO local", "Trabaja con nosotros"] },
+            { h: "Legal", items: ["Aviso legal", "Política de privacidad", "Política de cookies", "Contacto"] },
           ].map((col) => (
             <div key={col.h}>
               <h4 className="font-bold mb-3">{col.h}</h4>
@@ -413,8 +397,8 @@ function Index() {
           ))}
         </div>
         <div className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-          <p>Rankin.com es un marketplace de servicios SEO local. Demo construida con Lovable.</p>
-          <p className="mt-2">© 2026 Rankin.com</p>
+          <p>Rankin · Agencia de SEO local para negocios de barrio en España.</p>
+          <p className="mt-2">© 2026 Rankin</p>
         </div>
       </footer>
     </div>
