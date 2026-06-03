@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   MapPin, ArrowRight, Search, Briefcase, ChevronRight, Phone,
-  BarChart3, Target, Rocket, FileSearch,
+  BarChart3, Target, Rocket,
   TrendingUp, TrendingDown, Minus, ShieldCheck, DollarSign, ArrowUpRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
