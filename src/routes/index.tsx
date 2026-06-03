@@ -63,8 +63,8 @@ const sectorTabsList = sectors.slice(0, 6).map((s) => s.name);
 
 function Home() {
   
-  const [sectorSlug, setSectorSlug] = useState(sectors[0]?.slug ?? "");
-  const [citySlug, setCitySlug] = useState(cities[0]?.slug ?? "");
+  const [sectorSlug, setSectorSlug] = useState("");
+  const [citySlug, setCitySlug] = useState("");
   const [activeSector, setActiveSector] = useState(sectorTabsList[0]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
