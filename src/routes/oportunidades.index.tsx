@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  MapPin, ArrowRight, Search, Briefcase, Clock, Star,
-  PiggyBank, Sparkles, Database, BadgeCheck, ChevronRight,
+  MapPin, ArrowRight, Search, Briefcase, Star,
+  PiggyBank, Flame, Database, BadgeCheck, ChevronRight,
+  TrendingUp, Target,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
@@ -40,8 +41,32 @@ function OportunidadesIndex() {
   const [sectorSlug, setSectorSlug] = useState<string>(sectors[0]?.slug ?? "");
   const [citySlug, setCitySlug] = useState<string>(cities[0]?.slug ?? "");
 
-  const flash = useMemo(() => opportunities.slice(0, 3), []);
-  const todoIncluido = useMemo(() => opportunities.slice(3, 6), []);
+  const competitionWeight = { Baja: 1, Media: 2, Alta: 3 } as const;
+  const trendPct = (o: typeof opportunities[number]) => {
+    const first = o.trend[0]?.value ?? 1;
+    const last = o.trend[o.trend.length - 1]?.value ?? first;
+    return Math.round(((last - first) / first) * 100);
+  };
+
+  const hotWeek = useMemo(
+    () => [...opportunities].sort((a, b) => trendPct(b) - trendPct(a)).slice(0, 3),
+    [],
+  );
+  const bestRoi = useMemo(
+    () => [...opportunities]
+      .map((o) => ({ o, ratio: (ticketBySector[o.sectorSlug] ?? 100) / competitionWeight[o.competition] }))
+      .sort((a, b) => b.ratio - a.ratio)
+      .slice(0, 3)
+      .map((x) => x.o),
+    [],
+  );
+  const trending = useMemo(
+    () => [...opportunities]
+      .filter((o) => !hotWeek.find((h) => h.slug === o.slug))
+      .sort((a, b) => trendPct(b) - trendPct(a))
+      .slice(0, 3),
+    [hotWeek],
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -84,77 +109,62 @@ function OportunidadesIndex() {
       </section>
 
       <main className="mx-auto max-w-7xl px-4 mt-20 mb-16 space-y-16">
-        {/* Oportunidades de Sector + Ciudad — destination grid */}
+        {/* 1. Oportunidades calientes esta semana */}
         <section>
-          <h2 className="text-2xl font-extrabold">Oportunidades de Sector + Ciudad</h2>
-          <p className="text-sm text-muted-foreground mb-6">Descubre nuestras ciudades más populares.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {cities.map((c) => {
-              const opp = opportunities.find((o) => o.citySlug === c.slug) ?? opportunities[0];
+          <div className="flex items-end justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-2xl font-extrabold flex items-center gap-2">
+                <Flame className="h-6 w-6 text-accent" /> Oportunidades calientes esta semana
+              </h2>
+              <p className="text-sm text-muted-foreground">Los cruces sector + ciudad con más subida de búsquedas en los últimos días.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {hotWeek.map((o, i) => {
+              const pct = trendPct(o);
               return (
-                <Link key={c.slug} to="/oportunidades/$slug" params={{ slug: opp.slug }}
-                  className="group relative h-44 rounded-md overflow-hidden block">
-                  <img src={c.img} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <span className="absolute top-3 right-3 bg-white text-foreground text-xs font-bold px-2.5 py-1 rounded shadow">
-                    desde {opp.searches.toLocaleString("es-ES")} búsq/mes
-                  </span>
-                  <span className="absolute bottom-3 left-3 text-white font-extrabold text-lg drop-shadow">
-                    {c.name}
-                  </span>
-                </Link>
+                <article key={o.slug} className="border border-border rounded-md bg-card overflow-hidden flex flex-col">
+                  <div className="relative h-52">
+                    <img src={flashImages[i % flashImages.length]} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover" />
+                    <span className="absolute top-3 right-3 bg-foreground text-background text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
+                      <Flame className="h-3 w-3" /> Caliente esta semana
+                    </span>
+                    <span className="absolute top-12 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3" /> +{pct}% búsquedas vs mes anterior
+                    </span>
+                    <span className="absolute bottom-3 left-3 text-white text-xs font-semibold inline-flex items-center gap-1 drop-shadow">
+                      <MapPin className="h-3.5 w-3.5" /> {o.cityName}, España
+                    </span>
+                  </div>
+                  <div className="p-4 flex flex-col flex-1">
+                    <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
+                      Subida real en {o.sectorName.toLowerCase()} en {o.cityName} según Google Keyword Planner y Search Console.
+                    </p>
+                    <p className="font-bold mt-2">{o.sectorName} en {o.cityName}</p>
+                    <div className="flex items-center gap-2 mt-1 text-xs">
+                      <div className="flex text-accent">
+                        {Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}
+                      </div>
+                      <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
+                      <span className="text-muted-foreground">Score ({(o.searches / 10).toFixed(0)})</span>
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-2 space-y-0.5">
+                      <p>{o.searches.toLocaleString("es-ES")} búsq/mes · Competencia {o.competition}</p>
+                      <p>Tendencia últimos 12 meses: +{pct}%</p>
+                    </div>
+                    <div className="mt-auto pt-3 flex items-end justify-between">
+                      <div>
+                        <p className="text-xs text-muted-foreground">ticket medio</p>
+                        <p className="text-lg"><span className="font-extrabold text-foreground">{(ticketBySector[o.sectorSlug] ?? 100).toLocaleString("es-ES")} €</span> <span className="text-xs text-muted-foreground">/ cliente</span></p>
+                      </div>
+                      <Button asChild size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
+                        <Link to="/oportunidades/$slug" params={{ slug: o.slug }}>Ver informe <ChevronRight className="h-4 w-4 ml-1" /></Link>
+                      </Button>
+                    </div>
+                  </div>
+                </article>
               );
             })}
-          </div>
-        </section>
-
-        {/* Ofertas Flash Sales — 3 grandes con imagen */}
-        <section>
-          <h2 className="text-2xl font-extrabold">Oportunidades Flash</h2>
-          <p className="text-sm text-muted-foreground mb-6">Cruces con mayor score este mes.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {flash.map((o, i) => (
-              <article key={o.slug} className="border border-border rounded-md bg-card overflow-hidden flex flex-col">
-                <div className="relative h-52">
-                  <img src={flashImages[i % flashImages.length]} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover" />
-                  <span className="absolute top-3 right-3 bg-foreground text-background text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
-                    <Sparkles className="h-3 w-3" /> Sector + Ciudad
-                  </span>
-                  <span className="absolute top-12 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
-                    <Clock className="h-3 w-3" /> Top opp. del mes
-                  </span>
-                  <span className="absolute bottom-3 left-3 text-white text-xs font-semibold inline-flex items-center gap-1 drop-shadow">
-                    <MapPin className="h-3.5 w-3.5" /> {o.cityName}, España
-                  </span>
-                </div>
-                <div className="p-4 flex flex-col flex-1">
-                  <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
-                    Cruce {o.sectorName.toLowerCase()} × {o.cityName} con datos de Google Keyword Planner y Search Console real.
-                  </p>
-                  <p className="font-bold mt-2">{o.sectorName} en {o.cityName}</p>
-                  <div className="flex items-center gap-2 mt-1 text-xs">
-                    <div className="flex text-accent">
-                      {Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}
-                    </div>
-                    <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
-                    <span className="text-muted-foreground">Score ({(o.searches / 10).toFixed(0)})</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-2 space-y-0.5">
-                    <p>{o.searches.toLocaleString("es-ES")} búsq/mes · Competencia {o.competition}</p>
-                    <p>Datos incluidos · {o.cityName}</p>
-                  </div>
-                  <div className="mt-auto pt-3">
-                    <p className="text-xs text-muted-foreground">ticket medio</p>
-                    <p className="text-lg"><span className="font-extrabold text-foreground">{(ticketBySector[o.sectorSlug] ?? 100).toLocaleString("es-ES")} €</span> <span className="text-xs text-muted-foreground">/ cliente</span></p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div className="flex justify-center mt-6">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 h-11 rounded-md">
-              Cargar más oportunidades
-            </Button>
           </div>
         </section>
 
@@ -175,47 +185,108 @@ function OportunidadesIndex() {
           ))}
         </section>
 
-        {/* Sectores top — estilo "Todo incluido" */}
+        {/* 2. Mejor ROI por menos competencia */}
         <section>
-          <h2 className="text-2xl font-extrabold">Sectores con más demanda</h2>
-          <p className="text-sm text-muted-foreground mb-6">Las apuestas más rentables ahora mismo.</p>
+          <div className="mb-6">
+            <h2 className="text-2xl font-extrabold flex items-center gap-2">
+              <Target className="h-6 w-6 text-primary" /> Mejor ROI por menos competencia
+            </h2>
+            <p className="text-sm text-muted-foreground">Cruces con ticket alto y pocos competidores top. Entrada más fácil, retorno mayor.</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {todoIncluido.map((o, i) => (
-              <article key={o.slug} className="border border-border rounded-md bg-card overflow-hidden flex flex-col">
-                <div className="relative h-48">
-                  <img src={flashImages[(i + 1) % flashImages.length]} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover" />
-                  <span className="absolute top-3 right-3 bg-foreground text-background text-[11px] font-bold px-2 py-1 rounded">
-                    Sector destacado
-                  </span>
-                  <span className="absolute bottom-3 left-3 text-white text-xs font-semibold inline-flex items-center gap-1 drop-shadow">
-                    <MapPin className="h-3.5 w-3.5" /> {o.cityName}, España
-                  </span>
-                </div>
-                <div className="p-4 flex flex-col flex-1">
-                  <p className="font-bold">{o.sectorName}</p>
-                  <div className="flex items-center gap-2 mt-1 text-xs">
-                    <div className="flex text-accent">{Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}</div>
-                    <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
+            {bestRoi.map((o, i) => {
+              const ticket = ticketBySector[o.sectorSlug] ?? 100;
+              const comps = o.competition === "Baja" ? 4 : o.competition === "Media" ? 7 : 12;
+              return (
+                <article key={o.slug} className="border border-border rounded-md bg-card overflow-hidden flex flex-col">
+                  <div className="relative h-48">
+                    <img src={flashImages[(i + 1) % flashImages.length]} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover" />
+                    <span className="absolute top-3 right-3 bg-foreground text-background text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
+                      <Target className="h-3 w-3" /> Mejor ROI
+                    </span>
+                    <span className="absolute top-12 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-1 rounded">
+                      Solo {comps} competidores top
+                    </span>
+                    <span className="absolute bottom-3 left-3 text-white text-xs font-semibold inline-flex items-center gap-1 drop-shadow">
+                      <MapPin className="h-3.5 w-3.5" /> {o.cityName}, España
+                    </span>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {o.searches.toLocaleString("es-ES")} búsq/mes · Competencia {o.competition}<br />
-                    Datos incluidos · {o.cityName}<br />
-                    Plan accionable
-                  </p>
-                  <div className="mt-auto pt-3 flex items-end justify-between">
-                    <div>
-                      <p className="text-xs text-muted-foreground">ticket medio</p>
-                      <p className="text-lg font-extrabold">{(ticketBySector[o.sectorSlug] ?? 100).toLocaleString("es-ES")} €</p>
+                  <div className="p-4 flex flex-col flex-1">
+                    <p className="font-bold">{o.sectorName} en {o.cityName}</p>
+                    <div className="flex items-center gap-2 mt-1 text-xs">
+                      <div className="flex text-accent">{Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}</div>
+                      <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
                     </div>
-                    <Button asChild size="sm" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold">
-                      <Link to="/oportunidades/$slug" params={{ slug: o.slug }}>Ver informe <ChevronRight className="h-4 w-4 ml-1" /></Link>
-                    </Button>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {o.searches.toLocaleString("es-ES")} búsq/mes · Competencia {o.competition}<br />
+                      Ratio ticket / competidor: {Math.round(ticket / comps).toLocaleString("es-ES")} €<br />
+                      Entrada estimada en 60-90 días
+                    </p>
+                    <div className="mt-auto pt-3 flex items-end justify-between">
+                      <div>
+                        <p className="text-xs text-muted-foreground">ticket medio</p>
+                        <p className="text-lg font-extrabold">{ticket.toLocaleString("es-ES")} €</p>
+                      </div>
+                      <Button asChild size="sm" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold">
+                        <Link to="/oportunidades/$slug" params={{ slug: o.slug }}>Ver informe <ChevronRight className="h-4 w-4 ml-1" /></Link>
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </section>
+
+        {/* 3. Sectores en tendencia */}
+        <section>
+          <div className="mb-6">
+            <h2 className="text-2xl font-extrabold flex items-center gap-2">
+              <TrendingUp className="h-6 w-6 text-primary" /> Sectores en tendencia
+            </h2>
+            <p className="text-sm text-muted-foreground">Lo que más está creciendo en búsquedas este mes en España.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {trending.map((o, i) => {
+              const pct = trendPct(o);
+              return (
+                <article key={o.slug} className="border border-border rounded-md bg-card overflow-hidden flex flex-col">
+                  <div className="relative h-48">
+                    <img src={flashImages[(i + 2) % flashImages.length]} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover" />
+                    <span className="absolute top-3 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3" /> +{pct}% vs mes anterior
+                    </span>
+                    <span className="absolute bottom-3 left-3 text-white text-xs font-semibold inline-flex items-center gap-1 drop-shadow">
+                      <MapPin className="h-3.5 w-3.5" /> {o.cityName}, España
+                    </span>
+                  </div>
+                  <div className="p-4 flex flex-col flex-1">
+                    <p className="font-bold">{o.sectorName} en {o.cityName}</p>
+                    <div className="flex items-center gap-2 mt-1 text-xs">
+                      <div className="flex text-accent">{Array.from({ length: 4 }).map((_, k) => <Star key={k} className="h-3.5 w-3.5 fill-current" />)}</div>
+                      <span className="bg-primary/10 text-primary font-bold px-1.5 py-0.5 rounded text-[11px]">{o.score}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {o.searches.toLocaleString("es-ES")} búsq/mes · Competencia {o.competition}<br />
+                      Crecimiento últimos 12 meses: +{pct}%<br />
+                      Momento óptimo para posicionar
+                    </p>
+                    <div className="mt-auto pt-3 flex items-end justify-between">
+                      <div>
+                        <p className="text-xs text-muted-foreground">ticket medio</p>
+                        <p className="text-lg font-extrabold">{(ticketBySector[o.sectorSlug] ?? 100).toLocaleString("es-ES")} €</p>
+                      </div>
+                      <Button asChild size="sm" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold">
+                        <Link to="/oportunidades/$slug" params={{ slug: o.slug }}>Ver informe <ChevronRight className="h-4 w-4 ml-1" /></Link>
+                      </Button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
 
         {/* CTA final */}
         <section className="bg-primary text-primary-foreground rounded-md p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
