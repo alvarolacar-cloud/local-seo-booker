@@ -49,8 +49,8 @@ function compBadge(c: "Baja" | "Media" | "Alta") {
 }
 
 function OportunidadesIndex() {
-  const [sectorSlug, setSectorSlug] = useState<string>(sectors[0]?.slug ?? "");
-  const [citySlug, setCitySlug] = useState<string>(cities[0]?.slug ?? "");
+  const [sectorSlug, setSectorSlug] = useState<string>("");
+  const [citySlug, setCitySlug] = useState<string>("");
 
   const featuredOpps = opportunities.slice(0, 6);
   const featuredCases = cases.slice(0, 4);
