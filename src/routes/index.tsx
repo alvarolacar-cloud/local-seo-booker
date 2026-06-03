@@ -106,7 +106,7 @@ function Home() {
           <div className="mt-6">
             <div className="mb-2">
               <button className="inline-flex items-center gap-1 text-xs font-semibold text-white/80 border border-white/30 rounded px-3 py-1 hover:bg-white/10 transition">
-                Análisis completo <ChevronDown className="h-3 w-3" />
+                Oportunidades en Google <ChevronDown className="h-3 w-3" />
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1.1fr_1fr_1fr_auto] gap-2">
