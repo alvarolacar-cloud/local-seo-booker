@@ -467,9 +467,9 @@ function FieldStatic({ label, value }: { label: string; value: string }) {
   );
 }
 
-function FieldSelect({ label, icon, value, onChange, options }: {
+function FieldSelect({ label, icon, value, onChange, options, placeholder }: {
   label: string; icon: React.ReactNode; value: string; onChange: (v: string) => void;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string }[]; placeholder?: string;
 }) {
   return (
     <label className="bg-secondary/60 rounded-md px-4 h-14 flex items-center gap-3 cursor-pointer">
@@ -481,6 +481,7 @@ function FieldSelect({ label, icon, value, onChange, options }: {
           onChange={(e) => onChange(e.target.value)}
           className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5"
         >
+          {placeholder && <option value="" disabled>{placeholder}</option>}
           {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       </div>
