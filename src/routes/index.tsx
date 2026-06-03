@@ -72,20 +72,16 @@ function Home() {
       <section className="bg-primary text-primary-foreground">
         <SiteHeader variant="transparent" />
         <div className="mx-auto max-w-7xl px-4 pt-6 pb-10 md:pt-10">
-          {/* Tabs categorías */}
+          {/* Tabs categorías = navegación principal */}
           <div className="flex flex-wrap items-center gap-2 mb-6">
-            {tabs.map((t) => {
+            {navItems.map((t) => {
               const Icon = t.icon;
-              const active = tab === t.id;
               return (
-                <button
+                <Link
                   key={t.id}
-                  onClick={() => setTab(t.id)}
-                  className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold transition ${
-                    active
-                      ? "bg-[#0066ff] border-[#0066ff] text-white"
-                      : "border-white/30 text-white hover:bg-white/10"
-                  }`}
+                  to={t.to}
+                  className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/30 text-white hover:bg-white/10 text-sm font-semibold transition"
+                  activeProps={{ className: "!bg-[#0066ff] !border-[#0066ff]" }}
                 >
                   <Icon className="h-4 w-4" />
                   {t.label}
@@ -94,10 +90,11 @@ function Home() {
                       Novedad
                     </span>
                   )}
-                </button>
+                </Link>
               );
             })}
           </div>
+
 
           <h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl">
             Miles de búsquedas locales sin cubrir. Encuentra la tuya.
