@@ -128,9 +128,9 @@ function Home() {
               />
               <FieldStatic label="Zona / barrios" value="Todos los distritos" />
               <FieldStatic label="Volumen mínimo" value="500 búsq/mes" />
-              <Button asChild className="h-14 md:w-16 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-md">
+              <Button asChild className="h-14 md:px-8 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-md text-base font-semibold">
                 <Link to="/oportunidades">
-                  <Search className="h-5 w-5" />
+                  Buscar
                 </Link>
               </Button>
             </div>
