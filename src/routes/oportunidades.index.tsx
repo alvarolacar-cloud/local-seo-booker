@@ -245,17 +245,6 @@ function OportunidadesIndex() {
           </div>
         </section>
 
-        {/* Logos/clientes */}
-        <section>
-          <p className="text-center text-sm font-semibold text-muted-foreground mb-5">
-            +480 negocios locales confían en nosotros en toda España
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 opacity-70">
-            {["Fontanería Ríos", "Clínica Sonríe", "Barbería El Capitán", "Taller Norte", "Abogados Luna", "Inm. Mediterráneo"].map((b) => (
-              <span key={b} className="text-sm font-bold tracking-tight text-foreground/70">{b}</span>
-            ))}
-          </div>
-        </section>
 
         {/* Trabaja con tranquilidad — 6 trust cards */}
         <section>
