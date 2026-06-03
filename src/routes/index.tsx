@@ -136,13 +136,10 @@ function Home() {
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-1 pt-3">
               <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
-                <input type="checkbox" className="accent-[#0066ff]" defaultChecked /> Solo baja competencia
+                <input type="checkbox" className="accent-[#0066ff]" defaultChecked /> Datos de Google KeywordPlanner
               </label>
               <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
-                <input type="checkbox" className="accent-[#0066ff]" /> Incluir barrios limítrofes
-              </label>
-              <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
-                <input type="checkbox" className="accent-[#0066ff]" /> Solo sectores en tendencia
+                <input type="checkbox" className="accent-[#0066ff]" defaultChecked /> Datos de Google Trends
               </label>
             </div>
           </div>
