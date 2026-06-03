@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Compass, BookOpen, Trophy, Route as RouteIcon, Home as HomeIcon } from "lucide-react";
+import { SiteHeader } from "@/components/site/Header";
 
 const navItems = [
   { id: "inicio", label: "Inicio", icon: HomeIcon, to: "/" as const, novelty: false },
@@ -11,23 +12,24 @@ const navItems = [
 
 export function NavChips() {
   return (
-    <section className="bg-background border-b border-border">
-      <div className="mx-auto max-w-7xl px-4 py-6">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {navItems.map((c) => {
-            const Icon = c.icon;
+    <section className="bg-primary text-primary-foreground">
+      <SiteHeader variant="transparent" />
+      <div className="mx-auto max-w-7xl px-4 pt-6 pb-8 md:pt-10">
+        <div className="flex flex-wrap items-center gap-2">
+          {navItems.map((t) => {
+            const Icon = t.icon;
             return (
               <Link
-                key={c.id}
-                to={c.to}
-                className="relative flex items-center gap-3 bg-primary text-primary-foreground rounded-md px-4 py-4 font-semibold text-sm hover:bg-[var(--brand-deep)] transition"
-                activeOptions={{ exact: c.to === "/" }}
-                activeProps={{ className: "!bg-[#0066ff]" }}
+                key={t.id}
+                to={t.to}
+                activeOptions={{ exact: t.to === "/" }}
+                className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/30 text-white hover:bg-white/10 text-sm font-semibold transition"
+                activeProps={{ className: "!bg-[#0066ff] !border-[#0066ff]" }}
               >
-                <Icon className="h-5 w-5 shrink-0" />
-                <span className="truncate">{c.label}</span>
-                {c.novelty && (
-                  <span className="absolute -top-2 right-3 bg-[#e91e63] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                <Icon className="h-4 w-4" />
+                {t.label}
+                {t.novelty && (
+                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#e91e63] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
                     Novedad
                   </span>
                 )}
