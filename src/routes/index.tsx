@@ -1,329 +1,376 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import {
+  Search, MapPin, Briefcase, TrendingUp, Building2, Compass,
+  Wrench, Stethoscope, Hammer, Scale,
+  ChevronDown, ChevronRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/site/Header";
+import { SiteFooter } from "@/components/site/Footer";
+import { sectors } from "@/data/sectors";
+import { cities } from "@/data/cities";
+import { opportunities } from "@/data/opportunities";
+import heroBanner from "@/assets/hero-banner.jpg";
 import cityMadrid from "@/assets/city-madrid.jpg";
 import cityBarcelona from "@/assets/city-barcelona.jpg";
 import cityValencia from "@/assets/city-valencia.jpg";
 import citySevilla from "@/assets/city-sevilla.jpg";
 import cityBilbao from "@/assets/city-bilbao.jpg";
 import cityMalaga from "@/assets/city-malaga.jpg";
-import { Search, MapPin, ChevronRight, Phone, Wrench, TrendingUp, TrendingDown, Minus, BarChart3, Target, Compass, FileSearch, Rocket } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { SiteHeader } from "@/components/site/Header";
-import { SiteFooter } from "@/components/site/Footer";
-import { opportunities } from "@/data/opportunities";
-import { cities } from "@/data/cities";
-import { cases } from "@/data/cases";
-import { sectors } from "@/data/sectors";
+import editorialImg from "@/assets/report-map.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rankin — Oportunidades de SEO local para tu negocio" },
-      { name: "description", content: "Descubre qué oportunidad de SEO local tiene tu sector en tu ciudad: búsquedas mensuales, competencia y potencial real. Informes de oportunidad para fontaneros, dentistas, peluquerías, talleres y más." },
+      { title: "Rankin — Miles de búsquedas locales sin cubrir. Encuentra la tuya." },
+      { name: "description", content: "Detectamos los huecos de Google donde tu sector tiene demanda real y la competencia está floja. Informes de oportunidad para negocios locales." },
       { property: "og:title", content: "Rankin — Oportunidades de SEO local" },
-      { property: "og:description", content: "Encontramos los huecos de Google donde tu negocio puede ganar clientes locales. Sector + ciudad + datos reales." },
-      { property: "og:url", content: "/" },
+      { property: "og:description", content: "Sector + ciudad + datos reales. Encuentra el hueco." },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
-  component: Index,
+  component: Home,
 });
 
-function compBadge(c: "Baja" | "Media" | "Alta") {
-  if (c === "Baja") return { cls: "bg-primary/10 text-primary", icon: <TrendingDown className="h-3 w-3" /> };
-  if (c === "Alta") return { cls: "bg-destructive/15 text-destructive", icon: <TrendingUp className="h-3 w-3" /> };
-  return { cls: "bg-accent/30 text-accent-foreground", icon: <Minus className="h-3 w-3" /> };
-}
+const tabs = [
+  { id: "sector", label: "Por sector", icon: Briefcase, novelty: false },
+  { id: "ciudad", label: "Por ciudad", icon: MapPin, novelty: true },
+  { id: "barrio", label: "Por barrio", icon: Building2, novelty: false },
+  { id: "tendencia", label: "Tendencias", icon: TrendingUp, novelty: false },
+];
 
-const sectorOptions = Array.from(
-  new Map(opportunities.map((o) => [o.sectorSlug, o.sectorName])).entries()
-);
+const quickChips = [
+  { label: "Fontaneros", icon: Wrench, to: "/oportunidades" as const },
+  { label: "Dentistas", icon: Stethoscope, to: "/oportunidades" as const },
+  { label: "Reformas", icon: Hammer, to: "/oportunidades" as const },
+  { label: "Abogados", icon: Scale, to: "/oportunidades" as const },
+  { label: "Explora todo", icon: Compass, to: "/oportunidades" as const },
+];
 
 const cityImageMap: Record<string, string> = {
-  madrid: cityMadrid,
-  barcelona: cityBarcelona,
-  valencia: cityValencia,
-  sevilla: citySevilla,
-  bilbao: cityBilbao,
-  malaga: cityMalaga,
+  madrid: cityMadrid, barcelona: cityBarcelona, valencia: cityValencia,
+  sevilla: citySevilla, bilbao: cityBilbao, malaga: cityMalaga,
 };
 
-function Index() {
-  const featuredOpps = opportunities.slice(0, 6);
-  const featuredCases = cases.slice(0, 4);
+const faqs = [
+  { q: "¿Cómo funciona Rankin?", a: "Analizamos qué busca la gente en tu ciudad para tu sector, cuántos competidores hay y qué hueco tienes. Te entregamos un informe con un plan de acción priorizado." },
+  { q: "¿Cuánto cuesta un informe de oportunidad?", a: "El informe inicial es gratuito si tu sector y ciudad están en nuestro catálogo. Para informes a medida, 290€ con entrega en 48h." },
+  { q: "¿En cuánto tiempo veo resultados?", a: "Los primeros movimientos en Google Maps suelen aparecer entre 30 y 60 días. Posiciones top 3 estables, entre 3 y 6 meses." },
+  { q: "¿Hay permanencia?", a: "No. Trabajamos mes a mes. Si en 90 días no ves mejoras medibles, te devolvemos la última cuota." },
+  { q: "¿Trabajáis con cualquier sector?", a: "Sí, siempre que tenga demanda local en Google. Tenemos casos en 14 sectores y abrimos nuevos bajo demanda." },
+  { q: "¿Qué incluye el servicio mensual?", a: "Ficha de Google Business, contenido local, reseñas, enlaces, monitorización de competencia e informe mensual de resultados." },
+];
+
+const cityTabsList = ["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga"];
+
+function Home() {
+  const [tab, setTab] = useState("sector");
+  const [sectorSlug, setSectorSlug] = useState(sectors[0]?.slug ?? "");
+  const [citySlug, setCitySlug] = useState(cities[0]?.slug ?? "");
+  const [activeCity, setActiveCity] = useState("Madrid");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  const cityOpps = opportunities.filter((o) => o.cityName === activeCity).slice(0, 6);
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader />
-
-      {/* Hero */}
+      {/* HERO azul marino — Skyscanner clone */}
       <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-7xl px-4 pt-10 pb-20">
-          <span className="inline-flex items-center gap-1 bg-accent text-accent-foreground text-xs font-bold px-2 py-1 rounded">
-            <Compass className="h-3 w-3" /> Oportunidades de SEO local
-          </span>
-          <h1 className="mt-3 text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl">
-            ¿Cuánta gente está buscando tu servicio en tu ciudad ahora mismo?
+        <SiteHeader variant="transparent" />
+        <div className="mx-auto max-w-7xl px-4 pt-6 pb-10 md:pt-10">
+          {/* Tabs categorías */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
+            {tabs.map((t) => {
+              const Icon = t.icon;
+              const active = tab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`relative inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-semibold transition ${
+                    active
+                      ? "bg-[#0066ff] border-[#0066ff] text-white"
+                      : "border-white/30 text-white hover:bg-white/10"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {t.label}
+                  {t.novelty && (
+                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#e91e63] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                      Novedad
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl">
+            Miles de búsquedas locales sin cubrir. Encuentra la tuya.
           </h1>
-          <p className="mt-3 text-lg text-white/85 max-w-3xl">
-            Detectamos los huecos de Google donde tu sector tiene demanda real y la competencia está floja. Te lo enseñamos en un informe de oportunidad con datos, no humo.
-          </p>
+
+          {/* Buscador grande */}
+          <div className="mt-6 bg-card text-foreground rounded-md p-2 shadow-2xl">
+            <div className="mb-2 px-2 pt-1">
+              <button className="inline-flex items-center gap-1 text-xs font-semibold text-foreground/80 border border-border rounded px-3 py-1">
+                Análisis completo <ChevronDown className="h-3 w-3" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1.1fr_1fr_1fr_auto] gap-2">
+              <FieldSelect
+                label="Sector"
+                icon={<Briefcase className="h-4 w-4" />}
+                value={sectorSlug}
+                onChange={setSectorSlug}
+                options={sectors.map((s) => ({ value: s.slug, label: s.name }))}
+              />
+              <FieldSelect
+                label="Ciudad"
+                icon={<MapPin className="h-4 w-4" />}
+                value={citySlug}
+                onChange={setCitySlug}
+                options={cities.map((c) => ({ value: c.slug, label: c.name }))}
+              />
+              <FieldStatic label="Zona / barrios" value="Todos los distritos" />
+              <FieldStatic label="Volumen mínimo" value="500 búsq/mes" />
+              <Button asChild className="h-14 md:w-16 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-md">
+                <Link to="/oportunidades">
+                  <Search className="h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-1 px-3 pt-3 pb-1">
+              <label className="flex items-center gap-2 text-xs text-foreground/70 cursor-pointer">
+                <input type="checkbox" className="accent-[#0066ff]" defaultChecked /> Solo baja competencia
+              </label>
+              <label className="flex items-center gap-2 text-xs text-foreground/70 cursor-pointer">
+                <input type="checkbox" className="accent-[#0066ff]" /> Incluir barrios limítrofes
+              </label>
+              <label className="flex items-center gap-2 text-xs text-foreground/70 cursor-pointer">
+                <input type="checkbox" className="accent-[#0066ff]" /> Solo sectores en tendencia
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Banner inmersivo grande */}
+        <div className="mx-auto max-w-7xl px-4 pb-10">
+          <div className="relative rounded-lg overflow-hidden h-[360px] md:h-[440px]">
+            <img
+              src={heroBanner}
+              alt="Salamanca, Madrid"
+              className="absolute inset-0 w-full h-full object-cover"
+              width={1920}
+              height={1024}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+            <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
+              <p className="text-white/85 text-sm font-semibold mb-2">Oportunidad destacada</p>
+              <h2 className="text-white text-3xl md:text-5xl font-extrabold leading-tight max-w-2xl">
+                Salamanca, Madrid — 312 búsquedas/mes sin cubrir
+              </h2>
+            </div>
+            <Button asChild className="absolute bottom-6 right-6 md:bottom-10 md:right-10 bg-white text-foreground hover:bg-white/90 font-semibold">
+              <Link to="/oportunidades">Más información</Link>
+            </Button>
+            <div className="absolute bottom-3 left-6 md:left-10 flex items-center gap-2 text-xs text-white/80">
+              <span className="bg-accent text-accent-foreground font-extrabold px-2 py-0.5 rounded">RANKIN</span>
+              <span>Con datos reales de Google Keyword Planner</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Selector de oportunidad */}
-      <div className="mx-auto max-w-7xl px-4 -mt-12 relative z-10">
-        <div className="bg-accent rounded-md p-1 shadow-[var(--shadow-card)]">
-          <div className="grid grid-cols-1 md:grid-cols-[2fr_2fr_auto] gap-1">
-            <label className="bg-background rounded-sm flex items-center gap-2 px-3 py-3">
-              <Wrench className="h-5 w-5 text-primary" />
-              <select className="flex-1 bg-transparent border-0 outline-none text-base text-foreground">
-                <option value="">Elige tu sector…</option>
-                {sectorOptions.map(([slug, name]) => (
-                  <option key={slug} value={slug}>{name}</option>
-                ))}
-              </select>
-            </label>
-            <label className="bg-background rounded-sm flex items-center gap-2 px-3 py-3">
-              <MapPin className="h-5 w-5 text-primary" />
-              <select className="flex-1 bg-transparent border-0 outline-none text-base text-foreground">
-                <option value="">Elige tu ciudad…</option>
-                {cities.map((c) => (
-                  <option key={c.slug} value={c.slug}>{c.name}</option>
-                ))}
-              </select>
-            </label>
-            <Button asChild className="bg-primary hover:bg-[var(--brand-deep)] text-primary-foreground h-auto px-6 text-base font-semibold rounded-sm">
-              <Link to="/oportunidades"><Search className="h-5 w-5 mr-1" /> Ver mi oportunidad</Link>
-            </Button>
+      {/* Chips de acceso rápido */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 py-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {quickChips.map((c) => {
+              const Icon = c.icon;
+              return (
+                <Link
+                  key={c.label}
+                  to={c.to}
+                  className="flex items-center gap-3 bg-primary text-primary-foreground rounded-md px-4 py-4 font-semibold text-sm hover:bg-[var(--brand-deep)] transition"
+                >
+                  <Icon className="h-5 w-5 shrink-0" />
+                  <span className="truncate">{c.label}</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
-        <p className="mt-3 text-sm text-foreground">
-          Resultados públicos para 6 sectores y 6 ciudades. ¿No ves el tuyo? <Link to="/oportunidades" className="text-primary font-semibold underline">Pídenos un informe a medida</Link>.
-        </p>
-      </div>
+      </section>
 
-      <main className="mx-auto max-w-7xl px-4 mt-16 space-y-16">
-        {/* Qué es una oportunidad */}
-        <section>
-          <h2 className="text-xl font-bold mb-1">Qué es una oportunidad de SEO local</h2>
-          <p className="text-sm text-muted-foreground mb-4">El concepto sobre el que gira toda nuestra forma de trabajar.</p>
-          <div className="border border-border rounded-lg p-5 md:p-6 flex flex-col md:flex-row gap-6 items-center bg-card shadow-[var(--shadow-card)]">
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold">Un cruce entre tu sector y tu ciudad donde Google tiene hueco</h3>
-              <p className="text-muted-foreground mt-2 mb-4">
-                Lo medimos con tres variables: <strong>demanda real</strong> (cuánta gente busca tu servicio cada mes), <strong>competencia</strong> (cuántos negocios pelean por esas búsquedas) y un <strong>score de oportunidad</strong> de 0 a 100 que te dice si merece la pena entrar ahora.
+      {/* Banner editorial secundario */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 pb-8">
+          <div className="relative rounded-lg overflow-hidden h-[280px] md:h-[340px]">
+            <img
+              src={editorialImg}
+              alt="Cómo funciona Rankin"
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/10" />
+            <div className="relative h-full flex flex-col justify-center p-6 md:p-10 max-w-xl">
+              <h2 className="text-white text-3xl md:text-4xl font-extrabold leading-tight">
+                Así trabajamos contigo<br />paso a paso
+              </h2>
+              <p className="text-white/85 mt-3 text-sm md:text-base">
+                Detectamos el hueco, montamos el plan, ejecutamos cada mes y te lo enseñamos en un informe sin paja.
               </p>
-              <Button asChild className="bg-primary hover:bg-[var(--brand-deep)]">
-                <Link to="/oportunidades">Ver oportunidades abiertas</Link>
-              </Button>
-            </div>
-            <div className="grid grid-cols-3 gap-3 w-full md:w-80 shrink-0">
-              {[
-                { icon: BarChart3, t: "Demanda", v: "Búsq./mes" },
-                { icon: Target, t: "Competencia", v: "Baja-Alta" },
-                { icon: Rocket, t: "Score", v: "0-100" },
-              ].map(({ icon: Icon, t, v }) => (
-                <div key={t} className="bg-secondary rounded-md p-3 text-center">
-                  <Icon className="h-5 w-5 text-primary mx-auto mb-1" />
-                  <p className="text-xs font-semibold">{t}</p>
-                  <p className="text-[11px] text-muted-foreground">{v}</p>
-                </div>
-              ))}
+              <div className="mt-5">
+                <Button asChild className="bg-white text-foreground hover:bg-white/90 font-semibold">
+                  <Link to="/como-funciona">¿Cómo lo hacemos?</Link>
+                </Button>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Oportunidades destacadas */}
-        <section>
-          <div className="flex items-end justify-between mb-6 flex-wrap gap-2">
-            <div>
-              <h2 className="text-2xl font-bold mb-1">Oportunidades abiertas ahora mismo</h2>
-              <p className="text-sm text-muted-foreground">Sectores y ciudades con hueco real en Google. Entra al informe y mira los números por dentro.</p>
-            </div>
-            <Button asChild variant="outline">
-              <Link to="/oportunidades">Ver todas <ChevronRight className="h-4 w-4" /></Link>
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {featuredOpps.map((o) => {
-              const c = compBadge(o.competition);
-              const cityImg = cityImageMap[o.citySlug];
+      {/* Sección extra de cards — 4 barrios destacados (ÚNICA adición) */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 py-10">
+          <h2 className="text-2xl font-extrabold mb-1">Barrios con más hueco esta semana</h2>
+          <p className="text-sm text-muted-foreground mb-6">Búsquedas reales que nadie está cubriendo bien en Google Maps.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {opportunities.slice(0, 4).map((o) => {
+              const img = cityImageMap[o.citySlug];
               return (
-                <Link key={o.slug} to="/oportunidades/$slug" params={{ slug: o.slug }} className="group block border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-lg hover:border-primary transition">
-                  {cityImg && (
-                    <div className="relative h-14 overflow-hidden">
-                      <img src={cityImg} alt={o.cityName} className="h-full w-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition duration-500" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-card" />
+                <Link
+                  key={o.slug}
+                  to="/oportunidades/$slug"
+                  params={{ slug: o.slug }}
+                  className="group block rounded-lg overflow-hidden border border-border bg-card hover:shadow-lg transition"
+                >
+                  <div className="relative h-40 overflow-hidden">
+                    {img && (
+                      <img src={img} alt={o.cityName} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="absolute bottom-3 left-3 text-white">
+                      <p className="text-[11px] uppercase tracking-wide opacity-80">{o.cityName}</p>
+                      <p className="font-bold text-lg leading-tight">{o.sectorName}</p>
                     </div>
-                  )}
-                  <div className="p-5">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">{o.cityName}</p>
-                    <h3 className="text-lg font-bold mt-1 mb-3">{o.sectorName} en {o.cityName}</h3>
-                    <div className="flex items-center gap-2 mb-4 flex-wrap">
-                      <span className="bg-primary/10 text-primary font-semibold text-xs px-2 py-1 rounded">{o.searches.toLocaleString("es-ES")} búsq./mes</span>
-                      <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded ${c.cls}`}>
-                        {c.icon} Competencia {o.competition.toLowerCase()}
-                      </span>
+                    <span className="absolute top-3 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-0.5 rounded">
+                      Score {o.score}
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-semibold">{o.searches.toLocaleString("es-ES")} búsq/mes</span>
+                      <span className="text-muted-foreground">Comp. {o.competition.toLowerCase()}</span>
                     </div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="flex-1 h-2 bg-secondary rounded overflow-hidden">
-                        <div className="h-full bg-primary" style={{ width: `${o.score}%` }} />
-                      </div>
-                      <span className="text-sm font-bold text-primary">{o.score}/100</span>
-                    </div>
-                    <p className="text-sm font-semibold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Ver informe completo <ChevronRight className="h-4 w-4" />
+                    <p className="text-sm font-semibold text-primary mt-3 flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Ver informe <ChevronRight className="h-4 w-4" />
                     </p>
                   </div>
                 </Link>
               );
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Qué contiene el informe */}
-        <section className="border border-border rounded-lg p-6 md:p-8 bg-card">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-8 items-center">
-            <div>
-              <span className="inline-flex items-center gap-1 bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">
-                <FileSearch className="h-3 w-3" /> Informe de oportunidad
-              </span>
-              <h2 className="text-2xl font-bold mt-2 mb-2">Esto es lo que ves al abrir una oportunidad</h2>
-              <p className="text-muted-foreground mb-4">
-                Cada informe es un análisis concreto de tu sector en tu ciudad. Sin plantillas genéricas: los números vienen de Google y de nuestro propio crawler.
-              </p>
-              <ul className="space-y-2 text-sm">
-                {[
-                  "Búsquedas mensuales y evolución de los últimos 12 meses",
-                  "Palabras clave que más facturan en tu sector y ciudad",
-                  "Barrios y distritos con más potencial sin explotar",
-                  "Competidores que ya están posicionados y por qué",
-                  "Plan de acción priorizado para entrar al Map Pack",
-                ].map((t) => (
-                  <li key={t} className="flex items-start gap-2">
-                    <ChevronRight className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                    <span>{t}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-5 flex gap-2 flex-wrap">
-                <Button asChild className="bg-primary hover:bg-[var(--brand-deep)]">
-                  <Link to="/oportunidades/$slug" params={{ slug: "fontaneros-madrid" }}>Ver informe de ejemplo</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link to="/como-funciona">Cómo trabajamos</Link>
-                </Button>
-              </div>
-            </div>
-            <div className="bg-secondary rounded-md p-5 border border-border">
-              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">Vista previa</p>
-              <h3 className="font-bold text-lg mb-3">Fontaneros en Madrid</h3>
-              <div className="grid grid-cols-3 gap-2 mb-4">
-                <div className="bg-background rounded p-2 text-center">
-                  <p className="text-xs text-muted-foreground">Búsq./mes</p>
-                  <p className="font-bold text-primary">14.800</p>
-                </div>
-                <div className="bg-background rounded p-2 text-center">
-                  <p className="text-xs text-muted-foreground">Score</p>
-                  <p className="font-bold text-primary">82/100</p>
-                </div>
-                <div className="bg-background rounded p-2 text-center">
-                  <p className="text-xs text-muted-foreground">CPC</p>
-                  <p className="font-bold text-primary">3,2 €</p>
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground mb-1">Top barrios</p>
-              <div className="space-y-1">
-                {[{ n: "Centro", p: 92 }, { n: "Salamanca", p: 88 }, { n: "Chamberí", p: 84 }, { n: "Tetuán", p: 76 }].map((d) => (
-                  <div key={d.n} className="flex items-center gap-2">
-                    <span className="text-xs w-20">{d.n}</span>
-                    <div className="flex-1 h-1.5 bg-background rounded overflow-hidden">
-                      <div className="h-full bg-primary" style={{ width: `${d.p}%` }} />
-                    </div>
-                    <span className="text-xs font-semibold w-8 text-right">{d.p}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Casos */}
-        <section>
-          <div className="flex items-end justify-between mb-4 flex-wrap gap-2">
-            <div>
-              <h2 className="text-2xl font-bold mb-1">Oportunidades que ya hemos convertido en clientes</h2>
-              <p className="text-sm text-muted-foreground">Negocios reales que detectamos, posicionamos y siguen con nosotros.</p>
-            </div>
-            <Button asChild variant="outline">
-              <Link to="/casos-exito">Ver todos los casos <ChevronRight className="h-4 w-4" /></Link>
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {featuredCases.map((a) => (
-              <article key={a.slug} className="border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-lg transition">
-                <div className="relative aspect-[4/3]">
-                  <img src={a.img} alt={a.name} className="h-full w-full object-cover" loading="lazy" />
-                  <span className="absolute top-2 left-2 bg-accent text-accent-foreground text-xs font-semibold px-2 py-0.5 rounded">{a.sector}</span>
-                </div>
-                <div className="p-3">
-                  <h3 className="font-bold text-base leading-tight">{a.name}</h3>
-                  <p className="text-xs text-muted-foreground mb-2">{a.city}</p>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="bg-primary text-primary-foreground text-xs font-bold px-1.5 py-1 rounded">{a.rating}</span>
-                    <span className="text-xs"><strong>Excelente</strong> · {a.reviews} reseñas</span>
-                  </div>
-                  <div className="text-xs space-y-1 border-t border-border pt-2">
-                    <p><span className="text-muted-foreground">Antes:</span> {a.before}</p>
-                    <p><span className="text-muted-foreground">Ahora:</span> <strong>{a.after}</strong></p>
-                    <p className="text-primary font-semibold mt-1">{a.growth}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* Sectores con oportunidades activas */}
-        <section>
-          <h2 className="text-2xl font-bold mb-1">Sectores con oportunidades activas</h2>
-          <p className="text-sm text-muted-foreground mb-4">Estos son los sectores donde hemos detectado hueco real en Google. Trabajamos con cualquier negocio local bajo demanda.</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {sectors.map((s) => {
-              const Icon = s.icon;
+      {/* FAQ en 2 columnas */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 py-10">
+          <h2 className="text-2xl font-extrabold mb-6">Trabajar con Rankin</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-1">
+            {faqs.map((f, i) => {
+              const open = openFaq === i;
               return (
-                <Link key={s.slug} to="/oportunidades" className="group block border border-border rounded-lg p-4 bg-card shadow-[var(--shadow-card)] hover:shadow-lg hover:border-primary transition">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
-                      <Icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="font-bold text-sm leading-tight group-hover:text-primary transition">{s.short}</h3>
-                  </div>
-                  <p className="text-xs text-muted-foreground mb-2 line-clamp-2">{s.desc}</p>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="bg-primary/10 text-primary font-semibold px-1.5 py-0.5 rounded">{s.monthlySearches.toLocaleString("es-ES")} búsq./mes</span>
-                    <span className="text-muted-foreground">{s.cities.length} ciudades</span>
-                  </div>
-                </Link>
+                <div key={f.q} className="border-b border-border">
+                  <button
+                    onClick={() => setOpenFaq(open ? null : i)}
+                    className="w-full flex items-center justify-between gap-4 py-4 text-left"
+                  >
+                    <span className="font-semibold text-sm">{f.q}</span>
+                    <ChevronDown className={`h-4 w-4 shrink-0 transition ${open ? "rotate-180" : ""}`} />
+                  </button>
+                  {open && <p className="pb-4 text-sm text-muted-foreground leading-relaxed">{f.a}</p>}
+                </div>
               );
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CTA final */}
-        <section className="bg-primary text-primary-foreground rounded-lg p-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-2">¿Tu sector o ciudad no están en la lista?</h2>
-          <p className="text-white/85 mb-5 max-w-2xl mx-auto">Te montamos un informe de oportunidad a medida en 48h. Gratis y sin compromiso: solo necesitamos saber a qué te dedicas y dónde.</p>
-          <div className="flex gap-2 justify-center flex-wrap">
-            <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">Pedir informe a medida</Button>
-            <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary">
-              <Phone className="h-4 w-4 mr-1" /> 911 23 45 67
-            </Button>
+      {/* Explora por ciudad */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 pb-16">
+          <h2 className="text-2xl font-extrabold mb-1">Empieza a explorar tu ciudad</h2>
+          <p className="text-sm text-muted-foreground mb-5">Oportunidades activas por sector en las principales ciudades de España.</p>
+          <div className="flex flex-wrap gap-2 mb-6">
+            {cityTabsList.map((c) => {
+              const active = activeCity === c;
+              return (
+                <button
+                  key={c}
+                  onClick={() => setActiveCity(c)}
+                  className={`px-4 py-1.5 rounded-full border text-sm font-semibold transition ${
+                    active
+                      ? "bg-primary border-primary text-primary-foreground"
+                      : "border-border text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  {c}
+                </button>
+              );
+            })}
           </div>
-        </section>
-      </main>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2">
+            {cityOpps.length === 0 && (
+              <p className="text-sm text-muted-foreground col-span-3">Próximamente más oportunidades en {activeCity}.</p>
+            )}
+            {cityOpps.map((o) => (
+              <Link
+                key={o.slug}
+                to="/oportunidades/$slug"
+                params={{ slug: o.slug }}
+                className="text-sm text-primary hover:underline py-1"
+              >
+                {o.sectorName} en {o.cityName}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <SiteFooter />
     </div>
+  );
+}
+
+function FieldStatic({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="bg-secondary/60 rounded-md px-4 h-14 flex flex-col justify-center">
+      <span className="text-[11px] text-muted-foreground">{label}</span>
+      <span className="text-sm font-semibold truncate">{value}</span>
+    </div>
+  );
+}
+
+function FieldSelect({ label, icon, value, onChange, options }: {
+  label: string; icon: React.ReactNode; value: string; onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <label className="bg-secondary/60 rounded-md px-4 h-14 flex items-center gap-3 cursor-pointer">
+      <span className="text-muted-foreground shrink-0">{icon}</span>
+      <div className="flex flex-col min-w-0 flex-1">
+        <span className="text-[11px] text-muted-foreground">{label}</span>
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5"
+        >
+          {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+      </div>
+    </label>
   );
 }
