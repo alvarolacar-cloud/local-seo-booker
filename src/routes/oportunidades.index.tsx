@@ -109,14 +109,14 @@ function OportunidadesIndex() {
       </section>
 
       <main className="mx-auto max-w-7xl px-4 mt-20 mb-16 space-y-16">
-        {/* 1. Oportunidades calientes esta semana */}
+        {/* 1. Top oportunidades por ticket medio */}
         <section>
           <div className="flex items-end justify-between gap-4 mb-6">
             <div>
               <h2 className="text-2xl font-extrabold flex items-center gap-2">
-                <Flame className="h-6 w-6 text-accent" /> Oportunidades calientes esta semana
+                <Banknote className="h-6 w-6 text-accent" /> Top oportunidades por ticket medio
               </h2>
-              <p className="text-sm text-muted-foreground">Los cruces sector + ciudad con más subida de búsquedas en los últimos días.</p>
+              <p className="text-sm text-muted-foreground">Los cruces sector + ciudad con mayor ticket medio por cliente.</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
