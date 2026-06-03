@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, TrendingUp, TrendingDown, Minus, BarChart3, Target, Compass, Search, MapPin, Sparkles, ArrowRight, Star, CheckCircle2, Trophy, Eye, Users, Zap } from "lucide-react";
+import { ChevronRight, TrendingUp, TrendingDown, Minus, BarChart3, Target, Compass, MapPin, ArrowRight, CheckCircle2, Users, Search, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
