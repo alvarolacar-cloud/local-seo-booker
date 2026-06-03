@@ -116,6 +116,7 @@ function Home() {
                 value={sectorSlug}
                 onChange={setSectorSlug}
                 options={sectors.map((s) => ({ value: s.slug, label: s.name }))}
+                placeholder="Selecciona industria"
               />
               <FieldSelect
                 label="Ciudad"
@@ -123,6 +124,7 @@ function Home() {
                 value={citySlug}
                 onChange={setCitySlug}
                 options={cities.map((c) => ({ value: c.slug, label: c.name }))}
+                placeholder="Selecciona ciudad"
               />
               <FieldStatic label="Zona / barrios" value="Todos los distritos" />
               <FieldStatic label="Volumen mínimo" value="500 búsq/mes" />
