@@ -41,8 +41,32 @@ function OportunidadesIndex() {
   const [sectorSlug, setSectorSlug] = useState<string>(sectors[0]?.slug ?? "");
   const [citySlug, setCitySlug] = useState<string>(cities[0]?.slug ?? "");
 
-  const flash = useMemo(() => opportunities.slice(0, 3), []);
-  const todoIncluido = useMemo(() => opportunities.slice(3, 6), []);
+  const competitionWeight = { Baja: 1, Media: 2, Alta: 3 } as const;
+  const trendPct = (o: typeof opportunities[number]) => {
+    const first = o.trend[0]?.value ?? 1;
+    const last = o.trend[o.trend.length - 1]?.value ?? first;
+    return Math.round(((last - first) / first) * 100);
+  };
+
+  const hotWeek = useMemo(
+    () => [...opportunities].sort((a, b) => trendPct(b) - trendPct(a)).slice(0, 3),
+    [],
+  );
+  const bestRoi = useMemo(
+    () => [...opportunities]
+      .map((o) => ({ o, ratio: (ticketBySector[o.sectorSlug] ?? 100) / competitionWeight[o.competition] }))
+      .sort((a, b) => b.ratio - a.ratio)
+      .slice(0, 3)
+      .map((x) => x.o),
+    [],
+  );
+  const trending = useMemo(
+    () => [...opportunities]
+      .filter((o) => !hotWeek.find((h) => h.slug === o.slug))
+      .sort((a, b) => trendPct(b) - trendPct(a))
+      .slice(0, 3),
+    [hotWeek],
+  );
 
   return (
     <div className="min-h-screen bg-background">
