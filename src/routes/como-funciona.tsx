@@ -73,6 +73,73 @@ const faqs = [
   { q: "¿Trabajáis con mi competencia?", a: "No. Exclusividad por sector y ciudad. Si te llevamos a ti, no llevamos a nadie más de tu sector en tu zona." },
 ];
 
+const services = [
+  {
+    icon: MapPin,
+    color: "bg-blue-500/10 text-blue-700",
+    title: "SEO Local & Google Maps",
+    tagline: "Que tu negocio salga el primero cuando alguien busca cerca",
+    tasks: [
+      { icon: Target, label: "Investigación de keywords por barrio y servicio" },
+      { icon: MapPin, label: "Optimización completa de tu ficha de Google Business Profile" },
+      { icon: Camera, label: "Subida y optimización de fotos geolocalizadas cada mes" },
+      { icon: FileText, label: "Publicaciones semanales en tu perfil de Google" },
+      { icon: Link2, label: "Citas y enlaces locales (NAP) en directorios relevantes" },
+      { icon: Star, label: "Estrategia de reseñas: solicitud automatizada y respuestas" },
+      { icon: Eye, label: "Seguimiento del Local Pack (top 3 del mapa) cada semana" },
+      { icon: ShieldCheck, label: "Protección frente a reseñas falsas y reportes" },
+    ],
+  },
+  {
+    icon: Globe,
+    color: "bg-amber-500/10 text-amber-700",
+    title: "Web que convierte",
+    tagline: "No queremos visitas bonitas, queremos llamadas y formularios",
+    tasks: [
+      { icon: PenTool, label: "Diseño a medida para tu sector (no plantillas genéricas)" },
+      { icon: Smartphone, label: "100% responsive y optimizada para móvil" },
+      { icon: Gauge, label: "Core Web Vitals en verde: carga en menos de 2 segundos" },
+      { icon: FileText, label: "Landing por servicio y por barrio (no una sola página genérica)" },
+      { icon: Phone, label: "Botones de llamada, WhatsApp y formulario en cada pantalla" },
+      { icon: Wrench, label: "SEO técnico: schema, sitemap, robots, canonicals" },
+      { icon: ShieldCheck, label: "Certificado SSL, RGPD, aviso legal y cookies" },
+      { icon: Repeat, label: "Mantenimiento, copias de seguridad y actualizaciones incluidas" },
+    ],
+  },
+  {
+    icon: Megaphone,
+    color: "bg-emerald-500/10 text-emerald-700",
+    title: "Contenido & Reputación",
+    tagline: "Cada mes Google ve que tu negocio está vivo y la gente lo recomienda",
+    tasks: [
+      { icon: PenTool, label: "2-4 artículos al mes optimizados para keywords locales" },
+      { icon: FileText, label: "Fichas de servicio detalladas con FAQ y testimonios" },
+      { icon: Star, label: "Gestión activa de reseñas: pedir, responder y resolver" },
+      { icon: MessageSquare, label: "Plantillas de mensajes para WhatsApp y email" },
+      { icon: Camera, label: "Banco de fotos profesionales de tu trabajo (cuando aplica)" },
+      { icon: Users, label: "Casos de éxito redactados a partir de tus clientes reales" },
+      { icon: Megaphone, label: "Difusión en directorios sectoriales y prensa local" },
+      { icon: ShieldCheck, label: "Monitorización de menciones de tu marca en internet" },
+    ],
+  },
+  {
+    icon: BarChart3,
+    color: "bg-rose-500/10 text-rose-700",
+    title: "Medición & Estrategia",
+    tagline: "Sabrás exactamente qué euro vuelve y cuál no",
+    tasks: [
+      { icon: BarChart3, label: "Dashboard en vivo con posiciones, llamadas y formularios" },
+      { icon: Phone, label: "Seguimiento de llamadas desde Google con número trackeado" },
+      { icon: TrendingUp, label: "Comparativa mensual frente a tus 3 competidores directos" },
+      { icon: Eye, label: "Heatmaps y grabaciones de sesiones en tu web" },
+      { icon: FileText, label: "Informe mensual claro (sin jerga) en PDF y vídeo de 5 min" },
+      { icon: Calendar, label: "Reunión estratégica trimestral por videollamada" },
+      { icon: Target, label: "Roadmap actualizado cada trimestre con nuevos objetivos" },
+      { icon: CheckCircle2, label: "ROI calculado: cuánto inviertes vs cuánto facturas" },
+    ],
+  },
+];
+
 function ComoFunciona() {
   return (
     <div className="min-h-screen bg-background">
