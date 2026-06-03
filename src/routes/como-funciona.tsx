@@ -80,6 +80,7 @@ const faqs = [
 const services = [
   {
     icon: MapPin,
+    image: imgSeoLocal,
     color: "bg-blue-500/10 text-blue-700",
     title: "SEO Local & Google Maps",
     tagline: "Que tu negocio salga el primero cuando alguien busca cerca",
