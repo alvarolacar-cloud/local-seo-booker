@@ -37,6 +37,15 @@ const sectorOptions = Array.from(
   new Map(opportunities.map((o) => [o.sectorSlug, o.sectorName])).entries()
 );
 
+const cityImageMap: Record<string, string> = {
+  madrid: cityMadrid,
+  barcelona: cityBarcelona,
+  valencia: cityValencia,
+  sevilla: citySevilla,
+  bilbao: cityBilbao,
+  malaga: cityMalaga,
+};
+
 function Index() {
   const featuredOpps = opportunities.slice(0, 6);
   const featuredCases = cases.slice(0, 4);
