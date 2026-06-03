@@ -128,9 +128,9 @@ function Home() {
               />
               <FieldStatic label="Zona / barrios" value="Todos los distritos" />
               <FieldStatic label="Volumen mínimo" value="500 búsq/mes" />
-              <Button asChild className="h-14 md:w-16 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-md">
+              <Button asChild className="h-14 md:px-8 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-md text-base font-semibold">
                 <Link to="/oportunidades">
-                  <Search className="h-5 w-5" />
+                  Buscar
                 </Link>
               </Button>
             </div>
@@ -462,31 +462,29 @@ function Home() {
 
 function FieldStatic({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-secondary/60 rounded-md px-4 h-14 flex flex-col justify-center">
+    <div className="bg-card border border-border rounded-md px-4 h-14 flex flex-col justify-center">
       <span className="text-[11px] text-muted-foreground">{label}</span>
       <span className="text-sm font-semibold truncate">{value}</span>
     </div>
   );
 }
 
-function FieldSelect({ label, icon, value, onChange, options, placeholder }: {
+function FieldSelect({ label, icon: _icon, value, onChange, options, placeholder }: {
   label: string; icon: React.ReactNode; value: string; onChange: (v: string) => void;
   options: { value: string; label: string }[]; placeholder?: string;
 }) {
   return (
-    <label className="bg-secondary/60 rounded-md px-4 h-14 flex items-center gap-3 cursor-pointer">
-      <span className="text-muted-foreground shrink-0">{icon}</span>
-      <div className="flex flex-col min-w-0 flex-1">
-        <span className="text-[11px] text-muted-foreground">{label}</span>
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5"
-        >
-          {placeholder && <option value="" disabled>{placeholder}</option>}
-          {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-        </select>
-      </div>
+    <label className="bg-card border border-border rounded-md px-4 h-14 flex flex-col justify-center cursor-pointer focus-within:border-[#0066ff] hover:border-foreground/40 transition-colors">
+      <span className="text-[11px] text-muted-foreground">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5 truncate"
+      >
+        {placeholder && <option value="" disabled>{placeholder}</option>}
+        {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+      </select>
     </label>
   );
 }
+
