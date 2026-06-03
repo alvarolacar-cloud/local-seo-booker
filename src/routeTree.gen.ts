@@ -13,7 +13,6 @@ import { Route as GuiasRouteImport } from './routes/guias'
 import { Route as ComoFuncionaRouteImport } from './routes/como-funciona'
 import { Route as CasosExitoRouteImport } from './routes/casos-exito'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as SectoresIndexRouteImport } from './routes/sectores.index'
 import { Route as OportunidadesIndexRouteImport } from './routes/oportunidades.index'
 import { Route as SectoresSectorRouteImport } from './routes/sectores.$sector'
 import { Route as OportunidadesSlugRouteImport } from './routes/oportunidades.$slug'
@@ -36,11 +35,6 @@ const CasosExitoRoute = CasosExitoRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SectoresIndexRoute = SectoresIndexRouteImport.update({
-  id: '/sectores/',
-  path: '/sectores/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OportunidadesIndexRoute = OportunidadesIndexRouteImport.update({
@@ -67,7 +61,6 @@ export interface FileRoutesByFullPath {
   '/oportunidades/$slug': typeof OportunidadesSlugRoute
   '/sectores/$sector': typeof SectoresSectorRoute
   '/oportunidades/': typeof OportunidadesIndexRoute
-  '/sectores/': typeof SectoresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,7 +70,6 @@ export interface FileRoutesByTo {
   '/oportunidades/$slug': typeof OportunidadesSlugRoute
   '/sectores/$sector': typeof SectoresSectorRoute
   '/oportunidades': typeof OportunidadesIndexRoute
-  '/sectores': typeof SectoresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,7 +80,6 @@ export interface FileRoutesById {
   '/oportunidades/$slug': typeof OportunidadesSlugRoute
   '/sectores/$sector': typeof SectoresSectorRoute
   '/oportunidades/': typeof OportunidadesIndexRoute
-  '/sectores/': typeof SectoresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,7 +91,6 @@ export interface FileRouteTypes {
     | '/oportunidades/$slug'
     | '/sectores/$sector'
     | '/oportunidades/'
-    | '/sectores/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -110,7 +100,6 @@ export interface FileRouteTypes {
     | '/oportunidades/$slug'
     | '/sectores/$sector'
     | '/oportunidades'
-    | '/sectores'
   id:
     | '__root__'
     | '/'
@@ -120,7 +109,6 @@ export interface FileRouteTypes {
     | '/oportunidades/$slug'
     | '/sectores/$sector'
     | '/oportunidades/'
-    | '/sectores/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -131,7 +119,6 @@ export interface RootRouteChildren {
   OportunidadesSlugRoute: typeof OportunidadesSlugRoute
   SectoresSectorRoute: typeof SectoresSectorRoute
   OportunidadesIndexRoute: typeof OportunidadesIndexRoute
-  SectoresIndexRoute: typeof SectoresIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -162,13 +149,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sectores/': {
-      id: '/sectores/'
-      path: '/sectores'
-      fullPath: '/sectores/'
-      preLoaderRoute: typeof SectoresIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/oportunidades/': {
@@ -203,8 +183,17 @@ const rootRouteChildren: RootRouteChildren = {
   OportunidadesSlugRoute: OportunidadesSlugRoute,
   SectoresSectorRoute: SectoresSectorRoute,
   OportunidadesIndexRoute: OportunidadesIndexRoute,
-  SectoresIndexRoute: SectoresIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

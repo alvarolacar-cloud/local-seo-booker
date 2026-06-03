@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, MapPin, Star, ShieldCheck, MessageSquare, ChevronRight, Phone, Wrench, Award, TrendingUp } from "lucide-react";
+import { Search, MapPin, Star, ShieldCheck, MessageSquare, ChevronRight, Phone, Wrench, Award, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
-import { sectors } from "@/data/sectors";
+import { opportunities } from "@/data/opportunities";
 import { cities } from "@/data/cities";
 import { cases } from "@/data/cases";
 import localBusiness from "@/assets/local-business.jpg";
@@ -34,8 +34,14 @@ const homeServices = [
   { title: "Contenido geolocalizado", img: serviceContent, desc: "Landings por barrio, servicio y ciudad." },
 ];
 
+function compBadge(c: "Baja" | "Media" | "Alta") {
+  if (c === "Baja") return { cls: "bg-primary/10 text-primary", icon: <TrendingDown className="h-3 w-3" /> };
+  if (c === "Alta") return { cls: "bg-destructive/15 text-destructive", icon: <TrendingUp className="h-3 w-3" /> };
+  return { cls: "bg-accent/30 text-accent-foreground", icon: <Minus className="h-3 w-3" /> };
+}
+
 function Index() {
-  const featuredSectors = sectors.slice(0, 6);
+  const featuredOpps = opportunities.slice(0, 6);
   const featuredCases = cases.slice(0, 4);
 
   return (
