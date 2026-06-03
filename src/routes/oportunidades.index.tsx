@@ -62,10 +62,10 @@ function OportunidadesIndex() {
   );
   const trending = useMemo(
     () => [...opportunities]
-      .filter((o) => !hotWeek.find((h) => h.slug === o.slug))
+      .filter((o) => !topTicket.find((h) => h.slug === o.slug))
       .sort((a, b) => trendPct(b) - trendPct(a))
       .slice(0, 3),
-    [hotWeek],
+    [topTicket],
   );
 
   return (
