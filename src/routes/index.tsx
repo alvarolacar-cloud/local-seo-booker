@@ -1,4 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import cityMadrid from "@/assets/city-madrid.jpg";
+import cityBarcelona from "@/assets/city-barcelona.jpg";
+import cityValencia from "@/assets/city-valencia.jpg";
+import citySevilla from "@/assets/city-sevilla.jpg";
+import cityBilbao from "@/assets/city-bilbao.jpg";
+import cityMalaga from "@/assets/city-malaga.jpg";
 import { Search, MapPin, ChevronRight, Phone, Wrench, TrendingUp, TrendingDown, Minus, BarChart3, Target, Compass, FileSearch, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
@@ -30,6 +36,15 @@ function compBadge(c: "Baja" | "Media" | "Alta") {
 const sectorOptions = Array.from(
   new Map(opportunities.map((o) => [o.sectorSlug, o.sectorName])).entries()
 );
+
+const cityImageMap: Record<string, string> = {
+  madrid: cityMadrid,
+  barcelona: cityBarcelona,
+  valencia: cityValencia,
+  sevilla: citySevilla,
+  bilbao: cityBilbao,
+  malaga: cityMalaga,
+};
 
 function Index() {
   const featuredOpps = opportunities.slice(0, 6);
@@ -131,8 +146,15 @@ function Index() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {featuredOpps.map((o) => {
               const c = compBadge(o.competition);
+              const cityImg = cityImageMap[o.citySlug];
               return (
                 <Link key={o.slug} to="/oportunidades/$slug" params={{ slug: o.slug }} className="group block border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-lg hover:border-primary transition">
+                  {cityImg && (
+                    <div className="relative h-14 overflow-hidden">
+                      <img src={cityImg} alt={o.cityName} className="h-full w-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition duration-500" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-card" />
+                    </div>
+                  )}
                   <div className="p-5">
                     <p className="text-xs text-muted-foreground uppercase tracking-wide">{o.cityName}</p>
                     <h3 className="text-lg font-bold mt-1 mb-3">{o.sectorName} en {o.cityName}</h3>
