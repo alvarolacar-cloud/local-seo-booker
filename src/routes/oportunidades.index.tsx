@@ -62,14 +62,8 @@ function OportunidadesIndex() {
       {/* HERO con buscador (se mantiene) */}
       <section className="relative bg-primary">
         <div className="mx-auto max-w-7xl px-4 pt-6 pb-28 md:pt-10 md:pb-32 text-primary-foreground relative">
-          <nav className="text-xs text-white/70 mb-3" aria-label="Breadcrumb">
-            <Link to="/" className="hover:text-white">Inicio</Link>
-            <span className="mx-2">/</span>
-            <span className="text-white">Oportunidades locales</span>
-          </nav>
           <div className="flex items-start justify-between gap-6 flex-wrap">
             <div>
-              <p className="text-sm text-white/70 mb-2">Oportunidades locales</p>
               <h1 className="text-3xl md:text-4xl font-extrabold">Encuentra tu Sector + Ciudad</h1>
               <p className="mt-2 text-white/85 max-w-3xl">Huecos reales en Google Maps por sector y ciudad, con datos de búsqueda y competencia.</p>
             </div>
