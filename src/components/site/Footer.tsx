@@ -18,18 +18,18 @@ export function SiteFooter() {
   ];
 
   return (
-    <footer className="mt-20 bg-secondary border-t border-border">
+    <footer className="mt-20 bg-primary text-primary-foreground">
       <div className="mx-auto max-w-7xl px-4 py-12 grid grid-cols-2 md:grid-cols-3 gap-8 text-sm">
         {cols.map((col) => (
           <div key={col.h}>
             <h4 className="font-bold mb-3">{col.h}</h4>
-            <ul className="space-y-2 text-muted-foreground">
+            <ul className="space-y-2 text-primary-foreground/70">
               {col.links.map((l) => (
                 <li key={l.label}>
                   {l.params ? (
-                    <Link to={l.to as any} params={l.params as any} className="hover:text-primary">{l.label}</Link>
+                    <Link to={l.to as any} params={l.params as any} className="hover:text-primary-foreground">{l.label}</Link>
                   ) : (
-                    <Link to={l.to as any} className="hover:text-primary">{l.label}</Link>
+                    <Link to={l.to as any} className="hover:text-primary-foreground">{l.label}</Link>
                   )}
                 </li>
               ))}
@@ -38,14 +38,14 @@ export function SiteFooter() {
         ))}
         <div>
           <h4 className="font-bold mb-3">Contacto</h4>
-          <ul className="space-y-2 text-muted-foreground">
+          <ul className="space-y-2 text-primary-foreground/70">
             <li>911 23 45 67</li>
             <li>hola@rankin.es</li>
             <li>Madrid · Barcelona · Valencia</li>
           </ul>
         </div>
       </div>
-      <div className="border-t border-border py-6 text-center text-xs text-muted-foreground">
+      <div className="border-t border-primary-foreground/20 py-6 text-center text-xs text-primary-foreground/60">
         <p>Rankin · Agencia de SEO local para negocios de barrio en España.</p>
         <p className="mt-2">© 2026 Rankin</p>
       </div>
