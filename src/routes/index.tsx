@@ -175,12 +175,12 @@ function Home() {
       {/* Chips de acceso rápido */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {quickChips.map((c) => {
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {navItems.map((c) => {
               const Icon = c.icon;
               return (
                 <Link
-                  key={c.label}
+                  key={c.id}
                   to={c.to}
                   className="flex items-center gap-3 bg-primary text-primary-foreground rounded-md px-4 py-4 font-semibold text-sm hover:bg-[var(--brand-deep)] transition"
                 >
@@ -190,6 +190,7 @@ function Home() {
               );
             })}
           </div>
+
         </div>
       </section>
 
