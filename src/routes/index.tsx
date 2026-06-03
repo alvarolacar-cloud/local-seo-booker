@@ -2,9 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Search, MapPin, Briefcase, Compass,
-  BookOpen, Trophy, Route as RouteIcon,
+  BookOpen, Trophy, Route as RouteIcon, Home as HomeIcon,
   ChevronDown, ChevronRight,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
