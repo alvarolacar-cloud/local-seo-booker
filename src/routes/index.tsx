@@ -58,7 +58,7 @@ const faqs = [
 const cityTabsList = ["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga"];
 
 function Home() {
-  const [tab, setTab] = useState("sector");
+  
   const [sectorSlug, setSectorSlug] = useState(sectors[0]?.slug ?? "");
   const [citySlug, setCitySlug] = useState(cities[0]?.slug ?? "");
   const [activeCity, setActiveCity] = useState("Madrid");
