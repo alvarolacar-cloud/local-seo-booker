@@ -184,6 +184,70 @@ function ComoFunciona() {
           })}
         </section>
 
+        {/* Servicios — qué incluye cada plan */}
+        <section>
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <p className="text-sm font-semibold text-accent-foreground bg-accent/40 inline-block px-3 py-1 rounded-full mb-3">Todo lo que hacemos por ti cada mes</p>
+            <h2 className="text-2xl md:text-3xl font-extrabold">Más de 30 tareas trabajando para llenar tu agenda</h2>
+            <p className="mt-2 text-muted-foreground">No es un servicio único: son 4 áreas trabajando en paralelo. Esto es lo que ejecutamos mientras tú atiendes a tus clientes.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {services.map((s) => {
+              const Icon = s.icon;
+              return (
+                <article key={s.title} className="border border-border rounded-xl bg-card overflow-hidden flex flex-col">
+                  <div className="p-6 border-b border-border">
+                    <div className="flex items-start gap-4">
+                      <div className={`h-12 w-12 rounded-lg flex items-center justify-center shrink-0 ${s.color}`}>
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold">{s.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-0.5">{s.tagline}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <ul className="p-4 space-y-1 flex-1">
+                    {s.tasks.map((t) => {
+                      const TI = t.icon;
+                      return (
+                        <li key={t.label} className="flex items-start gap-3 px-3 py-2 rounded-md hover:bg-muted/40 transition-colors">
+                          <div className="h-7 w-7 rounded-md bg-muted flex items-center justify-center shrink-0 mt-0.5">
+                            <TI className="h-3.5 w-3.5 text-foreground" />
+                          </div>
+                          <span className="text-sm leading-snug">{t.label}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <div className="px-6 py-3 bg-muted/40 border-t border-border text-xs text-muted-foreground flex items-center gap-2">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                    Incluido en todos los planes
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          <div className="mt-6 border border-dashed border-border rounded-xl p-5 bg-muted/30 flex flex-col md:flex-row items-start md:items-center gap-4 justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0">
+                <Wrench className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="font-semibold">+ Trabajo extra cuando hace falta</p>
+                <p className="text-sm text-muted-foreground">Sesiones de fotos, vídeo, integraciones con tu CRM, campañas puntuales en Google Ads… Si lo necesita tu negocio, lo proponemos.</p>
+              </div>
+            </div>
+            <Button asChild variant="outline" className="shrink-0">
+              <Link to="/casos-exito">Ver resultados reales</Link>
+            </Button>
+          </div>
+        </section>
+
+
+
         {/* FAQ */}
         <section>
           <h2 className="text-xl font-bold mb-4">Preguntas frecuentes</h2>
