@@ -63,8 +63,8 @@ const sectorTabsList = sectors.slice(0, 6).map((s) => s.name);
 
 function Home() {
   
-  const [sectorSlug, setSectorSlug] = useState(sectors[0]?.slug ?? "");
-  const [citySlug, setCitySlug] = useState(cities[0]?.slug ?? "");
+  const [sectorSlug, setSectorSlug] = useState("");
+  const [citySlug, setCitySlug] = useState("");
   const [activeSector, setActiveSector] = useState(sectorTabsList[0]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -116,6 +116,7 @@ function Home() {
                 value={sectorSlug}
                 onChange={setSectorSlug}
                 options={sectors.map((s) => ({ value: s.slug, label: s.name }))}
+                placeholder="Selecciona industria"
               />
               <FieldSelect
                 label="Ciudad"
@@ -123,6 +124,7 @@ function Home() {
                 value={citySlug}
                 onChange={setCitySlug}
                 options={cities.map((c) => ({ value: c.slug, label: c.name }))}
+                placeholder="Selecciona ciudad"
               />
               <FieldStatic label="Zona / barrios" value="Todos los distritos" />
               <FieldStatic label="Volumen mínimo" value="500 búsq/mes" />
@@ -467,9 +469,9 @@ function FieldStatic({ label, value }: { label: string; value: string }) {
   );
 }
 
-function FieldSelect({ label, icon, value, onChange, options }: {
+function FieldSelect({ label, icon, value, onChange, options, placeholder }: {
   label: string; icon: React.ReactNode; value: string; onChange: (v: string) => void;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string }[]; placeholder?: string;
 }) {
   return (
     <label className="bg-secondary/60 rounded-md px-4 h-14 flex items-center gap-3 cursor-pointer">
@@ -481,6 +483,7 @@ function FieldSelect({ label, icon, value, onChange, options }: {
           onChange={(e) => onChange(e.target.value)}
           className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5"
         >
+          {placeholder && <option value="" disabled>{placeholder}</option>}
           {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       </div>
