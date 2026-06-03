@@ -3,7 +3,7 @@ import { ChevronRight, MapPin, TrendingUp, TrendingDown, Minus } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
-import { getOpportunity } from "@/data/opportunities";
+import { getOpportunity, type Opportunity } from "@/data/opportunities";
 import { cases } from "@/data/cases";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
