@@ -131,6 +131,7 @@ const services = [
   },
   {
     icon: BarChart3,
+    image: imgAnalytics,
     color: "bg-rose-500/10 text-rose-700",
     title: "Medición & Estrategia",
     tagline: "Sabrás exactamente qué euro vuelve y cuál no",
