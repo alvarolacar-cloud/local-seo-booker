@@ -114,6 +114,7 @@ const services = [
   },
   {
     icon: Megaphone,
+    image: imgContent,
     color: "bg-emerald-500/10 text-emerald-700",
     title: "Contenido & Reputación",
     tagline: "Cada mes Google ve que tu negocio está vivo y la gente lo recomienda",
