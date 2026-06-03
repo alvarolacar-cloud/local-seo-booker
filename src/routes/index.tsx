@@ -67,8 +67,6 @@ function Home() {
   const [activeSector, setActiveSector] = useState(sectorTabsList[0]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const sectorOpps = opportunities.filter((o) => o.sectorName === activeSector).slice(0, 6);
-
   return (
     <div className="min-h-screen bg-background">
       {/* HERO azul marino — Skyscanner clone */}
