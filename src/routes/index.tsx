@@ -1,4 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import cityMadrid from "@/assets/city-madrid.jpg";
+import cityBarcelona from "@/assets/city-barcelona.jpg";
+import cityValencia from "@/assets/city-valencia.jpg";
+import citySevilla from "@/assets/city-sevilla.jpg";
+import cityBilbao from "@/assets/city-bilbao.jpg";
+import cityMalaga from "@/assets/city-malaga.jpg";
 import { Search, MapPin, ChevronRight, Phone, Wrench, TrendingUp, TrendingDown, Minus, BarChart3, Target, Compass, FileSearch, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
