@@ -267,22 +267,21 @@ function OpportunityDetail() {
           </div>
         </section>
 
-        {/* MÁS INFORMACIÓN DE [sector] EN [ciudad] + mini galería */}
+        {/* VISIÓN DEL SECTOR EN LA CIUDAD */}
         <section>
-          <h2 className="text-2xl font-extrabold mb-3">Más información del mercado de {opp.sectorName.toLowerCase()} en {opp.cityName}</h2>
-          <div className="grid grid-cols-4 gap-2 mb-4">
-            <img src={imgStorefront} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover rounded-lg" />
-            <img src={imgHandshake} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover rounded-lg" />
-            <img src={cityImg} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover rounded-lg" />
-            <img src={imgPhone} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover rounded-lg" />
-          </div>
-          <div className="border border-border rounded-xl bg-card p-5">
-            <p className="font-bold mb-1">{opp.sectorName} en {opp.cityName}</p>
+          <h2 className="text-2xl font-extrabold mb-3">Visión del mercado de {opp.sectorName.toLowerCase()} en {opp.cityName}</h2>
+          <div className="border border-border rounded-xl bg-card p-6 space-y-4">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              El sector de {opp.sectorName.toLowerCase()} en {opp.cityName} mueve {fmt(opp.searches)} búsquedas mensuales y un ticket medio de {fmtEur(ticket)}.
-              La competencia es <strong className="text-foreground">{opp.competition.toLowerCase()}</strong>, con {opp.districts.length} distritos donde la demanda
-              supera la oferta bien posicionada. Si te metes en el top 3 de Google podrías capturar hasta {fmtEur(ceilingRevenue)} al mes solo de SEO local,
-              sin pagar un euro en anuncios.
+              El mercado de <strong className="text-foreground">{opp.sectorName.toLowerCase()} en {opp.cityName}</strong> concentra <strong className="text-foreground">{fmt(opp.searches)} búsquedas mensuales</strong> en Google, lo que lo sitúa como uno de los servicios más buscados por los residentes y propietarios de la zona. Con un ticket medio de <strong className="text-foreground">{fmtEur(ticket)}</strong>, cada cliente que entra por SEO local tiene un impacto directo y medible en la facturación.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              La competencia en {opp.cityName} es <strong className="text-foreground">{opp.competition.toLowerCase()}</strong>, lo que significa que hay espacio real para nuevos jugadores que inviertan en su presencia digital. Hemos analizado <strong className="text-foreground">{opp.districts.length} distritos</strong> y en varios de ellos la demanda supera con creces la oferta bien posicionada: aparecer en el top 3 del mapa local puede suponer la diferencia entre una agenda vacía y una lista de espera.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Los usuarios no buscan solo "{opp.sectorName.toLowerCase()}"; buscan urgencia, confianza y cercanía. Frases como <em>"{opp.sectorName.toLowerCase()} cerca de mí"</em> o <em>"{opp.sectorName.toLowerCase()} urgente {opp.cityName}"</em> dominan el long-tail y convierten a una velocidad muy superior al tráfico genérico. Capturar esa intención en el momento exacto de la búsqueda es lo que convierte una ficha de Google Business en un imán de clientes.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Si consigues posicionarte en los primeros resultados locales, el techo de ingresos estimado solo por este canal es de <strong className="text-foreground">{fmtEur(ceilingRevenue)}/mes</strong>, y eso sin invertir un solo euro en publicidad de pago. En sectores con ticket elevado como este, el retorno de una estrategia SEO local bien ejecutada se amortiza en semanas, no en meses.
             </p>
           </div>
         </section>
