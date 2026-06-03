@@ -178,7 +178,7 @@ function Home() {
       {/* Chips de acceso rápido */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {navItems.map((c) => {
               const Icon = c.icon;
               return (
