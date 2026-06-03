@@ -370,66 +370,26 @@ function OportunidadesIndex() {
           </div>
         </section>
 
-        {/* CTA banner con imagen */}
-        <section className="relative rounded-xl overflow-hidden border border-border">
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="relative h-56 md:h-auto">
-              <img src={serviceGmb} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        {/* CTA final sin imagen */}
+        <section className="relative bg-primary text-primary-foreground rounded-xl p-8 md:p-12 overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "20px 20px",
+          }} />
+          <div className="relative max-w-3xl">
+            <span className="inline-flex items-center gap-1 bg-accent text-accent-foreground text-xs font-bold px-2.5 py-1 rounded mb-4">
+              Informe a medida · 48h · Gratis
+            </span>
+            <h2 className="text-2xl md:text-3xl font-extrabold mb-3 leading-tight">¿No ves tu sector o tu ciudad?</h2>
+            <p className="text-white/85 mb-5 text-sm leading-relaxed max-w-xl">Hacemos informes a medida en 48h. Te decimos cuántas búsquedas tiene tu servicio en tu zona y cómo de difícil sería posicionarte top 3.</p>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold">
+                <Link to="/como-funciona">Pedir informe a medida</Link>
+              </Button>
+              <Button asChild variant="outline" className="bg-transparent border-white/30 text-primary-foreground hover:bg-white/10 font-semibold">
+                <Link to="/casos-exito">Ver casos</Link>
+              </Button>
             </div>
-            <div className="bg-primary text-primary-foreground p-8 md:p-10">
-              <span className="inline-flex items-center gap-1 bg-accent text-accent-foreground text-xs font-bold px-2.5 py-1 rounded mb-4">
-                Informe a medida · 48h · Gratis
-              </span>
-              <h2 className="text-2xl md:text-3xl font-extrabold mb-3 leading-tight">¿No ves tu sector o tu ciudad?</h2>
-              <p className="text-white/85 mb-5 text-sm leading-relaxed">Hacemos informes a medida en 48h. Te decimos cuántas búsquedas tiene tu servicio en tu zona y cómo de difícil sería posicionarte top 3.</p>
-              <div className="flex flex-wrap gap-2">
-                <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold">
-                  <Link to="/como-funciona">Pedir informe a medida</Link>
-                </Button>
-                <Button asChild variant="outline" className="bg-transparent border-white/30 text-primary-foreground hover:bg-white/10 font-semibold">
-                  <Link to="/casos-exito">Ver casos</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Artículos / planes inteligentes */}
-        <section>
-          <SectionHeader title="Aprende más sobre SEO local" subtitle="Guías, casos y trucos para sacar más partido a Google Maps en tu ciudad." />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {articles.map((a) => (
-              <Link to="/guias" key={a.title} className="group block">
-                <div className="relative h-40 rounded-lg overflow-hidden mb-3">
-                  <img src={a.img} alt="" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                  <span className="absolute top-2 left-2 bg-card text-foreground text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">{a.tag}</span>
-                </div>
-                <h3 className="font-bold text-sm leading-tight group-hover:text-primary transition">{a.title}</h3>
-                <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1"><BookOpen className="h-3 w-3" /> Lectura 6-8 min</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* Casos destacados rápidos */}
-        <section>
-          <SectionHeader title="Casos de negocios reales con SEO local" subtitle="Resultados verificables de clientes en distintas ciudades y sectores." />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {cases.slice(0, 3).map((c) => (
-              <div key={c.slug} className="border border-border rounded-xl bg-card overflow-hidden">
-                <img src={c.img} alt="" className="w-full h-32 object-cover" />
-                <div className="p-4">
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-                    <span>{c.city} · {c.sector}</span>
-                    <span className="inline-flex items-center gap-1 font-bold text-foreground">
-                      <Star className="h-3 w-3 fill-accent text-accent" /> {c.rating}
-                    </span>
-                  </div>
-                  <p className="font-bold text-sm">{c.name}</p>
-                  <p className="text-xs text-primary font-semibold mt-1">{c.growth}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </section>
 
