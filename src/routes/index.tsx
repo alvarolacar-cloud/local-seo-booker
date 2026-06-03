@@ -35,6 +35,7 @@ export const Route = createFileRoute("/")({
 });
 
 const navItems = [
+  { id: "inicio", label: "Inicio", icon: HomeIcon, to: "/" as const, novelty: false },
   { id: "oportunidades", label: "Oportunidades en Google", icon: Compass, to: "/oportunidades" as const, novelty: true },
   { id: "casos", label: "Nuestros Casos de Éxito", icon: Trophy, to: "/casos-exito" as const, novelty: false },
   { id: "como-funciona", label: "Cómo funciona", icon: RouteIcon, to: "/como-funciona" as const, novelty: false },
@@ -177,7 +178,7 @@ function Home() {
       {/* Chips de acceso rápido */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {navItems.map((c) => {
               const Icon = c.icon;
               return (
