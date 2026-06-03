@@ -14,7 +14,6 @@ import { Route as ComoFuncionaRouteImport } from './routes/como-funciona'
 import { Route as CasosExitoRouteImport } from './routes/casos-exito'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OportunidadesIndexRouteImport } from './routes/oportunidades.index'
-import { Route as SectoresSectorRouteImport } from './routes/sectores.$sector'
 import { Route as OportunidadesSlugRouteImport } from './routes/oportunidades.$slug'
 
 const GuiasRoute = GuiasRouteImport.update({
@@ -42,11 +41,6 @@ const OportunidadesIndexRoute = OportunidadesIndexRouteImport.update({
   path: '/oportunidades/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SectoresSectorRoute = SectoresSectorRouteImport.update({
-  id: '/sectores/$sector',
-  path: '/sectores/$sector',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const OportunidadesSlugRoute = OportunidadesSlugRouteImport.update({
   id: '/oportunidades/$slug',
   path: '/oportunidades/$slug',
@@ -59,7 +53,6 @@ export interface FileRoutesByFullPath {
   '/como-funciona': typeof ComoFuncionaRoute
   '/guias': typeof GuiasRoute
   '/oportunidades/$slug': typeof OportunidadesSlugRoute
-  '/sectores/$sector': typeof SectoresSectorRoute
   '/oportunidades/': typeof OportunidadesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -68,7 +61,6 @@ export interface FileRoutesByTo {
   '/como-funciona': typeof ComoFuncionaRoute
   '/guias': typeof GuiasRoute
   '/oportunidades/$slug': typeof OportunidadesSlugRoute
-  '/sectores/$sector': typeof SectoresSectorRoute
   '/oportunidades': typeof OportunidadesIndexRoute
 }
 export interface FileRoutesById {
@@ -78,7 +70,6 @@ export interface FileRoutesById {
   '/como-funciona': typeof ComoFuncionaRoute
   '/guias': typeof GuiasRoute
   '/oportunidades/$slug': typeof OportunidadesSlugRoute
-  '/sectores/$sector': typeof SectoresSectorRoute
   '/oportunidades/': typeof OportunidadesIndexRoute
 }
 export interface FileRouteTypes {
@@ -89,7 +80,6 @@ export interface FileRouteTypes {
     | '/como-funciona'
     | '/guias'
     | '/oportunidades/$slug'
-    | '/sectores/$sector'
     | '/oportunidades/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -98,7 +88,6 @@ export interface FileRouteTypes {
     | '/como-funciona'
     | '/guias'
     | '/oportunidades/$slug'
-    | '/sectores/$sector'
     | '/oportunidades'
   id:
     | '__root__'
@@ -107,7 +96,6 @@ export interface FileRouteTypes {
     | '/como-funciona'
     | '/guias'
     | '/oportunidades/$slug'
-    | '/sectores/$sector'
     | '/oportunidades/'
   fileRoutesById: FileRoutesById
 }
@@ -117,7 +105,6 @@ export interface RootRouteChildren {
   ComoFuncionaRoute: typeof ComoFuncionaRoute
   GuiasRoute: typeof GuiasRoute
   OportunidadesSlugRoute: typeof OportunidadesSlugRoute
-  SectoresSectorRoute: typeof SectoresSectorRoute
   OportunidadesIndexRoute: typeof OportunidadesIndexRoute
 }
 
@@ -158,13 +145,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OportunidadesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sectores/$sector': {
-      id: '/sectores/$sector'
-      path: '/sectores/$sector'
-      fullPath: '/sectores/$sector'
-      preLoaderRoute: typeof SectoresSectorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/oportunidades/$slug': {
       id: '/oportunidades/$slug'
       path: '/oportunidades/$slug'
@@ -181,7 +161,6 @@ const rootRouteChildren: RootRouteChildren = {
   ComoFuncionaRoute: ComoFuncionaRoute,
   GuiasRoute: GuiasRoute,
   OportunidadesSlugRoute: OportunidadesSlugRoute,
-  SectoresSectorRoute: SectoresSectorRoute,
   OportunidadesIndexRoute: OportunidadesIndexRoute,
 }
 export const routeTree = rootRouteImport
