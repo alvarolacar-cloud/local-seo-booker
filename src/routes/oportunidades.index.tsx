@@ -317,6 +317,113 @@ function OportunidadesIndex() {
             </Button>
           </div>
         </section>
+
+        {/* Tipos de oportunidades */}
+        <section>
+          <h2 className="text-2xl font-bold mb-1">Tipos de oportunidades que encontramos</h2>
+          <p className="text-sm text-muted-foreground mb-6">No todas las oportunidades son iguales. Te las clasificamos para que sepas dónde entrar primero.</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {/* Sectores en tendencia */}
+            <div className="border border-border rounded-lg p-5 bg-card shadow-[var(--shadow-card)]">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center">
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                </div>
+                <h3 className="font-bold text-base">Sectores en tendencia</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">Más búsquedas este mes. El usuario quiere ver qué está creciendo ahora.</p>
+              <div className="space-y-3">
+                {opportunities
+                  .slice()
+                  .sort((a, b) => b.searches - a.searches)
+                  .slice(0, 3)
+                  .map((o) => {
+                    const growth = Math.round(((o.trend[11].value - o.trend[10].value) / o.trend[10].value) * 100);
+                    return (
+                      <div key={o.slug} className="flex items-center justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold truncate">{o.sectorName} en {o.cityName}</p>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-chart-3/15 text-chart-3 px-1.5 py-0.5 rounded mt-1">
+                            <ArrowUpRight className="h-3 w-3" /> +{growth}% vs mes anterior
+                          </span>
+                        </div>
+                        <MiniSparkline data={o.trend} />
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            {/* Poca competencia */}
+            <div className="border border-border rounded-lg p-5 bg-card shadow-[var(--shadow-card)]">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-8 w-8 rounded-md bg-chart-3/15 flex items-center justify-center">
+                  <ShieldCheck className="h-4 w-4 text-chart-3" />
+                </div>
+                <h3 className="font-bold text-base">Oportunidades con poca competencia</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">Buen volumen de búsqueda pero pocos profesionales posicionados. Ideal para entrar fácil.</p>
+              <div className="space-y-3">
+                {opportunities
+                  .filter((o) => o.competition === "Baja" || o.competition === "Media")
+                  .sort((a, b) => b.score - a.score)
+                  .slice(0, 3)
+                  .map((o) => (
+                    <div key={o.slug} className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold truncate">{o.sectorName} en {o.cityName}</p>
+                        <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-chart-3/15 text-chart-3 px-1.5 py-0.5 rounded">
+                            Baja competencia
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                            Alta demanda
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-sm font-bold text-primary shrink-0">{o.score}/100</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Top por ticket medio */}
+            <div className="border border-border rounded-lg p-5 bg-card shadow-[var(--shadow-card)]">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-8 w-8 rounded-md bg-chart-4/15 flex items-center justify-center">
+                  <DollarSign className="h-4 w-4 text-chart-4" />
+                </div>
+                <h3 className="font-bold text-base">Top oportunidades por ticket medio</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">Los cruces más rentables ordenados por ticket. Entra donde cada cliente vale más.</p>
+              <div className="space-y-3">
+                {opportunities
+                  .slice()
+                  .sort((a, b) => b.cpc - a.cpc)
+                  .slice(0, 3)
+                  .map((o) => {
+                    const ticket = o.cpc > 4 ? `${(o.cpc * 1800).toLocaleString("es-ES")}€` : `${o.cpc * 100}€/h`;
+                    const roi = Math.round(o.cpc * o.searches * 0.08);
+                    return (
+                      <div key={o.slug} className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold truncate">{o.sectorName} en {o.cityName}</p>
+                          <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-chart-4/15 text-chart-4 px-1.5 py-0.5 rounded">
+                              Ticket {ticket}
+                            </span>
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                              ROI {roi.toLocaleString("es-ES")}€/mes
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <SiteFooter />
