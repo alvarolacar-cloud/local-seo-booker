@@ -49,8 +49,8 @@ function compBadge(c: "Baja" | "Media" | "Alta") {
 }
 
 function OportunidadesIndex() {
-  const [sectorSlug, setSectorSlug] = useState<string>(sectors[0]?.slug ?? "");
-  const [citySlug, setCitySlug] = useState<string>(cities[0]?.slug ?? "");
+  const [sectorSlug, setSectorSlug] = useState<string>("");
+  const [citySlug, setCitySlug] = useState<string>("");
 
   const featuredOpps = opportunities.slice(0, 6);
   const featuredCases = cases.slice(0, 4);
@@ -80,8 +80,10 @@ function OportunidadesIndex() {
           <div className="mx-auto max-w-7xl bg-card text-foreground rounded-md shadow-2xl p-2">
             <div className="grid grid-cols-1 md:grid-cols-[1.1fr_1.1fr_1fr_1fr_auto] gap-2">
               <FieldSelect label="Sector" icon={<Briefcase className="h-4 w-4" />} value={sectorSlug} onChange={setSectorSlug}
+                placeholder="Selecciona industria"
                 options={sectors.map((s) => ({ value: s.slug, label: s.name }))} />
               <FieldSelect label="Ciudad" icon={<MapPin className="h-4 w-4" />} value={citySlug} onChange={setCitySlug}
+                placeholder="Selecciona ciudad"
                 options={cities.map((c) => ({ value: c.slug, label: c.name }))} />
               <Field label="Zona / barrios" value="Todos los distritos" />
               <Field label="Volumen mínimo" value="500 búsq/mes · Cualquiera" />
@@ -400,9 +402,9 @@ function Field({ label, value }: { label: string; value: string }) {
   );
 }
 
-function FieldSelect({ label, icon, value, onChange, options }: {
+function FieldSelect({ label, icon, value, onChange, options, placeholder }: {
   label: string; icon: React.ReactNode; value: string; onChange: (v: string) => void;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string }[]; placeholder?: string;
 }) {
   return (
     <label className="bg-secondary/50 rounded-md px-4 py-2 h-14 flex items-center gap-3 cursor-pointer">
@@ -411,6 +413,7 @@ function FieldSelect({ label, icon, value, onChange, options }: {
         <span className="text-[11px] text-muted-foreground">{label}</span>
         <select value={value} onChange={(e) => onChange(e.target.value)}
           className="bg-transparent text-sm font-semibold focus:outline-none cursor-pointer -ml-0.5">
+          {placeholder && <option value="">{placeholder}</option>}
           {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
       </div>
