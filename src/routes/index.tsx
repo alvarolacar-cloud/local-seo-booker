@@ -316,29 +316,6 @@ function Home() {
               );
             })}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2">
-            {sectorOpps.length === 0 && (
-              <p className="text-sm text-muted-foreground col-span-3">Próximamente más oportunidades en {activeSector}.</p>
-            )}
-            {sectorOpps.map((o) => (
-              <Link
-                key={o.slug}
-                to="/oportunidades/$slug"
-                params={{ slug: o.slug }}
-                className="text-sm text-primary hover:underline py-1"
-              >
-                {o.sectorName} en {o.cityName}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Ciudades de España por zona */}
-      <section className="bg-background border-t border-border">
-        <div className="mx-auto max-w-7xl px-4 py-12">
-          <h2 className="text-2xl font-extrabold mb-1">Ciudades donde detectamos oportunidades</h2>
-          <p className="text-sm text-muted-foreground mb-8">Cobertura por zonas de España. Elige tu ciudad y mira el hueco real.</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
               { zone: "Centro", cities: ["Madrid", "Toledo", "Guadalajara", "Ávila", "Segovia", "Cuenca", "Salamanca", "Valladolid"] },
@@ -362,6 +339,7 @@ function Home() {
           </div>
         </div>
       </section>
+
 
 
 
