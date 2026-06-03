@@ -360,7 +360,7 @@ function Home() {
                       <p className="font-bold text-lg leading-tight">{o.sectorName}</p>
                     </div>
                     <span className="absolute top-3 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-0.5 rounded">
-                      Score {o.score}
+                      {o.sectorName.toLowerCase()} en {o.cityName.toLowerCase()}
                     </span>
                   </div>
                   <div className="p-4">
