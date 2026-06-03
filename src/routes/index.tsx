@@ -64,10 +64,10 @@ function Home() {
   
   const [sectorSlug, setSectorSlug] = useState(sectors[0]?.slug ?? "");
   const [citySlug, setCitySlug] = useState(cities[0]?.slug ?? "");
-  const [activeCity, setActiveCity] = useState("Madrid");
+  const [activeSector, setActiveSector] = useState(sectorTabsList[0]);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const cityOpps = opportunities.filter((o) => o.cityName === activeCity).slice(0, 6);
+  const sectorOpps = opportunities.filter((o) => o.sectorName === activeSector).slice(0, 6);
 
   return (
     <div className="min-h-screen bg-background">
