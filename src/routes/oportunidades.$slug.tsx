@@ -2,14 +2,17 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import {
   ChevronRight, MapPin, TrendingUp, TrendingDown, Minus, ArrowRight,
   Search, Wallet, Target, CheckCircle2, AlertTriangle, Sparkles,
-  Trophy, Star, Calendar, Building2, FileText,
+  Trophy, Calendar, Building2, FileText, Share2, Heart, Clock,
+  Smartphone, Users, BarChart3, Globe, MessageSquare, Tag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
 import { getOpportunity, type Opportunity } from "@/data/opportunities";
 import { cases } from "@/data/cases";
-import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, Area, AreaChart } from "recharts";
+import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { useMemo, useState } from "react";
 import cityMadrid from "@/assets/city-madrid.jpg";
 import cityBarcelona from "@/assets/city-barcelona.jpg";
@@ -17,19 +20,21 @@ import cityValencia from "@/assets/city-valencia.jpg";
 import citySevilla from "@/assets/city-sevilla.jpg";
 import cityBilbao from "@/assets/city-bilbao.jpg";
 import cityMalaga from "@/assets/city-malaga.jpg";
+import imgStorefront from "@/assets/report-storefront.jpg";
+import imgMap from "@/assets/report-map.jpg";
+import imgPhone from "@/assets/report-phone.jpg";
+import imgHandshake from "@/assets/report-handshake.jpg";
 
 const cityImageMap: Record<string, string> = {
   madrid: cityMadrid, barcelona: cityBarcelona, valencia: cityValencia,
   sevilla: citySevilla, bilbao: cityBilbao, malaga: cityMalaga,
 };
 
-// Ticket medio por servicio (€)
 const ticketBySector: Record<string, number> = {
   fontaneros: 180, electricistas: 160, reformas: 8500, dentistas: 750, abogados: 1200,
   inmobiliarias: 4500, peluquerias: 35, talleres: 320, restaurantes: 28, gimnasios: 45,
   estetica: 70, veterinarias: 95, academias: 120, fotografos: 1800,
 };
-// % típico de búsquedas que se convierten en cliente real (CTR top 3 × conv. media)
 const conversionBySector: Record<string, number> = {
   fontaneros: 0.08, electricistas: 0.08, reformas: 0.015, dentistas: 0.03, abogados: 0.025,
   inmobiliarias: 0.012, peluquerias: 0.06, talleres: 0.05, restaurantes: 0.07, gimnasios: 0.035,
@@ -77,6 +82,13 @@ function compMeta(c: "Baja" | "Media" | "Alta") {
   return { cls: "bg-accent/30 text-accent-foreground border-accent/40", icon: <Minus className="h-3.5 w-3.5" />, text: "Competencia media" };
 }
 
+function scoreLabel(score: number) {
+  if (score >= 85) return "Excelente";
+  if (score >= 75) return "Muy buena";
+  if (score >= 65) return "Buena";
+  return "Interesante";
+}
+
 function OpportunityDetail() {
   const { opp } = Route.useLoaderData() as { opp: Opportunity };
   const related = cases.filter((c) => c.sectorSlug === opp.sectorSlug);
@@ -87,7 +99,6 @@ function OpportunityDetail() {
   const ticket = ticketBySector[opp.sectorSlug] ?? 200;
   const baseConv = conversionBySector[opp.sectorSlug] ?? 0.04;
 
-  // Simulador: % de búsquedas mensuales captadas
   const [capturePct, setCapturePct] = useState(10);
   const sim = useMemo(() => {
     const visits = Math.round(opp.searches * (capturePct / 100));
@@ -96,70 +107,212 @@ function OpportunityDetail() {
     return { visits, clients, revenue };
   }, [opp.searches, capturePct, baseConv, ticket]);
 
-  // Potencial "techo" = capturando ~20% (top 3 Google)
   const ceilingRevenue = Math.round(opp.searches * 0.2 * baseConv * ticket);
 
   return (
     <div className="min-h-screen bg-background">
-      {/* HERO con imagen ciudad */}
-      <section className="relative overflow-hidden">
-        <img src={cityImg} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/95 via-primary/90 to-primary/95" />
-        <div className="relative">
-          <SiteHeader variant="transparent" />
-          <div className="mx-auto max-w-7xl px-4 pt-8 pb-10 md:pt-10 md:pb-14 text-primary-foreground">
-            <Link to="/oportunidades" className="text-xs text-white/70 hover:text-white inline-flex items-center gap-1 mb-4">
-              <ChevronRight className="h-3 w-3 rotate-180" /> Volver a oportunidades
-            </Link>
+      <SiteHeader />
 
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider bg-white/10 backdrop-blur px-2.5 py-1 rounded">
+      <div className="mx-auto max-w-7xl px-4 pt-6">
+        <Link to="/oportunidades" className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
+          <ChevronRight className="h-3 w-3 rotate-180" /> Volver a oportunidades
+        </Link>
+      </div>
+
+      {/* TÍTULO + SCORE + CTA (estilo cabecera hotel) */}
+      <header className="mx-auto max-w-7xl px-4 pt-4 pb-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider bg-secondary text-foreground px-2 py-1 rounded">
                 <FileText className="h-3 w-3" /> Informe de oportunidad
               </span>
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider bg-white/10 backdrop-blur px-2.5 py-1 rounded">
-                <Calendar className="h-3 w-3" /> Actualizado hoy
-              </span>
-              <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider border px-2.5 py-1 rounded bg-card/90 ${badge.cls.replace('bg-primary/10','').replace('bg-destructive/10','').replace('bg-accent/30','')}`}>
+              <span className={`inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider border px-2 py-1 rounded ${badge.cls}`}>
                 {badge.icon} {badge.text}
               </span>
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider bg-secondary text-muted-foreground px-2 py-1 rounded">
+                <Calendar className="h-3 w-3" /> Actualizado hoy
+              </span>
             </div>
-
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] max-w-4xl">
-              {opp.sectorName} <span className="text-accent">en {opp.cityName}</span>
+            <h1 className="text-3xl md:text-5xl font-extrabold leading-[1.05]">
+              {opp.sectorName} en {opp.cityName}
             </h1>
-            <p className="mt-3 text-white/85 max-w-2xl text-lg">
-              Este es el dinero real que mueve tu sector cada mes en {opp.cityName}. Y lo que podrías llevarte tú si estás en el top 3 de Google.
+            <p className="mt-2 text-muted-foreground inline-flex items-center gap-1.5 text-sm">
+              <MapPin className="h-4 w-4" /> {opp.cityName}, España · {opp.districts.length} distritos analizados
             </p>
+          </div>
 
-            {/* 3 KPIs gigantes */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-3">
-              <HeroKpi
-                icon={<Search className="h-4 w-4" />}
-                label="Búsquedas al mes"
-                value={fmt(opp.searches)}
-                hint={`Personas buscando «${opp.sectorName.toLowerCase()}» en ${opp.cityName}`}
-              />
-              <HeroKpi
-                icon={<Wallet className="h-4 w-4" />}
-                label="Ticket medio del servicio"
-                value={fmtEur(ticket)}
-                hint="Lo que vale de media cada cliente captado"
-              />
-              <HeroKpi
-                icon={<Trophy className="h-4 w-4" />}
-                label="Techo de ingresos al mes"
-                value={fmtEur(ceilingRevenue)}
-                hint="Si dominas el top 3 de Google en tu zona"
-                highlight
-              />
+          {/* Score grande tipo hotel */}
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-sm font-bold">Oportunidad {scoreLabel(opp.score).toLowerCase()}</p>
+              <p className="text-xs text-muted-foreground">Score sobre 100</p>
+            </div>
+            <div className="bg-primary text-primary-foreground rounded-lg rounded-tl-none px-4 py-2 text-2xl font-extrabold leading-none min-w-[64px] text-center">
+              {opp.score}
+            </div>
+            <div className="hidden md:flex items-center gap-1">
+              <Button variant="ghost" size="icon" aria-label="Compartir"><Share2 className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" aria-label="Guardar"><Heart className="h-4 w-4" /></Button>
             </div>
           </div>
         </div>
+      </header>
+
+      {/* MOSAICO de imágenes (5 fotos estilo Skyscanner) */}
+      <section className="mx-auto max-w-7xl px-4">
+        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-[280px] md:h-[420px] rounded-2xl overflow-hidden">
+          <img src={cityImg} alt={`${opp.cityName}`} className="col-span-2 row-span-2 w-full h-full object-cover" />
+          <img src={imgStorefront} alt="" loading="lazy" className="w-full h-full object-cover" />
+          <img src={imgPhone} alt="" loading="lazy" className="w-full h-full object-cover" />
+          <img src={imgHandshake} alt="" loading="lazy" className="w-full h-full object-cover" />
+          <img src={imgMap} alt="" loading="lazy" className="w-full h-full object-cover" />
+        </div>
+
+        {/* Barra ticket + CTA, estilo "144€ Ver ofertas" */}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-border rounded-xl bg-card px-4 py-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <div>
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-bold">Ticket medio del servicio</p>
+              <p className="text-2xl font-extrabold text-primary leading-none mt-0.5">{fmtEur(ticket)}</p>
+            </div>
+            <div className="hidden sm:block h-10 w-px bg-border" />
+            <div className="hidden sm:block">
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-bold">Techo de ingresos</p>
+              <p className="text-2xl font-extrabold leading-none mt-0.5">{fmtEur(ceilingRevenue)}<span className="text-xs text-muted-foreground font-medium">/mes</span></p>
+            </div>
+          </div>
+          <Button asChild className="font-bold h-11 px-5">
+            <a href="#simulador">Calcular mi caso <ArrowRight className="h-4 w-4 ml-1" /></a>
+          </Button>
+        </div>
       </section>
 
-      <main className="mx-auto max-w-7xl px-4 mt-12 mb-20 space-y-16">
-        {/* SIMULADOR — el "wow" */}
-        <section className="border border-border rounded-2xl bg-card p-6 md:p-8 shadow-[var(--shadow-card)]">
+      <main className="mx-auto max-w-7xl px-4 mt-12 mb-20 space-y-14">
+        {/* COMPARAR KEYWORDS Y OPORTUNIDADES (tabs estilo "comparar habitaciones") */}
+        <section>
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Comparar keywords y oportunidades</h2>
+          <p className="text-sm text-muted-foreground mb-5">No todas las búsquedas valen lo mismo. Estas son las que llenan la agenda.</p>
+
+          <Tabs defaultValue="dinero">
+            <TabsList className="bg-secondary">
+              <TabsTrigger value="dinero">Por dinero</TabsTrigger>
+              <TabsTrigger value="volumen">Por volumen</TabsTrigger>
+              <TabsTrigger value="servicios">Por servicio</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="dinero" className="mt-5 space-y-2">
+              {[...opp.topKeywords]
+                .map((k) => ({ ...k, revenue: Math.round(k.volume * 0.18 * baseConv * ticket) }))
+                .sort((a, b) => b.revenue - a.revenue)
+                .map((k, i) => (
+                  <KeywordRow key={k.kw} i={i} kw={k.kw} volume={k.volume} maxVolume={maxKw} revenue={k.revenue} />
+                ))}
+            </TabsContent>
+            <TabsContent value="volumen" className="mt-5 space-y-2">
+              {[...opp.topKeywords].sort((a, b) => b.volume - a.volume).map((k, i) => {
+                const revenue = Math.round(k.volume * 0.18 * baseConv * ticket);
+                return <KeywordRow key={k.kw} i={i} kw={k.kw} volume={k.volume} maxVolume={maxKw} revenue={revenue} />;
+              })}
+            </TabsContent>
+            <TabsContent value="servicios" className="mt-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {opp.topServices.map((s, i) => (
+                  <div key={s} className="flex items-center justify-between border border-border rounded-lg p-4 bg-card">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-muted-foreground w-5">#{i + 1}</span>
+                      <span className="font-semibold">{s}</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground inline-flex items-center gap-1"><Tag className="h-3 w-3" /> Alta demanda</span>
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </section>
+
+        {/* DATOS DE INTERÉS (4 mini stats con icono) */}
+        <section>
+          <h2 className="text-2xl font-extrabold mb-4">Datos de interés</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <DataPoint icon={<Search className="h-5 w-5" />} label="Búsquedas/mes" value={fmt(opp.searches)} />
+            <DataPoint icon={<Wallet className="h-5 w-5" />} label="Ticket medio" value={fmtEur(ticket)} />
+            <DataPoint icon={<Trophy className="h-5 w-5" />} label="Ingresos potenciales/mes" value={fmtEur(ceilingRevenue)} />
+            <DataPoint icon={<Users className="h-5 w-5" />} label="CPC medio Google Ads" value={`${opp.cpc.toFixed(2)} €`} />
+          </div>
+        </section>
+
+        {/* SERVICIOS (grid con iconos tipo amenities) */}
+        <section>
+          <h2 className="text-2xl font-extrabold mb-1">Qué incluye el ranking en Google</h2>
+          <p className="text-sm text-muted-foreground mb-5">Las palancas que mueven el posicionamiento local de tu negocio.</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[
+              { icon: <MapPin className="h-5 w-5" />, t: "Ficha Google" },
+              { icon: <MessageSquare className="h-5 w-5" />, t: "Reseñas" },
+              { icon: <Globe className="h-5 w-5" />, t: "Web local" },
+              { icon: <Building2 className="h-5 w-5" />, t: "Citaciones NAP" },
+              { icon: <FileText className="h-5 w-5" />, t: "Posts GBP" },
+              { icon: <BarChart3 className="h-5 w-5" />, t: "Schema local" },
+            ].map((a) => (
+              <div key={a.t} className="bg-secondary rounded-lg p-4 flex flex-col items-center text-center gap-2">
+                <div className="text-primary">{a.icon}</div>
+                <p className="text-xs font-semibold">{a.t}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* MÁS INFORMACIÓN DE [sector] EN [ciudad] + mini galería */}
+        <section>
+          <h2 className="text-2xl font-extrabold mb-3">Más información del mercado de {opp.sectorName.toLowerCase()} en {opp.cityName}</h2>
+          <div className="grid grid-cols-4 gap-2 mb-4">
+            <img src={imgStorefront} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover rounded-lg" />
+            <img src={imgHandshake} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover rounded-lg" />
+            <img src={cityImg} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover rounded-lg" />
+            <img src={imgPhone} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover rounded-lg" />
+          </div>
+          <div className="border border-border rounded-xl bg-card p-5">
+            <p className="font-bold mb-1">{opp.sectorName} en {opp.cityName}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              El sector de {opp.sectorName.toLowerCase()} en {opp.cityName} mueve {fmt(opp.searches)} búsquedas mensuales y un ticket medio de {fmtEur(ticket)}.
+              La competencia es <strong className="text-foreground">{opp.competition.toLowerCase()}</strong>, con {opp.districts.length} distritos donde la demanda
+              supera la oferta bien posicionada. Si te metes en el top 3 de Google podrías capturar hasta {fmtEur(ceilingRevenue)} al mes solo de SEO local,
+              sin pagar un euro en anuncios.
+            </p>
+          </div>
+        </section>
+
+        {/* EVOLUCIÓN DEMANDA (gráfico) */}
+        <section>
+          <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
+            <h2 className="text-2xl font-extrabold">Evolución de la demanda (12 meses)</h2>
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">
+              <TrendingUp className="h-3 w-3" /> Crecimiento sostenido
+            </span>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">Búsquedas mensuales relacionadas con «{opp.sectorName.toLowerCase()}» en {opp.cityName}.</p>
+          <div className="border border-border rounded-xl bg-card p-4 h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={opp.trend} margin={{ left: 0, right: 12, top: 8, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="gradTrend" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.35} />
+                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
+                <YAxis tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
+                <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8 }} />
+                <Area type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2.5} fill="url(#gradTrend)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </section>
+
+        {/* SIMULADOR (el "wow") */}
+        <section id="simulador" className="border border-border rounded-2xl bg-card p-6 md:p-8 shadow-[var(--shadow-card)]">
           <div className="flex items-start gap-3 mb-2">
             <div className="h-10 w-10 rounded-lg bg-accent/30 text-accent-foreground flex items-center justify-center shrink-0">
               <Sparkles className="h-5 w-5" />
@@ -178,196 +331,42 @@ function OpportunityDetail() {
                   <span className="text-2xl font-extrabold text-primary">{capturePct}%</span>
                 </div>
                 <input
-                  type="range"
-                  min={1}
-                  max={30}
-                  step={1}
-                  value={capturePct}
+                  type="range" min={1} max={30} step={1} value={capturePct}
                   onChange={(e) => setCapturePct(parseInt(e.target.value))}
                   className="w-full accent-primary h-2 cursor-pointer"
                 />
                 <div className="flex justify-between text-[11px] text-muted-foreground mt-1.5">
-                  <span>1% (web invisible)</span>
-                  <span>10% (web decente)</span>
-                  <span>30% (top 3 Google)</span>
+                  <span>1%</span><span>10%</span><span>30% (top 3)</span>
                 </div>
               </label>
-
               <div className="mt-6 space-y-3 text-sm">
                 <SimRow label="Visitas potenciales" value={fmt(sim.visits)} sub="visitas/mes a tu web o ficha" />
-                <SimRow label="Clientes nuevos" value={fmt(sim.clients)} sub={`asumiendo conversión media del ${(baseConv * 100).toFixed(1)}%`} />
+                <SimRow label="Clientes nuevos" value={fmt(sim.clients)} sub={`conversión media del ${(baseConv * 100).toFixed(1)}%`} />
               </div>
             </div>
-
             <div className="bg-primary text-primary-foreground rounded-xl p-6 md:p-8 flex flex-col justify-center relative overflow-hidden">
               <img src={cityImg} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover opacity-10" />
               <div className="relative">
                 <p className="text-xs font-bold uppercase tracking-widest text-accent">Facturación estimada</p>
-                <p className="mt-2 text-5xl md:text-6xl font-extrabold leading-none">
-                  {fmtEur(sim.revenue)}
-                </p>
+                <p className="mt-2 text-5xl md:text-6xl font-extrabold leading-none">{fmtEur(sim.revenue)}</p>
                 <p className="mt-1 text-white/80 text-sm">al mes · solo de SEO local</p>
                 <div className="mt-5 flex items-center gap-2 text-xs text-white/85">
                   <CheckCircle2 className="h-4 w-4 text-accent shrink-0" />
                   <span>Equivalente a {fmtEur(sim.revenue * 12)} al año</span>
                 </div>
                 <Button asChild className="mt-6 bg-accent text-accent-foreground hover:bg-accent/90 font-bold w-full md:w-auto">
-                  <Link to="/como-funciona">
-                    Quiero capturar este % <ArrowRight className="h-4 w-4 ml-1" />
-                  </Link>
+                  <Link to="/como-funciona">Quiero capturar este % <ArrowRight className="h-4 w-4 ml-1" /></Link>
                 </Button>
               </div>
             </div>
           </div>
         </section>
 
-        {/* TENDENCIA */}
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 border border-border rounded-2xl p-6 bg-card">
-            <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
-              <h2 className="text-xl font-extrabold">Evolución de la demanda (12 meses)</h2>
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">
-                <TrendingUp className="h-3 w-3" /> Crecimiento sostenido
-              </span>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">Búsquedas mensuales relacionadas con «{opp.sectorName.toLowerCase()}» en {opp.cityName}.</p>
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={opp.trend} margin={{ left: 0, right: 12, top: 8, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="gradTrend" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.35} />
-                      <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
-                  <YAxis tick={{ fontSize: 12 }} stroke="hsl(var(--muted-foreground))" />
-                  <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", borderRadius: 8 }} />
-                  <Area type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2.5} fill="url(#gradTrend)" />
-                  <Line type="monotone" dataKey="value" stroke="hsl(var(--primary))" strokeWidth={2.5} dot={{ r: 3 }} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-          <div className="border border-border rounded-2xl p-6 bg-card flex flex-col">
-            <h2 className="text-xl font-extrabold mb-1">Foto del mercado hoy</h2>
-            <p className="text-sm text-muted-foreground mb-4">Lo que verás si buscas en Google ahora mismo desde {opp.cityName}.</p>
-            <ul className="space-y-3 text-sm">
-              <FactRow icon={<AlertTriangle className="h-4 w-4" />} tone="warn"
-                text={`Top 3 ocupado por ${opp.competition === "Alta" ? "agencias y portales nacionales" : opp.competition === "Media" ? "competidores locales fuertes" : "fichas mal optimizadas, hueco real"}.`} />
-              <FactRow icon={<Building2 className="h-4 w-4" />} tone="info"
-                text={`${opp.districts.length}+ distritos con demanda real en ${opp.cityName}.`} />
-              <FactRow icon={<Star className="h-4 w-4" />} tone="warn"
-                text="Reseñas concentradas en 2-3 negocios: oportunidad de adelantarles." />
-              <FactRow icon={<CheckCircle2 className="h-4 w-4" />} tone="ok"
-                text={`Score de oportunidad: ${opp.score}/100`} />
-            </ul>
-          </div>
-        </section>
-
-        {/* DISTRITOS */}
-        <section>
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Distritos con más potencial en {opp.cityName}</h2>
-          <p className="text-sm text-muted-foreground mb-6 max-w-2xl">Zonas donde la demanda es alta y la competencia local no está bien posicionada. Tu mejor punto de entrada.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {opp.districts.map((d, i) => (
-              <div key={d.name} className="flex items-center gap-4 border border-border rounded-xl p-4 bg-card hover:border-primary transition">
-                <div className="text-xl font-extrabold text-muted-foreground/40 w-8 shrink-0">#{i + 1}</div>
-                <MapPin className="h-5 w-5 text-primary shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold">{d.name}</p>
-                  <div className="mt-1.5 h-2 bg-secondary rounded overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-primary to-[var(--brand-deep,oklch(0.22_0.14_255))]" style={{ width: `${d.potential}%` }} />
-                  </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-2xl font-extrabold text-primary leading-none">{d.potential}</p>
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground">potencial</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* KEYWORDS con €/mes */}
-        <section className="border border-border rounded-2xl p-6 md:p-8 bg-card">
-          <div className="flex items-end justify-between gap-3 mb-1 flex-wrap">
-            <h2 className="text-2xl md:text-3xl font-extrabold">Las keywords que mueven el dinero</h2>
-            <span className="text-xs text-muted-foreground">Ingresos estimados si rankeas top 3</span>
-          </div>
-          <p className="text-sm text-muted-foreground mb-6 max-w-2xl">No todas las búsquedas valen lo mismo. Estas son las que te llenan la agenda.</p>
-
-          <div className="space-y-3">
-            {opp.topKeywords.map((k, i) => {
-              const monthlyRevenue = Math.round(k.volume * 0.18 * baseConv * ticket);
-              return (
-                <div key={k.kw} className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto_auto] gap-4 items-center border border-border/60 rounded-lg p-4 bg-background">
-                  <div className="text-xs font-bold text-muted-foreground w-6 shrink-0">#{i + 1}</div>
-                  <div className="min-w-0">
-                    <p className="font-bold text-sm md:text-base truncate">«{k.kw}»</p>
-                    <div className="mt-1.5 h-1.5 bg-secondary rounded overflow-hidden max-w-md">
-                      <div className="h-full bg-primary" style={{ width: `${(k.volume / maxKw) * 100}%` }} />
-                    </div>
-                  </div>
-                  <div className="text-right md:w-28">
-                    <p className="text-sm font-bold">{fmt(k.volume)}</p>
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">búsq/mes</p>
-                  </div>
-                  <div className="text-right md:w-32 bg-primary/5 rounded-lg px-3 py-2">
-                    <p className="text-base font-extrabold text-primary">{fmtEur(monthlyRevenue)}</p>
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">potencial/mes</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-secondary rounded-lg p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Servicios más buscados</p>
-              <ul className="space-y-1.5">
-                {opp.topServices.map((s) => (
-                  <li key={s} className="flex items-center gap-2 text-sm font-medium">
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent" /> {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-secondary rounded-lg p-4">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">CPC medio (Google Ads)</p>
-              <p className="text-3xl font-extrabold text-primary">{opp.cpc.toFixed(2)} €</p>
-              <p className="text-xs text-muted-foreground mt-1">Cada clic por anuncios cuesta esto. Con SEO no pagas.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* PLAN — 4 pasos */}
-        <section>
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Cómo te llevas este dinero</h2>
-          <p className="text-sm text-muted-foreground mb-6 max-w-2xl">Lo que haríamos contigo en 90 días para capturar tu trozo del mercado.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {[
-              { n: "01", t: "Auditoría local", d: `Analizamos tu ficha, tu web y tus competidores reales en ${opp.cityName}.` },
-              { n: "02", t: "Ficha Google Maps", d: "Optimizamos tu perfil para que aparezcas en el pack de 3 mapas." },
-              { n: "03", t: "Contenido por distrito", d: `Páginas específicas para cada zona de ${opp.cityName} con demanda.` },
-              { n: "04", t: "Reseñas y autoridad", d: "Sistema para conseguir reseñas reales y enlaces locales que mueven ranking." },
-            ].map((s) => (
-              <div key={s.n} className="border border-border rounded-xl p-5 bg-card hover:border-primary transition">
-                <p className="text-3xl font-extrabold text-primary/30">{s.n}</p>
-                <p className="font-bold mt-1">{s.t}</p>
-                <p className="text-sm text-muted-foreground mt-1">{s.d}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* CASOS */}
+        {/* CASOS DE ÉXITO (estilo "opiniones de huéspedes") */}
         {related.length > 0 && (
           <section>
-            <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Ya lo hemos hecho en tu sector</h2>
-            <p className="text-sm text-muted-foreground mb-6">Negocios de {opp.sectorName.toLowerCase()} a los que ya hemos posicionado en su ciudad.</p>
+            <h2 className="text-2xl font-extrabold mb-1">Casos en el sector</h2>
+            <p className="text-sm text-muted-foreground mb-5">Negocios de {opp.sectorName.toLowerCase()} a los que ya hemos posicionado.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {related.map((c) => (
                 <article key={c.slug} className="border border-border rounded-xl overflow-hidden bg-card hover:border-primary hover:-translate-y-0.5 transition">
@@ -385,7 +384,112 @@ function OpportunityDetail() {
           </section>
         )}
 
-        {/* CTA */}
+        {/* ZONA GEOGRÁFICA (mapa estilizado + cards) */}
+        <section>
+          <div className="flex items-end justify-between gap-3 mb-4 flex-wrap">
+            <div>
+              <h2 className="text-2xl font-extrabold">Zona geográfica <span className="text-primary">{(opp.score / 20).toFixed(1)}</span></h2>
+              <p className="text-sm text-muted-foreground">{opp.cityName} concentra demanda en {opp.districts.length} distritos. Estos son los puntos de entrada con menos competencia.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
+            <div className="relative rounded-xl overflow-hidden border border-border h-80 lg:h-full">
+              <img src={imgMap} alt={`Mapa de ${opp.cityName}`} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+              <div className="absolute top-3 left-3 bg-card/95 backdrop-blur rounded-lg px-3 py-2 shadow-md inline-flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" />
+                <span className="text-sm font-bold">{opp.cityName}</span>
+              </div>
+            </div>
+            <div className="space-y-2">
+              {opp.districts.slice(0, 4).map((d, i) => (
+                <div key={d.name} className="flex items-center gap-3 border border-border rounded-lg p-3 bg-card">
+                  <div className="text-sm font-extrabold text-muted-foreground/50 w-6">#{i + 1}</div>
+                  <MapPin className="h-4 w-4 text-primary shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-sm">{d.name}</p>
+                    <div className="mt-1 h-1.5 bg-secondary rounded overflow-hidden">
+                      <div className="h-full bg-primary" style={{ width: `${d.potential}%` }} />
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-extrabold text-primary leading-none">{d.potential}</p>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">potencial</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* MEJOR MOMENTO PARA EMPEZAR (estilo entrada/salida) */}
+        <section>
+          <h2 className="text-2xl font-extrabold mb-4">Mejor momento para posicionarte</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center gap-4 border border-border rounded-xl bg-card p-5">
+              <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center"><Clock className="h-5 w-5" /></div>
+              <div>
+                <p className="text-xs uppercase tracking-wider font-bold text-muted-foreground">Pico de demanda</p>
+                <p className="text-xl font-extrabold">Octubre – Marzo</p>
+                <p className="text-xs text-muted-foreground">Empieza ahora para llegar posicionado.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 border border-border rounded-xl bg-card p-5">
+              <div className="h-12 w-12 rounded-full bg-accent/30 text-accent-foreground flex items-center justify-center"><Clock className="h-5 w-5" /></div>
+              <div>
+                <p className="text-xs uppercase tracking-wider font-bold text-muted-foreground">Valle de demanda</p>
+                <p className="text-xl font-extrabold">Julio – Agosto</p>
+                <p className="text-xs text-muted-foreground">Momento perfecto para crear contenido.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* INFORMACIÓN ÚTIL (tabla clave-valor) */}
+        <section>
+          <h2 className="text-2xl font-extrabold mb-4">Información útil</h2>
+          <div className="border border-border rounded-xl bg-card overflow-hidden divide-y divide-border">
+            <InfoRow icon={<Smartphone className="h-4 w-4" />} label="Dispositivo principal" value="78% móvil · 22% escritorio" />
+            <InfoRow icon={<Clock className="h-4 w-4" />} label="Horas pico de búsqueda" value="9-11h y 18-21h" />
+            <InfoRow icon={<Target className="h-4 w-4" />} label="Intención de búsqueda" value="Comercial / contratación inmediata" />
+            <InfoRow icon={<AlertTriangle className="h-4 w-4" />} label="Top 3 ocupado por" value={opp.competition === "Alta" ? "Agencias y portales nacionales" : opp.competition === "Media" ? "Competidores locales fuertes" : "Fichas mal optimizadas — hueco real"} />
+            <InfoRow icon={<MapPin className="h-4 w-4" />} label="Cobertura recomendada" value={`${opp.districts.length} distritos de ${opp.cityName} + municipios limítrofes`} />
+            <InfoRow icon={<Calendar className="h-4 w-4" />} label="Tiempo medio a top 3" value="3 a 6 meses con trabajo constante" />
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section>
+          <h2 className="text-2xl font-extrabold mb-1">{opp.sectorName} en {opp.cityName}: preguntas frecuentes</h2>
+          <p className="text-sm text-muted-foreground mb-4">Las dudas habituales antes de empezar.</p>
+          <Accordion type="single" collapsible className="border border-border rounded-xl bg-card divide-y divide-border">
+            <AccordionItem value="q1" className="px-4 border-0">
+              <AccordionTrigger className="font-semibold">¿Cuánto se tarda en aparecer en el top 3 de Google?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Entre 3 y 6 meses para keywords locales en {opp.cityName} con un sector de competencia {opp.competition.toLowerCase()}. La ficha de Google Maps suele moverse antes (4-8 semanas).
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="q2" className="px-4 border-0">
+              <AccordionTrigger className="font-semibold">¿Cuánto cuesta posicionarse?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Depende de tu situación actual y de la competencia. En este sector y ciudad el retorno suele cubrir la inversión antes del mes 4.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="q3" className="px-4 border-0">
+              <AccordionTrigger className="font-semibold">¿Y si ya estoy en Google Maps pero nadie me llama?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Es lo más común. La ficha existe pero está sin optimizar: fotos, categorías, reseñas, posts y servicios. Cuando se trabaja bien, las llamadas suben en 2-3 semanas.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="q4" className="px-4 border-0">
+              <AccordionTrigger className="font-semibold">¿De dónde sale este informe?</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                Cruzamos datos públicos de Google (volúmenes, CPC, competidores), nuestra base de proyectos de SEO local y la realidad del mercado en {opp.cityName}. Actualizado mensualmente.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </section>
+
+        {/* CTA final */}
         <section className="relative overflow-hidden rounded-2xl">
           <img src={cityImg} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/95 to-primary/80" />
@@ -416,14 +520,34 @@ function OpportunityDetail() {
   );
 }
 
-function HeroKpi({ icon, label, value, hint, highlight }: { icon: React.ReactNode; label: string; value: string; hint: string; highlight?: boolean }) {
+function KeywordRow({ i, kw, volume, maxVolume, revenue }: { i: number; kw: string; volume: number; maxVolume: number; revenue: number }) {
   return (
-    <div className={`rounded-xl p-5 border ${highlight ? "bg-accent text-accent-foreground border-accent" : "bg-card text-foreground border-border/40"} shadow-lg`}>
-      <p className={`inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider ${highlight ? "text-accent-foreground/80" : "text-muted-foreground"}`}>
-        {icon} {label}
-      </p>
-      <p className={`mt-1.5 text-4xl md:text-5xl font-extrabold leading-none ${highlight ? "text-accent-foreground" : "text-primary"}`}>{value}</p>
-      <p className={`text-xs mt-2 ${highlight ? "text-accent-foreground/75" : "text-muted-foreground"}`}>{hint}</p>
+    <div className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto_auto] gap-4 items-center border border-border rounded-lg p-4 bg-card">
+      <div className="text-xs font-bold text-muted-foreground w-6 shrink-0">#{i + 1}</div>
+      <div className="min-w-0">
+        <p className="font-bold text-sm md:text-base truncate">«{kw}»</p>
+        <div className="mt-1.5 h-1.5 bg-secondary rounded overflow-hidden max-w-md">
+          <div className="h-full bg-primary" style={{ width: `${(volume / maxVolume) * 100}%` }} />
+        </div>
+      </div>
+      <div className="text-right md:w-28">
+        <p className="text-sm font-bold">{fmt(volume)}</p>
+        <p className="text-[10px] uppercase tracking-wider text-muted-foreground">búsq/mes</p>
+      </div>
+      <div className="text-right md:w-32 bg-primary/5 rounded-lg px-3 py-2">
+        <p className="text-base font-extrabold text-primary">{fmtEur(revenue)}</p>
+        <p className="text-[10px] uppercase tracking-wider text-muted-foreground">potencial/mes</p>
+      </div>
+    </div>
+  );
+}
+
+function DataPoint({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+  return (
+    <div className="border border-border rounded-xl bg-card p-4">
+      <div className="h-9 w-9 rounded-lg bg-secondary text-primary flex items-center justify-center mb-2">{icon}</div>
+      <p className="text-xl font-extrabold leading-tight">{value}</p>
+      <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
     </div>
   );
 }
@@ -440,12 +564,14 @@ function SimRow({ label, value, sub }: { label: string; value: string; sub: stri
   );
 }
 
-function FactRow({ icon, text, tone }: { icon: React.ReactNode; text: string; tone: "ok" | "warn" | "info" }) {
-  const cls = tone === "ok" ? "bg-primary/10 text-primary" : tone === "warn" ? "bg-accent/30 text-accent-foreground" : "bg-secondary text-foreground";
+function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <li className="flex items-start gap-3">
-      <span className={`h-7 w-7 rounded-md flex items-center justify-center shrink-0 ${cls}`}>{icon}</span>
-      <span className="text-sm leading-snug pt-0.5">{text}</span>
-    </li>
+    <div className="grid grid-cols-[180px_1fr] md:grid-cols-[240px_1fr] gap-4 px-4 py-3 items-start">
+      <div className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+        <span className="text-primary">{icon}</span>
+        {label}
+      </div>
+      <div className="text-sm">{value}</div>
+    </div>
   );
 }
