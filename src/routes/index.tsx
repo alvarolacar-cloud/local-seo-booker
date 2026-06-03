@@ -24,6 +24,10 @@ import sectorFontaneros from "@/assets/sector-fontaneros.jpg";
 import sectorDentistas from "@/assets/sector-dentistas.jpg";
 import sectorAbogadosImg from "@/assets/sector-abogados.jpg";
 import sectorPeluquerias from "@/assets/sector-peluquerias.jpg";
+import sectorTalleres from "@/assets/sector-talleres.jpg";
+import sectorReformas from "@/assets/sector-reformas.jpg";
+import sectorElectricistas from "@/assets/sector-electricistas.jpg";
+import sectorRestaurantes from "@/assets/sector-restaurantes.jpg";
 import editorialImg from "@/assets/report-map.jpg";
 
 export const Route = createFileRoute("/")({
@@ -59,6 +63,10 @@ const sectorImageMap: Record<string, string> = {
   dentistas: sectorDentistas,
   abogados: sectorAbogadosImg,
   peluquerias: sectorPeluquerias,
+  talleres: sectorTalleres,
+  reformas: sectorReformas,
+  electricistas: sectorElectricistas,
+  restaurantes: sectorRestaurantes,
 };
 
 const faqs = [
@@ -352,7 +360,7 @@ function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
             {opportunities.slice(4, 8).map((o) => {
-              const img = cityImageMap[o.citySlug];
+              const img = sectorImageMap[o.sectorSlug] ?? cityImageMap[o.citySlug];
               return (
                 <Link
                   key={o.slug}
@@ -362,7 +370,7 @@ function Home() {
                 >
                   <div className="relative h-40 overflow-hidden">
                     {img && (
-                      <img src={img} alt={o.cityName} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                      <img src={img} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                     <div className="absolute bottom-3 left-3 text-white">
