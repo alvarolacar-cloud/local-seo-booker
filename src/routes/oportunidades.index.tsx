@@ -96,9 +96,8 @@ function OportunidadesIndex() {
   const sectorName = result ? (result.kind === "exact" ? result.opp.sectorName : result.sectorName) : "";
   const cityName = result ? (result.kind === "exact" ? result.opp.cityName : result.cityName) : "";
   const searches = result ? (result.kind === "exact" ? result.opp.searches : result.searches) : 0;
-  const competition = result ? (result.kind === "exact" ? result.opp.competition : result.competition) : "Media" as const;
-  const score = result ? (result.kind === "exact" ? result.opp.score : result.score) : 0;
-  const cpc = result ? (result.kind === "exact" ? result.opp.cpc : result.cpc) : 0;
+
+
   const ticket = ticketBySector[sectorSlug] ?? 100;
 
   return (
