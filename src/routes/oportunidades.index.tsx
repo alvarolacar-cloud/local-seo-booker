@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
+import { NavChips } from "@/components/site/NavChips";
 import { SiteFooter } from "@/components/site/Footer";
 import { opportunities } from "@/data/opportunities";
 import { cities } from "@/data/cities";
@@ -94,7 +95,12 @@ function OportunidadesIndex() {
         </div>
       </section>
 
-      <main className="mx-auto max-w-7xl px-4 mt-20 mb-16 space-y-16">
+      <div className="mt-10">
+        <NavChips />
+      </div>
+
+      <main className="mx-auto max-w-7xl px-4 mt-12 mb-16 space-y-16">
+
         {/* Qué es una oportunidad */}
         <section>
           <h2 className="text-xl font-bold mb-1">Qué es una oportunidad de SEO local</h2>

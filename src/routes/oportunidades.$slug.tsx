@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { SiteHeader } from "@/components/site/Header";
+import { NavChips } from "@/components/site/NavChips";
 import { SiteFooter } from "@/components/site/Footer";
 import { getOpportunity, type Opportunity } from "@/data/opportunities";
 import { cases } from "@/data/cases";
@@ -112,6 +113,7 @@ function OpportunityDetail() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
+      <NavChips />
 
       <div className="mx-auto max-w-7xl px-4 pt-6">
         <Link to="/oportunidades" className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1">
