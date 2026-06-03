@@ -146,8 +146,15 @@ function Index() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {featuredOpps.map((o) => {
               const c = compBadge(o.competition);
+              const cityImg = cityImageMap[o.citySlug];
               return (
                 <Link key={o.slug} to="/oportunidades/$slug" params={{ slug: o.slug }} className="group block border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-lg hover:border-primary transition">
+                  {cityImg && (
+                    <div className="relative h-14 overflow-hidden">
+                      <img src={cityImg} alt={o.cityName} className="h-full w-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition duration-500" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-card" />
+                    </div>
+                  )}
                   <div className="p-5">
                     <p className="text-xs text-muted-foreground uppercase tracking-wide">{o.cityName}</p>
                     <h3 className="text-lg font-bold mt-1 mb-3">{o.sectorName} en {o.cityName}</h3>
