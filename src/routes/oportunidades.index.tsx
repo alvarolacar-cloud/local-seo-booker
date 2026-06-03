@@ -209,22 +209,15 @@ function OportunidadesIndex() {
               const ticketVal = ticketBySector[o.sectorSlug] ?? 100;
               return (
                 <Link key={o.slug} to="/oportunidades/$slug" params={{ slug: o.slug }}
-                  className="group block border border-border rounded-xl overflow-hidden bg-card shadow-[var(--shadow-card)] hover:border-primary hover:-translate-y-0.5 transition">
-                  <div className="relative h-32 overflow-hidden">
-                    <img src={cityImageMap[o.citySlug]} alt={o.cityName} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
-                    {o.score >= 85 && (
-                      <span className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded">
-                        ★ Oferta destacada
-                      </span>
-                    )}
-                    <span className={`absolute top-2 right-2 inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded ${badge.cls}`}>
-                      {badge.icon} Comp. {o.competition}
-                    </span>
-                  </div>
+                  className="group block border border-border rounded-xl bg-card shadow-[var(--shadow-card)] hover:border-primary hover:-translate-y-0.5 transition">
                   <div className="p-4">
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-                      <MapPin className="h-3 w-3 text-primary" /> {o.cityName}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <MapPin className="h-3 w-3 text-primary" /> {o.cityName}
+                      </div>
+                      <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded ${badge.cls}`}>
+                        {badge.icon} {o.competition}
+                      </span>
                     </div>
                     <h3 className="font-bold text-base leading-snug group-hover:text-primary transition">
                       {o.sectorName} en {o.cityName}
