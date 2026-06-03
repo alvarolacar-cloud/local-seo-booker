@@ -3,7 +3,7 @@ import { ChevronRight, MapPin, Phone, Star, TrendingUp, CheckCircle2 } from "luc
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
-import { getSector } from "@/data/sectors";
+import { getSector, type Sector } from "@/data/sectors";
 import { cases } from "@/data/cases";
 import { opportunities } from "@/data/opportunities";
 
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/sectores/$sector")({
 });
 
 function SectorDetail() {
-  const { sector } = Route.useLoaderData();
+  const { sector } = Route.useLoaderData() as { sector: Sector };
   const Icon = sector.icon;
   const relatedCases = cases.filter((c) => c.sectorSlug === sector.slug);
   const relatedOpps = opportunities.filter((o) => o.sectorSlug === sector.slug);
