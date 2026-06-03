@@ -27,11 +27,6 @@ export const Route = createFileRoute("/oportunidades/")({
   component: OportunidadesIndex,
 });
 
-const cityImageMap: Record<string, string> = {
-  madrid: cityMadrid, barcelona: cityBarcelona, valencia: cityValencia,
-  sevilla: citySevilla, bilbao: cityBilbao, malaga: cityMalaga,
-};
-
 function compBadge(c: "Baja" | "Media" | "Alta") {
   if (c === "Baja") return { cls: "bg-primary/10 text-primary", icon: <TrendingDown className="h-3 w-3" /> };
   if (c === "Alta") return { cls: "bg-destructive/15 text-destructive", icon: <TrendingUp className="h-3 w-3" /> };
@@ -56,24 +51,12 @@ function estimateOpportunity(sectorSlug: string, citySlug: string) {
   return { kind: "estimate" as const, sectorName: sector.name, cityName: city.name, citySlug, searches };
 }
 
-const popularDestinations = [
-  { citySlug: "madrid", name: "Madrid", note: "21 sectores analizados", searches: "+82.000 búsquedas/mes" },
-  { citySlug: "barcelona", name: "Barcelona", note: "19 sectores analizados", searches: "+71.000 búsquedas/mes" },
-  { citySlug: "valencia", name: "Valencia", note: "14 sectores analizados", searches: "+38.000 búsquedas/mes" },
-];
-
 const topSectorsMadrid = [
   { name: "Restaurantes", searches: 33400, comp: "Alta" as const, score: 76 },
   { name: "Clínicas dentales", searches: 22300, comp: "Alta" as const, score: 78 },
   { name: "Inmobiliarias", searches: 18500, comp: "Media" as const, score: 81 },
 ];
 
-const articles = [
-  { img: serviceAudit, tag: "Guía", title: "Cómo aparecer el primero en Google Maps en tu ciudad", read: "8 min" },
-  { img: serviceContent, tag: "Casos", title: "5 negocios locales que multiplicaron x3 sus llamadas con SEO" },
-  { img: serviceGmb, tag: "Truco", title: "El truco de las reseñas que duplica tu CTR en Google" },
-  { img: localBusiness, tag: "Ranking", title: "Los 10 sectores con más demanda local en España 2026" },
-];
 
 const faqs = [
   { q: "¿De dónde salen estos datos?", a: "Cruzamos Google Keyword Planner, Search Console real de nuestros clientes y análisis SERP por ciudad." },
