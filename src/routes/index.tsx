@@ -334,6 +334,37 @@ function Home() {
         </div>
       </section>
 
+      {/* Ciudades de España por zona */}
+      <section className="bg-background border-t border-border">
+        <div className="mx-auto max-w-7xl px-4 py-12">
+          <h2 className="text-2xl font-extrabold mb-1">Ciudades donde detectamos oportunidades</h2>
+          <p className="text-sm text-muted-foreground mb-8">Cobertura por zonas de España. Elige tu ciudad y mira el hueco real.</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { zone: "Centro", cities: ["Madrid", "Toledo", "Guadalajara", "Ávila", "Segovia", "Cuenca", "Salamanca", "Valladolid"] },
+              { zone: "Cataluña y Levante", cities: ["Barcelona", "Valencia", "Tarragona", "Girona", "Lleida", "Castellón", "Alicante", "Murcia"] },
+              { zone: "Sur", cities: ["Sevilla", "Málaga", "Granada", "Córdoba", "Cádiz", "Almería", "Huelva", "Jaén"] },
+              { zone: "Norte", cities: ["Bilbao", "San Sebastián", "Santander", "Oviedo", "Gijón", "A Coruña", "Vigo", "Pamplona"] },
+            ].map((block) => (
+              <div key={block.zone}>
+                <h3 className="text-sm font-extrabold uppercase tracking-wide text-foreground mb-3">{block.zone}</h3>
+                <ul className="space-y-1.5">
+                  {block.cities.map((c) => (
+                    <li key={c}>
+                      <Link to="/oportunidades" className="text-sm text-primary hover:underline">
+                        {c}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+
       <SiteFooter />
     </div>
   );
