@@ -431,6 +431,32 @@ function OportunidadesIndex() {
   );
 }
 
+function MiniSparkline({ data }: { data: { month: string; value: number }[] }) {
+  const values = data.map((d) => d.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min || 1;
+  const width = 60;
+  const height = 24;
+  const points = values.map((v, i) => {
+    const x = (i / (values.length - 1)) * width;
+    const y = height - ((v - min) / range) * height;
+    return `${x},${y}`;
+  });
+  return (
+    <svg width={width} height={height} className="shrink-0 text-primary">
+      <polyline
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        points={points.join(" ")}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-secondary/50 rounded-md px-4 py-2 h-14 flex flex-col justify-center">
