@@ -387,7 +387,7 @@ function OpportunityDetail() {
           </section>
         )}
 
-        {/* ZONA GEOGRÁFICA (mapa pequeño + barrios) */}
+        {/* ZONA GEOGRÁFICA (barrios) */}
         <section>
           <div className="flex items-end justify-between gap-3 mb-4 flex-wrap">
             <div>
@@ -395,23 +395,13 @@ function OpportunityDetail() {
               <p className="text-sm text-muted-foreground">Barrios de {opp.cityName} con demanda destacada en {opp.sectorName.toLowerCase()}.</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-4">
-            <div className="relative rounded-xl overflow-hidden border border-border h-48">
-              <img src={imgMap} alt={`Mapa de ${opp.cityName}`} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-              <div className="absolute top-3 left-3 bg-card/95 backdrop-blur rounded-lg px-3 py-2 shadow-md inline-flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-primary" />
-                <span className="text-sm font-bold">{opp.cityName}</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-              {opp.districts.map((d, i) => (
-                <div key={d.name} className="flex items-center gap-2 border border-border rounded-lg px-3 py-2.5 bg-card">
-                  <span className="text-xs font-bold text-muted-foreground/60">#{i + 1}</span>
-                  <MapPin className="h-3.5 w-3.5 text-primary shrink-0" />
-                  <span className="text-sm font-semibold truncate">{d.name}</span>
-                </div>
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {opp.districts.map((d) => (
+              <span key={d.name} className="text-sm font-medium text-muted-foreground inline-flex items-center gap-1.5">
+                <MapPin className="h-3 w-3 text-primary shrink-0" />
+                {d.name}
+              </span>
+            ))}
           </div>
         </section>
 
