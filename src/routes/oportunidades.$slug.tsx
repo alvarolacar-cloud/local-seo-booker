@@ -482,11 +482,35 @@ function OpportunityDetail() {
               <Target className="h-3 w-3" /> Informe a medida · gratis · 48h
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3 max-w-3xl mx-auto">
-              Quiero un informe igual pero con <span className="text-accent">mis competidores reales</span>
+              Te ayudamos a captar clientes de {opp.sectorName.toLowerCase()} en {opp.cityName}
             </h2>
-            <p className="text-white/85 mb-6 max-w-2xl mx-auto">
-              Te lo preparamos con tu nombre, tus servicios concretos y los negocios que ahora mismo están por delante de ti en {opp.cityName}.
+            <p className="text-white/85 mb-8 max-w-2xl mx-auto">
+              No solo analizamos el mercado: ejecutamos la estrategia que te lleva a la primera página de Google, a tu ficha optimizada y a recibir llamadas reales.
             </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10 max-w-5xl mx-auto text-left">
+              <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-5">
+                <Search className="h-5 w-5 text-accent mb-3" />
+                <p className="font-bold text-sm mb-1">SEO Local</p>
+                <p className="text-xs text-white/75 leading-relaxed">Posicionamos tu web y tu ficha de Google Maps para que te encuentren antes que a la competencia cuando busquen {opp.sectorName.toLowerCase()} en {opp.cityName}.</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-5">
+                <Globe className="h-5 w-5 text-accent mb-3" />
+                <p className="font-bold text-sm mb-1">Web que convierte</p>
+                <p className="text-xs text-white/75 leading-relaxed">Diseñamos o optimizamos tu página para que cada visita se traduzca en contacto: velocidad, móvil-first y copy orientado a la contratación.</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-5">
+                <MessageSquare className="h-5 w-5 text-accent mb-3" />
+                <p className="font-bold text-sm mb-1">Ficha Google Maps</p>
+                <p className="text-xs text-white/75 leading-relaxed">Optimizamos tu perfil de empresa: fotos, reseñas, publicaciones y palabras clave para que Google te muestre en el mapa local.</p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-5">
+                <BarChart3 className="h-5 w-5 text-accent mb-3" />
+                <p className="font-bold text-sm mb-1">Resultados medibles</p>
+                <p className="text-xs text-white/75 leading-relaxed">Te mostramos cada mes posiciones, tráfico, llamadas y formularios recibidos para que sepas exactamente qué está funcionando.</p>
+              </div>
+            </div>
+
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold h-12 px-6 text-base">
                 Pedir mi informe personalizado <ArrowRight className="h-5 w-5 ml-1" />
