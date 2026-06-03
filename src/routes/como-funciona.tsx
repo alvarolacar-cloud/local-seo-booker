@@ -3,6 +3,10 @@ import { Search, ClipboardList, Rocket, BarChart3, Repeat, Phone, MapPin, Globe,
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
+import imgSeoLocal from "@/assets/service-seo-local.jpg";
+import imgWeb from "@/assets/service-web.jpg";
+import imgContent from "@/assets/service-content.jpg";
+import imgAnalytics from "@/assets/service-analytics.jpg";
 
 export const Route = createFileRoute("/como-funciona")({
   head: () => ({
