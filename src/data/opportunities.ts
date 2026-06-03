@@ -122,6 +122,39 @@ export const opportunities: Opportunity[] = [
     ],
     topServices: ["Reformas integrales", "Cocinas", "Baños", "Locales comerciales"],
   },
+  {
+    slug: "electricistas-barcelona",
+    sectorSlug: "electricistas", citySlug: "barcelona",
+    sectorName: "Electricistas", cityName: "Barcelona",
+    searches: 10200, cpc: 2.8, competition: "Media", score: 79,
+    trend: trend(7800, 0.04),
+    districts: [
+      { name: "Eixample", potential: 91 }, { name: "Gràcia", potential: 85 },
+      { name: "Sants", potential: 78 }, { name: "Sant Martí", potential: 73 },
+    ],
+    topKeywords: [
+      { kw: "electricista barcelona", volume: 3600 }, { kw: "electricista urgente barcelona", volume: 1900 },
+      { kw: "reformas eléctricas barcelona", volume: 1100 }, { kw: "boletín eléctrico barcelona", volume: 880 },
+    ],
+    topServices: ["Averías urgentes", "Reformas eléctricas", "Boletines", "Iluminación LED"],
+  },
+  {
+    slug: "restaurantes-madrid",
+    sectorSlug: "restaurantes", citySlug: "madrid",
+    sectorName: "Restaurantes", cityName: "Madrid",
+    searches: 35800, cpc: 1.9, competition: "Alta", score: 76,
+    trend: trend(28000, 0.035),
+    districts: [
+      { name: "Centro", potential: 95 }, { name: "Salamanca", potential: 90 },
+      { name: "Chamberí", potential: 86 }, { name: "Retiro", potential: 81 },
+      { name: "Latina", potential: 75 }, { name: "Tetuán", potential: 70 },
+    ],
+    topKeywords: [
+      { kw: "restaurante madrid", volume: 12100 }, { kw: "restaurante romántico madrid", volume: 3600 },
+      { kw: "restaurante grupo madrid", volume: 2400 }, { kw: "restaurante terraza madrid", volume: 1900 },
+    ],
+    topServices: ["Reservas online", "Menú degustación", "Eventos privados", "Terraza"],
+  },
 ];
 
 export const getOpportunity = (slug: string) => opportunities.find((o) => o.slug === slug);
