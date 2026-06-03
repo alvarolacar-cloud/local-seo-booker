@@ -58,7 +58,7 @@ const faqs = [
   { q: "¿Qué incluye el servicio mensual?", a: "Ficha de Google Business, contenido local, reseñas, enlaces, monitorización de competencia e informe mensual de resultados." },
 ];
 
-const cityTabsList = ["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga"];
+const sectorTabsList = sectors.slice(0, 6).map((s) => s.name);
 
 function Home() {
   
