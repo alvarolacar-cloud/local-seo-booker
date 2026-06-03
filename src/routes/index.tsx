@@ -340,6 +340,42 @@ function Home() {
               );
             })}
           </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+            {opportunities.slice(4, 6).map((o) => {
+              const img = cityImageMap[o.citySlug];
+              return (
+                <Link
+                  key={o.slug}
+                  to="/oportunidades/$slug"
+                  params={{ slug: o.slug }}
+                  className="group block rounded-lg overflow-hidden border border-border bg-card hover:shadow-lg transition"
+                >
+                  <div className="relative h-40 overflow-hidden">
+                    {img && (
+                      <img src={img} alt={o.cityName} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                    <div className="absolute bottom-3 left-3 text-white">
+                      <p className="text-[11px] uppercase tracking-wide opacity-80">{o.cityName}</p>
+                      <p className="font-bold text-lg leading-tight">{o.sectorName}</p>
+                    </div>
+                    <span className="absolute top-3 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-0.5 rounded">
+                      Score {o.score}
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-semibold">{o.searches.toLocaleString("es-ES")} búsq/mes</span>
+                      <span className="text-muted-foreground">Comp. {o.competition.toLowerCase()}</span>
+                    </div>
+                    <p className="text-sm font-semibold text-primary mt-3 flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Ver informe <ChevronRight className="h-4 w-4" />
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
