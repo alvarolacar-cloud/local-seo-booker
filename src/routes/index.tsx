@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
-  Search, MapPin, Briefcase, TrendingUp, Building2, Compass,
-  Wrench, Stethoscope, Hammer, Scale,
+  Search, MapPin, Briefcase, Compass,
+  BookOpen, Trophy, Route as RouteIcon,
   ChevronDown, ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -33,20 +33,13 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-const tabs = [
-  { id: "sector", label: "Por sector", icon: Briefcase, novelty: false },
-  { id: "ciudad", label: "Por ciudad", icon: MapPin, novelty: true },
-  { id: "barrio", label: "Por barrio", icon: Building2, novelty: false },
-  { id: "tendencia", label: "Tendencias", icon: TrendingUp, novelty: false },
+const navItems = [
+  { id: "oportunidades", label: "Oportunidades locales", icon: Compass, to: "/oportunidades" as const, novelty: true },
+  { id: "casos", label: "Casos de éxito", icon: Trophy, to: "/casos-exito" as const, novelty: false },
+  { id: "como-funciona", label: "Cómo funciona", icon: RouteIcon, to: "/como-funciona" as const, novelty: false },
+  { id: "guias", label: "Guías", icon: BookOpen, to: "/guias" as const, novelty: false },
 ];
 
-const quickChips = [
-  { label: "Fontaneros", icon: Wrench, to: "/oportunidades" as const },
-  { label: "Dentistas", icon: Stethoscope, to: "/oportunidades" as const },
-  { label: "Reformas", icon: Hammer, to: "/oportunidades" as const },
-  { label: "Abogados", icon: Scale, to: "/oportunidades" as const },
-  { label: "Explora todo", icon: Compass, to: "/oportunidades" as const },
-];
 
 const cityImageMap: Record<string, string> = {
   madrid: cityMadrid, barcelona: cityBarcelona, valencia: cityValencia,
