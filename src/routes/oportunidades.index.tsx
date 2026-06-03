@@ -57,9 +57,10 @@ function OportunidadesIndex() {
 
   return (
     <div className="min-h-screen bg-background">
+      <NavChips />
+
       {/* HERO con buscador (se mantiene) */}
       <section className="relative bg-primary">
-        <SiteHeader variant="transparent" />
         <div className="mx-auto max-w-7xl px-4 pt-6 pb-28 md:pt-10 md:pb-32 text-primary-foreground relative">
           <div className="flex items-start justify-between gap-6 flex-wrap">
             <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
@@ -95,11 +96,7 @@ function OportunidadesIndex() {
         </div>
       </section>
 
-      <div className="mt-10">
-        <NavChips />
-      </div>
-
-      <main className="mx-auto max-w-7xl px-4 mt-12 mb-16 space-y-16">
+      <main className="mx-auto max-w-7xl px-4 mt-20 mb-16 space-y-16">
 
         {/* Qué es una oportunidad */}
         <section>
