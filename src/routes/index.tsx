@@ -35,6 +35,7 @@ export const Route = createFileRoute("/")({
 });
 
 const navItems = [
+  { id: "inicio", label: "Inicio", icon: HomeIcon, to: "/" as const, novelty: false },
   { id: "oportunidades", label: "Oportunidades en Google", icon: Compass, to: "/oportunidades" as const, novelty: true },
   { id: "casos", label: "Nuestros Casos de Éxito", icon: Trophy, to: "/casos-exito" as const, novelty: false },
   { id: "como-funciona", label: "Cómo funciona", icon: RouteIcon, to: "/como-funciona" as const, novelty: false },
