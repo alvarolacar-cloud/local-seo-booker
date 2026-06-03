@@ -375,8 +375,9 @@ function OportunidadesIndex() {
           }} />
           <div className="relative max-w-3xl">
             <span className="inline-flex items-center gap-1 bg-accent text-accent-foreground text-xs font-bold px-2.5 py-1 rounded mb-4">
-              <Sparkles className="h-3 w-3" /> Informe a medida · 48h · Gratis
+              Informe a medida · 48h · Gratis
             </span>
+
             <h2 className="text-3xl md:text-4xl font-extrabold mb-3">¿No ves tu sector o tu ciudad?</h2>
             <p className="text-white/85 mb-6 max-w-2xl">Hacemos informes a medida en 48h. Te decimos cuántas búsquedas tiene tu servicio en tu zona, qué barrios convierten mejor y cómo de difícil sería posicionarte top 3.</p>
             <div className="flex flex-wrap gap-3">
