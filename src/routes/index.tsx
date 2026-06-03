@@ -87,26 +87,33 @@ function Index() {
       </div>
 
       <main className="mx-auto max-w-7xl px-4 mt-16 space-y-16">
-        {/* Cómo funciona una oportunidad */}
+        {/* Qué es una oportunidad */}
         <section>
-          <h2 className="text-2xl font-bold mb-1">Qué es una oportunidad de SEO local</h2>
-          <p className="text-sm text-muted-foreground mb-6 max-w-3xl">
-            Un cruce entre <strong>sector</strong> y <strong>ciudad</strong> donde hay clientes buscando en Google y donde tu negocio puede posicionarse en un plazo razonable. Lo medimos con tres variables:
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { icon: BarChart3, t: "Demanda real", d: "Búsquedas mensuales del servicio en tu ciudad y barrios concretos." },
-              { icon: Target, t: "Competencia", d: "Cuántos negocios pelean por esas búsquedas y cómo de fuertes son." },
-              { icon: Rocket, t: "Score de oportunidad", d: "Una nota de 0 a 100 que te dice si merece la pena entrar ahora." },
-            ].map(({ icon: Icon, t, d }) => (
-              <div key={t} className="border border-border rounded-lg p-5 bg-card">
-                <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center mb-3">
-                  <Icon className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-bold mb-1">Qué es una oportunidad de SEO local</h2>
+          <p className="text-sm text-muted-foreground mb-4">El concepto sobre el que gira toda nuestra forma de trabajar.</p>
+          <div className="border border-border rounded-lg p-5 md:p-6 flex flex-col md:flex-row gap-6 items-center bg-card shadow-[var(--shadow-card)]">
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold">Un cruce entre tu sector y tu ciudad donde Google tiene hueco</h3>
+              <p className="text-muted-foreground mt-2 mb-4">
+                Lo medimos con tres variables: <strong>demanda real</strong> (cuánta gente busca tu servicio cada mes), <strong>competencia</strong> (cuántos negocios pelean por esas búsquedas) y un <strong>score de oportunidad</strong> de 0 a 100 que te dice si merece la pena entrar ahora.
+              </p>
+              <Button asChild className="bg-primary hover:bg-[var(--brand-deep)]">
+                <Link to="/oportunidades">Ver oportunidades abiertas</Link>
+              </Button>
+            </div>
+            <div className="grid grid-cols-3 gap-3 w-full md:w-80 shrink-0">
+              {[
+                { icon: BarChart3, t: "Demanda", v: "Búsq./mes" },
+                { icon: Target, t: "Competencia", v: "Baja-Alta" },
+                { icon: Rocket, t: "Score", v: "0-100" },
+              ].map(({ icon: Icon, t, v }) => (
+                <div key={t} className="bg-secondary rounded-md p-3 text-center">
+                  <Icon className="h-5 w-5 text-primary mx-auto mb-1" />
+                  <p className="text-xs font-semibold">{t}</p>
+                  <p className="text-[11px] text-muted-foreground">{v}</p>
                 </div>
-                <h3 className="font-bold mb-1">{t}</h3>
-                <p className="text-sm text-muted-foreground">{d}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 
