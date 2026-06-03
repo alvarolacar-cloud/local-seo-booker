@@ -79,6 +79,11 @@ const faqs = [
   { q: "¿Y si mi sector o ciudad no aparece?", a: "Te lo preparamos a medida en 48h sin coste. Solo necesitamos saber tu sector, tu ciudad y los barrios donde operas." },
   { q: "¿Esto sustituye a una auditoría SEO?", a: "No. Es el paso previo: te dice si tiene sentido invertir. La auditoría te dice qué hacer en tu web concreta para conseguirlo." },
 ];
+const ticketBySector: Record<string, number> = {
+  fontaneros: 180, electricistas: 160, reformas: 8500, dentistas: 750, abogados: 1200,
+  inmobiliarias: 4500, peluquerias: 35, talleres: 320, restaurantes: 28, gimnasios: 45,
+  estetica: 70, veterinarias: 95, academias: 120, fotografos: 1800,
+};
 
 function OportunidadesIndex() {
   const [sectorSlug, setSectorSlug] = useState<string>(sectors[0]?.slug ?? "");
