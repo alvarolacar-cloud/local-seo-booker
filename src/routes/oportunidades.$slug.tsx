@@ -112,7 +112,6 @@ function OpportunityDetail() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader />
       <NavChips />
 
       <div className="mx-auto max-w-7xl px-4 pt-6">

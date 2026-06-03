@@ -152,7 +152,6 @@ const services = [
 function ComoFunciona() {
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader />
       <NavChips />
 
       <section className="bg-primary text-primary-foreground">
