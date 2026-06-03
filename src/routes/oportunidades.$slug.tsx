@@ -159,14 +159,18 @@ function OpportunityDetail() {
         </div>
       </header>
 
-      {/* MOSAICO de imágenes (5 fotos estilo Skyscanner) */}
+      {/* MOSAICO: mapa real grande + 2 imágenes */}
       <section className="mx-auto max-w-7xl px-4">
-        <div className="grid grid-cols-4 grid-rows-2 gap-2 h-[280px] md:h-[420px] rounded-2xl overflow-hidden">
-          <img src={cityImg} alt={`${opp.cityName}`} className="col-span-2 row-span-2 w-full h-full object-cover" />
+        <div className="grid grid-cols-3 grid-rows-2 gap-2 h-[280px] md:h-[420px] rounded-2xl overflow-hidden">
+          <iframe
+            title={`Mapa de ${opp.cityName}`}
+            src={`https://www.google.com/maps?q=${encodeURIComponent(opp.cityName + ', España')}&output=embed`}
+            className="col-span-2 row-span-2 w-full h-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
           <img src={imgStorefront} alt="" loading="lazy" className="w-full h-full object-cover" />
-          <img src={imgPhone} alt="" loading="lazy" className="w-full h-full object-cover" />
           <img src={imgHandshake} alt="" loading="lazy" className="w-full h-full object-cover" />
-          <img src={imgMap} alt="" loading="lazy" className="w-full h-full object-cover" />
         </div>
 
         {/* Barra ticket + CTA, estilo "144€ Ver ofertas" */}
