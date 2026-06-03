@@ -120,17 +120,17 @@ function OportunidadesIndex() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {hotWeek.map((o, i) => {
-              const pct = trendPct(o);
+            {topTicket.map((o, i) => {
+              const ticket = ticketBySector[o.sectorSlug] ?? 100;
               return (
                 <article key={o.slug} className="border border-border rounded-md bg-card overflow-hidden flex flex-col">
                   <div className="relative h-52">
                     <img src={flashImages[i % flashImages.length]} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover" />
                     <span className="absolute top-3 right-3 bg-foreground text-background text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
-                      <Flame className="h-3 w-3" /> Caliente esta semana
+                      <Banknote className="h-3 w-3" /> Top ticket medio
                     </span>
                     <span className="absolute top-12 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-1 rounded inline-flex items-center gap-1">
-                      <TrendingUp className="h-3 w-3" /> +{pct}% búsquedas vs mes anterior
+                      {ticket.toLocaleString("es-ES")} € / cliente
                     </span>
                     <span className="absolute bottom-3 left-3 text-white text-xs font-semibold inline-flex items-center gap-1 drop-shadow">
                       <MapPin className="h-3.5 w-3.5" /> {o.cityName}, España
@@ -138,7 +138,7 @@ function OportunidadesIndex() {
                   </div>
                   <div className="p-4 flex flex-col flex-1">
                     <p className="text-sm leading-snug text-muted-foreground line-clamp-2">
-                      Subida real en {o.sectorName.toLowerCase()} en {o.cityName} según Google Keyword Planner y Search Console.
+                      Mayor ticket medio en {o.sectorName.toLowerCase()} en {o.cityName} según datos reales de contratación.
                     </p>
                     <p className="font-bold mt-2">{o.sectorName} en {o.cityName}</p>
                     <div className="flex items-center gap-2 mt-1 text-xs">
@@ -150,12 +150,12 @@ function OportunidadesIndex() {
                     </div>
                     <div className="text-xs text-muted-foreground mt-2 space-y-0.5">
                       <p>{o.searches.toLocaleString("es-ES")} búsq/mes · Competencia {o.competition}</p>
-                      <p>Tendencia últimos 12 meses: +{pct}%</p>
+                      <p>Ticket medio: {ticket.toLocaleString("es-ES")} €</p>
                     </div>
                     <div className="mt-auto pt-3 flex items-end justify-between">
                       <div>
                         <p className="text-xs text-muted-foreground">ticket medio</p>
-                        <p className="text-lg"><span className="font-extrabold text-foreground">{(ticketBySector[o.sectorSlug] ?? 100).toLocaleString("es-ES")} €</span> <span className="text-xs text-muted-foreground">/ cliente</span></p>
+                        <p className="text-lg"><span className="font-extrabold text-foreground">{ticket.toLocaleString("es-ES")} €</span> <span className="text-xs text-muted-foreground">/ cliente</span></p>
                       </div>
                       <Button asChild size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
                         <Link to="/oportunidades/$slug" params={{ slug: o.slug }}>Ver informe <ChevronRight className="h-4 w-4 ml-1" /></Link>
