@@ -69,8 +69,8 @@
   --card-foreground: oklch(0.18 0.02 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.02 250);
-  /* Brand: deep booking-style navy blue */
-  --primary: oklch(0.32 0.14 255);
+  /* Brand: deep Skyscanner-style navy blue */
+  --primary: oklch(0.22 0.08 258);
   --primary-foreground: oklch(0.99 0.005 250);
   /* CTA: amber/yellow accent */
   --accent: oklch(0.78 0.16 75);
