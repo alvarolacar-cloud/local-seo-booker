@@ -103,9 +103,9 @@ function Home() {
           </h1>
 
           {/* Buscador grande */}
-          <div className="mt-6 bg-card text-foreground rounded-md p-2 shadow-2xl">
-            <div className="mb-2 px-2 pt-1">
-              <button className="inline-flex items-center gap-1 text-xs font-semibold text-foreground/80 border border-border rounded px-3 py-1">
+          <div className="mt-6">
+            <div className="mb-2">
+              <button className="inline-flex items-center gap-1 text-xs font-semibold text-white/80 border border-white/30 rounded px-3 py-1 hover:bg-white/10 transition">
                 Análisis completo <ChevronDown className="h-3 w-3" />
               </button>
             </div>
@@ -134,14 +134,14 @@ function Home() {
                 </Link>
               </Button>
             </div>
-            <div className="flex flex-wrap gap-x-6 gap-y-1 px-3 pt-3 pb-1">
-              <label className="flex items-center gap-2 text-xs text-foreground/70 cursor-pointer">
+            <div className="flex flex-wrap gap-x-6 gap-y-1 pt-3">
+              <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
                 <input type="checkbox" className="accent-[#0066ff]" defaultChecked /> Solo baja competencia
               </label>
-              <label className="flex items-center gap-2 text-xs text-foreground/70 cursor-pointer">
+              <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
                 <input type="checkbox" className="accent-[#0066ff]" /> Incluir barrios limítrofes
               </label>
-              <label className="flex items-center gap-2 text-xs text-foreground/70 cursor-pointer">
+              <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
                 <input type="checkbox" className="accent-[#0066ff]" /> Solo sectores en tendencia
               </label>
             </div>
