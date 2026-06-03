@@ -341,7 +341,7 @@ function Home() {
             })}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-            {opportunities.slice(4, 6).map((o) => {
+            {opportunities.slice(4, 8).map((o) => {
               const img = cityImageMap[o.citySlug];
               return (
                 <Link
