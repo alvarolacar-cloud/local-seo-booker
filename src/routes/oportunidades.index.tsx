@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ChevronRight, TrendingUp, TrendingDown, Minus, MapPin, ArrowRight,
   Search, Briefcase, Star, Info, Shield, Clock, Sparkles, BadgeCheck, Zap, Phone,
-  ChevronLeft, BookOpen,
+  ChevronLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
@@ -10,18 +10,8 @@ import { SiteFooter } from "@/components/site/Footer";
 import { opportunities } from "@/data/opportunities";
 import { cities } from "@/data/cities";
 import { sectors } from "@/data/sectors";
-import { cases } from "@/data/cases";
 import { useMemo, useState } from "react";
 import cityMadrid from "@/assets/city-madrid.jpg";
-import cityBarcelona from "@/assets/city-barcelona.jpg";
-import cityValencia from "@/assets/city-valencia.jpg";
-import citySevilla from "@/assets/city-sevilla.jpg";
-import cityBilbao from "@/assets/city-bilbao.jpg";
-import cityMalaga from "@/assets/city-malaga.jpg";
-import localBusiness from "@/assets/local-business.jpg";
-import serviceAudit from "@/assets/service-audit.jpg";
-import serviceContent from "@/assets/service-content.jpg";
-import serviceGmb from "@/assets/service-gmb.jpg";
 
 export const Route = createFileRoute("/oportunidades/")({
   head: () => ({
