@@ -2,9 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Search, MapPin, Briefcase, Compass,
-  BookOpen, Trophy, Route as RouteIcon,
+  BookOpen, Trophy, Route as RouteIcon, Home as HomeIcon,
   ChevronDown, ChevronRight,
 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
@@ -34,11 +35,13 @@ export const Route = createFileRoute("/")({
 });
 
 const navItems = [
+  { id: "inicio", label: "Inicio", icon: HomeIcon, to: "/" as const, novelty: false },
   { id: "oportunidades", label: "Oportunidades locales", icon: Compass, to: "/oportunidades" as const, novelty: true },
   { id: "casos", label: "Casos de éxito", icon: Trophy, to: "/casos-exito" as const, novelty: false },
   { id: "como-funciona", label: "Cómo funciona", icon: RouteIcon, to: "/como-funciona" as const, novelty: false },
   { id: "guias", label: "Guías", icon: BookOpen, to: "/guias" as const, novelty: false },
 ];
+
 
 
 const cityImageMap: Record<string, string> = {
@@ -175,7 +178,7 @@ function Home() {
       {/* Chips de acceso rápido */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {navItems.map((c) => {
               const Icon = c.icon;
               return (
