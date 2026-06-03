@@ -296,15 +296,15 @@ function Home() {
       {/* Explora por ciudad */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 pb-16">
-          <h2 className="text-2xl font-extrabold mb-1">Empieza a explorar tu ciudad</h2>
-          <p className="text-sm text-muted-foreground mb-5">Oportunidades activas por sector en las principales ciudades de España.</p>
+          <h2 className="text-2xl font-extrabold mb-1">Explora oportunidades en tu sector</h2>
+          <p className="text-sm text-muted-foreground mb-5">Oportunidades activas por ciudad en los sectores con más demanda.</p>
           <div className="flex flex-wrap gap-2 mb-6">
-            {cityTabsList.map((c) => {
-              const active = activeCity === c;
+            {sectorTabsList.map((c) => {
+              const active = activeSector === c;
               return (
                 <button
                   key={c}
-                  onClick={() => setActiveCity(c)}
+                  onClick={() => setActiveSector(c)}
                   className={`px-4 py-1.5 rounded-full border text-sm font-semibold transition ${
                     active
                       ? "bg-primary border-primary text-primary-foreground"
@@ -317,10 +317,10 @@ function Home() {
             })}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2">
-            {cityOpps.length === 0 && (
-              <p className="text-sm text-muted-foreground col-span-3">Próximamente más oportunidades en {activeCity}.</p>
+            {sectorOpps.length === 0 && (
+              <p className="text-sm text-muted-foreground col-span-3">Próximamente más oportunidades en {activeSector}.</p>
             )}
-            {cityOpps.map((o) => (
+            {sectorOpps.map((o) => (
               <Link
                 key={o.slug}
                 to="/oportunidades/$slug"
