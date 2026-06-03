@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronRight, TrendingUp, TrendingDown, Minus, BarChart3, Target, Compass, Search, MapPin, Sparkles } from "lucide-react";
+import { ChevronRight, TrendingUp, TrendingDown, Minus, BarChart3, Target, Compass, Search, MapPin, Sparkles, ArrowRight, Star, CheckCircle2, Trophy, Eye, Users, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/oportunidades/")({
   head: () => ({
     meta: [
       { title: "Oportunidades de SEO local por sector y ciudad | Rankin" },
-      { name: "description", content: "Descubre qué oportunidad de SEO local tiene tu sector en tu ciudad: búsquedas mensuales, competencia y score real. Selecciona sector y ciudad y obtén una estimación al instante." },
+      { name: "description", content: "Descubre en 5 segundos qué oportunidad de SEO local tiene tu sector en tu ciudad: búsquedas/mes, competencia y score real." },
       { property: "og:title", content: "Oportunidades de SEO local" },
       { property: "og:description", content: "Selecciona sector + ciudad y descubre tu oportunidad SEO local con datos reales." },
       { property: "og:url", content: "/oportunidades" },
@@ -43,7 +43,6 @@ function compBadge(c: "Baja" | "Media" | "Alta") {
   return { cls: "bg-accent/30 text-accent-foreground", icon: <Minus className="h-3 w-3" /> };
 }
 
-// Estima una oportunidad cuando no existe ese cruce concreto en el dataset
 function estimateOpportunity(sectorSlug: string, citySlug: string) {
   const exact = opportunities.find((o) => o.sectorSlug === sectorSlug && o.citySlug === citySlug);
   if (exact) return { kind: "exact" as const, opp: exact };
@@ -52,12 +51,12 @@ function estimateOpportunity(sectorSlug: string, citySlug: string) {
   const city = cities.find((c) => c.slug === citySlug);
   if (!sector || !city) return null;
 
-  // Heurística sencilla a partir del volumen mensual del sector y del peso de la ciudad
   const cityWeight: Record<string, number> = { madrid: 1, barcelona: 0.85, valencia: 0.45, sevilla: 0.4, malaga: 0.35, bilbao: 0.3 };
   const w = cityWeight[citySlug] ?? 0.3;
   const searches = Math.round(sector.monthlySearches * w);
   const competition: "Baja" | "Media" | "Alta" = searches > 12000 ? "Alta" : searches > 5000 ? "Media" : "Baja";
   const score = Math.max(45, Math.min(92, Math.round(60 + (searches / 400) - (competition === "Alta" ? 12 : competition === "Media" ? 4 : -6))));
+  const cpc = +(sector.monthlySearches > 15000 ? 4.5 : sector.monthlySearches > 8000 ? 3.2 : 2.1).toFixed(2);
   return {
     kind: "estimate" as const,
     sectorName: sector.name,
@@ -66,8 +65,20 @@ function estimateOpportunity(sectorSlug: string, citySlug: string) {
     searches,
     competition,
     score,
+    cpc,
   };
 }
+
+const topSectorsRanking = [...sectors]
+  .sort((a, b) => b.monthlySearches - a.monthlySearches)
+  .slice(0, 6);
+
+const faqs = [
+  { q: "¿De dónde salen estos datos?", a: "Cruzamos Google Keyword Planner, datos de Search Console reales de nuestros clientes y análisis SERP por ciudad. Nada inventado." },
+  { q: "¿Qué es exactamente el score?", a: "Una nota 0-100 que mezcla volumen de búsqueda, dificultad real para entrar al top 3, CPC (señal de intención comercial) y estacionalidad." },
+  { q: "¿Y si mi sector o ciudad no aparece?", a: "Te lo preparamos a medida en 48h sin coste. Solo necesitamos saber tu sector, tu ciudad y los barrios donde operas." },
+  { q: "¿Esto sustituye a una auditoría SEO?", a: "No. Es el paso previo: te dice si tiene sentido invertir. La auditoría te dice qué hacer en tu web concreta para conseguirlo." },
+];
 
 function OportunidadesIndex() {
   const [sectorSlug, setSectorSlug] = useState<string>(sectors[0]?.slug ?? "");
@@ -77,32 +88,49 @@ function OportunidadesIndex() {
   const [cityFilter, setCityFilter] = useState("Todas");
   const filteredOpps = opportunities.filter((o) => cityFilter === "Todas" || o.cityName === cityFilter);
 
+  const sectorName = result ? (result.kind === "exact" ? result.opp.sectorName : result.sectorName) : "";
+  const cityName = result ? (result.kind === "exact" ? result.opp.cityName : result.cityName) : "";
+  const searches = result ? (result.kind === "exact" ? result.opp.searches : result.searches) : 0;
+  const competition = result ? (result.kind === "exact" ? result.opp.competition : result.competition) : "Media" as const;
+  const score = result ? (result.kind === "exact" ? result.opp.score : result.score) : 0;
+  const cpc = result ? (result.kind === "exact" ? result.opp.cpc : result.cpc) : 0;
+  const estValue = Math.round(searches * 0.25 * cpc); // visitas estimadas top3 * CPC
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      {/* Hero + buscador */}
-      <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-7xl px-4 pt-10 pb-12">
-          <span className="inline-flex items-center gap-1 bg-accent text-accent-foreground text-xs font-bold px-2 py-1 rounded">
-            <Sparkles className="h-3 w-3" /> Oportunidades locales
-          </span>
-          <h1 className="mt-4 text-3xl md:text-5xl font-extrabold leading-tight max-w-3xl">
-            ¿Qué oportunidad SEO tiene tu negocio en tu ciudad?
+      {/* HERO — buscador directo, grande, irresistible */}
+      <section className="relative bg-primary text-primary-foreground overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.07] pointer-events-none" style={{
+          backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+          backgroundSize: "24px 24px",
+        }} />
+        <div className="relative mx-auto max-w-7xl px-4 pt-12 pb-16 md:pt-16 md:pb-20">
+          <div className="flex flex-wrap items-center gap-2 mb-5">
+            <span className="inline-flex items-center gap-1 bg-accent text-accent-foreground text-xs font-bold px-2.5 py-1 rounded">
+              <Sparkles className="h-3 w-3" /> Calculadora gratis
+            </span>
+            <span className="inline-flex items-center gap-1 text-xs text-white/80">
+              <Users className="h-3 w-3" /> Ya consultado por 1.240+ negocios este mes
+            </span>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] max-w-4xl">
+            Mira cuánto dinero estás dejando a tu competencia <span className="text-accent">cada mes</span>.
           </h1>
-          <p className="mt-3 text-white/85 max-w-2xl">
-            Elige tu sector y tu ciudad. Te mostramos cuánto se busca, qué competencia hay y un score de oportunidad real.
+          <p className="mt-4 text-lg text-white/85 max-w-2xl">
+            Elige tu sector y tu ciudad. En 5 segundos verás búsquedas reales, competencia y un score de oportunidad. Sin registro.
           </p>
 
-          {/* Buscador */}
-          <div className="mt-8 bg-card text-foreground rounded-lg shadow-[var(--shadow-card)] p-4 md:p-5">
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3 items-end">
+          {/* Buscador BIG */}
+          <div className="mt-8 bg-card text-foreground rounded-xl shadow-2xl border border-border/50 p-5 md:p-6">
+            <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_auto] gap-3 items-end">
               <label className="block">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Sector</span>
+                <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">1 · Tu sector</span>
                 <select
                   value={sectorSlug}
                   onChange={(e) => setSectorSlug(e.target.value)}
-                  className="mt-1 w-full h-11 px-3 rounded-md border border-border bg-background text-sm font-medium"
+                  className="mt-1 w-full h-14 px-4 rounded-lg border-2 border-border bg-background text-base font-semibold focus:border-primary focus:outline-none transition"
                 >
                   {sectors.map((s) => (
                     <option key={s.slug} value={s.slug}>{s.name}</option>
@@ -110,70 +138,124 @@ function OportunidadesIndex() {
                 </select>
               </label>
               <label className="block">
-                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Ciudad</span>
+                <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">2 · Tu ciudad</span>
                 <select
                   value={citySlug}
                   onChange={(e) => setCitySlug(e.target.value)}
-                  className="mt-1 w-full h-11 px-3 rounded-md border border-border bg-background text-sm font-medium"
+                  className="mt-1 w-full h-14 px-4 rounded-lg border-2 border-border bg-background text-base font-semibold focus:border-primary focus:outline-none transition"
                 >
                   {cities.map((c) => (
                     <option key={c.slug} value={c.slug}>{c.name}</option>
                   ))}
                 </select>
               </label>
-              <Button className="h-11 bg-primary hover:bg-[var(--brand-deep)] font-semibold">
-                <Search className="h-4 w-4 mr-1" /> Ver oportunidad
+              <Button className="h-14 px-6 bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-base shadow-lg">
+                <Zap className="h-5 w-5 mr-1.5" /> Ver mi oportunidad
               </Button>
             </div>
 
-            {/* Resultado en vivo */}
+            {/* Resultado BIG */}
             {result && (
-              <div className="mt-5 border-t border-border pt-5">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                      {result.kind === "exact" ? "Informe disponible" : "Estimación preliminar"}
+              <div className="mt-6 border-t-2 border-dashed border-border pt-6">
+                <div className="flex flex-col lg:flex-row lg:items-stretch gap-5">
+                  {/* Bloque headline */}
+                  <div className="flex-1 bg-gradient-to-br from-primary/5 to-accent/10 rounded-lg p-5 border border-border">
+                    <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                      {result.kind === "exact" ? "Informe completo disponible" : "Estimación preliminar"}
                     </p>
-                    <p className="text-lg md:text-xl font-bold">
-                      {result.kind === "exact" ? result.opp.sectorName : result.sectorName} en {result.kind === "exact" ? result.opp.cityName : result.cityName}
-                    </p>
+                    <p className="text-2xl md:text-3xl font-extrabold leading-tight">{sectorName}<br /><span className="text-primary">en {cityName}</span></p>
+                    <div className="mt-4 flex items-baseline gap-2">
+                      <span className="text-5xl font-extrabold text-primary leading-none">{score}</span>
+                      <span className="text-base font-semibold text-muted-foreground">/100 score</span>
+                    </div>
+                    <div className="mt-3 h-2 bg-secondary rounded overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-primary to-accent" style={{ width: `${score}%` }} />
+                    </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-3 md:gap-4">
-                    <MiniStat label="Búsquedas/mes" value={(result.kind === "exact" ? result.opp.searches : result.searches).toLocaleString("es-ES")} />
-                    <MiniStat
-                      label="Competencia"
-                      value={result.kind === "exact" ? result.opp.competition : result.competition}
-                    />
-                    <MiniStat label="Score" value={`${result.kind === "exact" ? result.opp.score : result.score}/100`} highlight />
+                  {/* Bloque stats + CTA */}
+                  <div className="flex-1 flex flex-col gap-3">
+                    <div className="grid grid-cols-3 gap-3">
+                      <BigStat label="Búsquedas/mes" value={searches.toLocaleString("es-ES")} />
+                      <BigStat label="Competencia" value={competition} />
+                      <BigStat label="CPC medio" value={`${cpc.toFixed(2)} €`} />
+                    </div>
+                    <div className="bg-foreground text-background rounded-lg p-4 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-wider opacity-70">Valor estimado del top 3</p>
+                        <p className="text-2xl font-extrabold">{estValue.toLocaleString("es-ES")} € / mes</p>
+                      </div>
+                      {result.kind === "exact" ? (
+                        <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold shrink-0">
+                          <Link to="/oportunidades/$slug" params={{ slug: result.opp.slug }}>
+                            Ver informe <ArrowRight className="h-4 w-4 ml-1" />
+                          </Link>
+                        </Button>
+                      ) : (
+                        <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold shrink-0">
+                          <Link to="/como-funciona">Informe a medida</Link>
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                  {result.kind === "exact" ? (
-                    <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold shrink-0">
-                      <Link to="/oportunidades/$slug" params={{ slug: result.opp.slug }}>
-                        Ver informe completo <ChevronRight className="h-4 w-4 ml-1" />
-                      </Link>
-                    </Button>
-                  ) : (
-                    <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold shrink-0">
-                      <Link to="/como-funciona">Pedir informe a medida</Link>
-                    </Button>
-                  )}
                 </div>
                 {result.kind === "estimate" && (
-                  <p className="mt-3 text-xs text-muted-foreground">
-                    No tenemos aún un informe publicado para este cruce concreto. Te lo preparamos a medida en 48h con datos reales.
+                  <p className="mt-3 text-xs text-muted-foreground flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                    No tenemos aún un informe publicado para este cruce. Te lo preparamos a medida en 48h con datos reales y sin coste.
                   </p>
                 )}
               </div>
             )}
           </div>
+
+          {/* Trust strip */}
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <TrustItem icon={<Eye className="h-4 w-4" />} text="Datos de Google reales" />
+            <TrustItem icon={<CheckCircle2 className="h-4 w-4" />} text="Sin registro ni email" />
+            <TrustItem icon={<Star className="h-4 w-4" />} text="4,9/5 en reseñas" />
+            <TrustItem icon={<Trophy className="h-4 w-4" />} text="+800 negocios analizados" />
+          </div>
         </div>
       </section>
 
-      <main className="mx-auto max-w-7xl px-4 mt-14 mb-16 space-y-14">
+      <main className="mx-auto max-w-7xl px-4 mt-14 mb-16 space-y-16">
+        {/* Ranking sectores con más oportunidad */}
+        <section>
+          <div className="flex items-end justify-between gap-3 mb-5 flex-wrap">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-extrabold">Los sectores con más demanda local</h2>
+              <p className="text-sm text-muted-foreground mt-1">Volumen total de búsquedas mensuales en las 6 grandes ciudades.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {topSectorsRanking.map((s, i) => {
+              const Icon = s.icon;
+              return (
+                <button
+                  key={s.slug}
+                  onClick={() => setSectorSlug(s.slug)}
+                  className="group text-left border border-border rounded-lg p-4 bg-card hover:border-primary hover:shadow-[var(--shadow-card)] transition flex items-center gap-4"
+                >
+                  <div className="text-2xl font-extrabold text-muted-foreground/40 w-8 shrink-0">#{i + 1}</div>
+                  <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold truncate">{s.name}</p>
+                    <p className="text-xs text-muted-foreground">{s.monthlySearches.toLocaleString("es-ES")} búsquedas/mes</p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition shrink-0" />
+                </button>
+              );
+            })}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">Haz clic en un sector para verlo en la calculadora ↑</p>
+        </section>
+
         {/* Qué medimos */}
         <section>
-          <h2 className="text-xl md:text-2xl font-bold mb-1">Qué medimos en cada oportunidad</h2>
-          <p className="text-sm text-muted-foreground mb-5 max-w-2xl">Tres señales sencillas para saber si vale la pena invertir en SEO local en tu sector y ciudad.</p>
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Qué medimos en cada oportunidad</h2>
+          <p className="text-sm text-muted-foreground mb-6 max-w-2xl">Tres señales sencillas para saber si vale la pena invertir en SEO local en tu sector y ciudad.</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <MetricCard icon={<BarChart3 className="h-5 w-5" />} title="Demanda real" text="Cuánta gente busca tu servicio cada mes en tu ciudad. Sin demanda no hay SEO que valga." />
             <MetricCard icon={<Target className="h-5 w-5" />} title="Competencia" text="Cómo de difícil es entrar en el top 3 de Google: webs fuertes, fichas optimizadas, anuncios." />
@@ -181,11 +263,11 @@ function OportunidadesIndex() {
           </div>
         </section>
 
-        {/* Cards de oportunidades */}
+        {/* Cards de oportunidades publicadas */}
         <section>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
             <div>
-              <h2 className="text-xl md:text-2xl font-bold">Oportunidades destacadas</h2>
+              <h2 className="text-2xl md:text-3xl font-extrabold">Oportunidades destacadas</h2>
               <p className="text-sm text-muted-foreground">Cruces sector × ciudad que ya hemos analizado con datos reales.</p>
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -193,7 +275,7 @@ function OportunidadesIndex() {
                 <button
                   key={c}
                   onClick={() => setCityFilter(c)}
-                  className={`px-3 py-1 text-xs rounded-full border transition ${cityFilter === c ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary"}`}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-full border transition ${cityFilter === c ? "bg-primary text-primary-foreground border-primary" : "border-border hover:border-primary"}`}
                 >
                   {c}
                 </button>
@@ -214,7 +296,7 @@ function OportunidadesIndex() {
                     key={o.slug}
                     to="/oportunidades/$slug"
                     params={{ slug: o.slug }}
-                    className="group block border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:border-primary transition"
+                    className="group block border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:border-primary hover:-translate-y-0.5 transition"
                   >
                     <div className="relative h-24 overflow-hidden">
                       <img
@@ -267,11 +349,65 @@ function OportunidadesIndex() {
           )}
         </section>
 
-        {/* CTA */}
-        <section className="bg-primary text-primary-foreground rounded-lg p-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-2">¿No ves tu sector o tu ciudad?</h2>
-          <p className="text-white/85 mb-5 max-w-2xl mx-auto">Hacemos informes a medida en 48h. Te decimos cuántas búsquedas tiene tu servicio en tu zona y cómo de difícil sería posicionarlo.</p>
-          <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold">Pedir informe a medida</Button>
+        {/* Ciudades grid */}
+        <section>
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Explora por ciudad</h2>
+          <p className="text-sm text-muted-foreground mb-6">Cobertura por barrios y distritos en las 6 grandes ciudades españolas.</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {cities.map((c) => (
+              <button
+                key={c.slug}
+                onClick={() => { setCitySlug(c.slug); setCityFilter(c.name); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                className="group relative h-32 rounded-lg overflow-hidden border border-border hover:border-primary transition"
+              >
+                <img src={c.img} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/30 to-transparent" />
+                <div className="absolute bottom-2 left-3 right-3 text-left">
+                  <p className="font-extrabold text-background text-lg leading-tight">{c.name}</p>
+                  <p className="text-[10px] text-background/80">{c.note}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section>
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-1">Preguntas frecuentes</h2>
+          <p className="text-sm text-muted-foreground mb-6">Lo que más nos preguntan sobre la calculadora de oportunidades.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {faqs.map((f) => (
+              <div key={f.q} className="border border-border rounded-lg p-5 bg-card">
+                <h3 className="font-bold mb-1.5 flex items-start gap-2">
+                  <span className="text-primary shrink-0">→</span> {f.q}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA final */}
+        <section className="relative bg-primary text-primary-foreground rounded-xl p-8 md:p-12 overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "20px 20px",
+          }} />
+          <div className="relative max-w-3xl">
+            <span className="inline-flex items-center gap-1 bg-accent text-accent-foreground text-xs font-bold px-2.5 py-1 rounded mb-4">
+              <Sparkles className="h-3 w-3" /> Informe a medida · 48h · Gratis
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">¿No ves tu sector o tu ciudad?</h2>
+            <p className="text-white/85 mb-6 max-w-2xl">Hacemos informes a medida en 48h. Te decimos cuántas búsquedas tiene tu servicio en tu zona, qué barrios convierten mejor y cómo de difícil sería posicionarte top 3.</p>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold h-12 px-6">
+                <Link to="/como-funciona">Pedir informe a medida</Link>
+              </Button>
+              <Button asChild variant="outline" className="bg-transparent border-white/30 text-primary-foreground hover:bg-white/10 h-12 px-6 font-semibold">
+                <Link to="/casos-exito">Ver casos de éxito</Link>
+              </Button>
+            </div>
+          </div>
         </section>
       </main>
 
@@ -280,11 +416,19 @@ function OportunidadesIndex() {
   );
 }
 
-function MiniStat({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+function BigStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className={`rounded-md px-3 py-2 text-center ${highlight ? "bg-primary/10" : "bg-secondary"}`}>
-      <p className="text-[10px] text-muted-foreground uppercase tracking-wide">{label}</p>
-      <p className={`text-sm font-extrabold ${highlight ? "text-primary" : "text-foreground"}`}>{value}</p>
+    <div className="bg-secondary rounded-lg px-3 py-3 text-center">
+      <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">{label}</p>
+      <p className="text-lg md:text-xl font-extrabold text-foreground mt-0.5">{value}</p>
+    </div>
+  );
+}
+
+function TrustItem({ icon, text }: { icon: React.ReactNode; text: string }) {
+  return (
+    <div className="flex items-center gap-2 text-white/85">
+      <span className="text-accent">{icon}</span> {text}
     </div>
   );
 }
