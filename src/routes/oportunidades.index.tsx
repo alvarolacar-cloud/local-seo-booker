@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   MapPin, ArrowRight, Search, Briefcase, ChevronRight, Phone,
   BarChart3, Target, Rocket, FileSearch,
-  TrendingUp, TrendingDown, Minus,
+  TrendingUp, TrendingDown, Minus, ShieldCheck, DollarSign, ArrowUpRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
