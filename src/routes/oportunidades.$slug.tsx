@@ -136,7 +136,7 @@ function OpportunityDetail() {
               ))}
             </ul>
             <Button asChild className="mt-6 bg-primary hover:bg-[var(--brand-deep)]">
-              <Link to="/sectores/$sector" params={{ sector: opp.sectorSlug }}>Ver plan SEO para {opp.sectorName.toLowerCase()}</Link>
+              <Link to="/como-funciona">Cómo trabajaríamos contigo</Link>
             </Button>
           </div>
         </section>

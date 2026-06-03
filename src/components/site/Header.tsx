@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { to: "/sectores", label: "Sectores" },
   { to: "/oportunidades", label: "Oportunidades" },
   { to: "/casos-exito", label: "Casos de éxito" },
   { to: "/como-funciona", label: "Cómo funciona" },

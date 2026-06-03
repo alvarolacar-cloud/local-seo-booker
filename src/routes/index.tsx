@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Search, MapPin, Star, ShieldCheck, MessageSquare, ChevronRight, Phone, Wrench, Award, TrendingUp } from "lucide-react";
+import { Search, MapPin, Star, ShieldCheck, MessageSquare, ChevronRight, Phone, Wrench, Award, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
-import { sectors } from "@/data/sectors";
+import { opportunities } from "@/data/opportunities";
 import { cities } from "@/data/cities";
 import { cases } from "@/data/cases";
 import localBusiness from "@/assets/local-business.jpg";
@@ -34,8 +34,14 @@ const homeServices = [
   { title: "Contenido geolocalizado", img: serviceContent, desc: "Landings por barrio, servicio y ciudad." },
 ];
 
+function compBadge(c: "Baja" | "Media" | "Alta") {
+  if (c === "Baja") return { cls: "bg-primary/10 text-primary", icon: <TrendingDown className="h-3 w-3" /> };
+  if (c === "Alta") return { cls: "bg-destructive/15 text-destructive", icon: <TrendingUp className="h-3 w-3" /> };
+  return { cls: "bg-accent/30 text-accent-foreground", icon: <Minus className="h-3 w-3" /> };
+}
+
 function Index() {
-  const featuredSectors = sectors.slice(0, 6);
+  const featuredOpps = opportunities.slice(0, 6);
   const featuredCases = cases.slice(0, 4);
 
   return (
@@ -97,40 +103,39 @@ function Index() {
           </div>
         </section>
 
-        {/* Sectores destacados */}
+        {/* Oportunidades destacadas */}
         <section>
           <div className="flex items-end justify-between mb-6 flex-wrap gap-2">
             <div>
-              <h2 className="text-2xl font-bold mb-1">¿A qué se dedica tu negocio?</h2>
-              <p className="text-sm text-muted-foreground">Sectores donde mejor sabemos lo que funciona. Entra y mira cómo posicionamos a negocios como el tuyo.</p>
+              <h2 className="text-2xl font-bold mb-1">Oportunidades destacadas para tu negocio</h2>
+              <p className="text-sm text-muted-foreground">Sectores y ciudades con hueco real en Google. Entra al informe y mira cuánto se busca, quién compite y dónde está la oportunidad.</p>
             </div>
             <Button asChild variant="outline">
-              <Link to="/sectores">Ver todos los sectores <ChevronRight className="h-4 w-4" /></Link>
+              <Link to="/oportunidades">Ver todas las oportunidades <ChevronRight className="h-4 w-4" /></Link>
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {featuredSectors.map((s) => {
-              const Icon = s.icon;
+            {featuredOpps.map((o) => {
+              const c = compBadge(o.competition);
               return (
-                <Link key={s.slug} to="/sectores/$sector" params={{ sector: s.slug }} className="group block border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-lg hover:border-primary transition">
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <img src={s.img} alt={`SEO local para ${s.name}`} className="h-full w-full object-cover group-hover:scale-105 transition" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                    <div className="absolute bottom-2 left-2 flex items-center gap-2">
-                      <span className="bg-background rounded-full h-9 w-9 flex items-center justify-center">
-                        <Icon className="h-5 w-5 text-primary" />
+                <Link key={o.slug} to="/oportunidades/$slug" params={{ slug: o.slug }} className="group block border border-border rounded-lg overflow-hidden bg-card shadow-[var(--shadow-card)] hover:shadow-lg hover:border-primary transition">
+                  <div className="p-5">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">{o.cityName}</p>
+                    <h3 className="text-lg font-bold mt-1 mb-3">{o.sectorName} en {o.cityName}</h3>
+                    <div className="flex items-center gap-2 mb-4 flex-wrap">
+                      <span className="bg-primary/10 text-primary font-semibold text-xs px-2 py-1 rounded">{o.searches.toLocaleString("es-ES")} búsq./mes</span>
+                      <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded ${c.cls}`}>
+                        {c.icon} Competencia {o.competition.toLowerCase()}
                       </span>
-                      <span className="text-white font-bold text-lg drop-shadow">{s.name}</span>
                     </div>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-sm text-foreground mb-3">{s.desc}</p>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="bg-primary/10 text-primary font-semibold px-2 py-1 rounded">"{s.keyword}"</span>
-                      <span className="text-muted-foreground">{s.clients}</span>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex-1 h-2 bg-secondary rounded overflow-hidden">
+                        <div className="h-full bg-primary" style={{ width: `${o.score}%` }} />
+                      </div>
+                      <span className="text-sm font-bold text-primary">{o.score}/100</span>
                     </div>
-                    <p className="mt-3 text-sm font-semibold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Ver plan SEO para {s.short.toLowerCase()} <ChevronRight className="h-4 w-4" />
+                    <p className="text-sm font-semibold text-primary flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Ver informe completo <ChevronRight className="h-4 w-4" />
                     </p>
                   </div>
                 </Link>
