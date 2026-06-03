@@ -9,38 +9,154 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as GuiasRouteImport } from './routes/guias'
+import { Route as ComoFuncionaRouteImport } from './routes/como-funciona'
+import { Route as CasosExitoRouteImport } from './routes/casos-exito'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SectoresIndexRouteImport } from './routes/sectores.index'
+import { Route as OportunidadesIndexRouteImport } from './routes/oportunidades.index'
+import { Route as SectoresSectorRouteImport } from './routes/sectores.$sector'
+import { Route as OportunidadesSlugRouteImport } from './routes/oportunidades.$slug'
 
+const GuiasRoute = GuiasRouteImport.update({
+  id: '/guias',
+  path: '/guias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComoFuncionaRoute = ComoFuncionaRouteImport.update({
+  id: '/como-funciona',
+  path: '/como-funciona',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CasosExitoRoute = CasosExitoRouteImport.update({
+  id: '/casos-exito',
+  path: '/casos-exito',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SectoresIndexRoute = SectoresIndexRouteImport.update({
+  id: '/sectores/',
+  path: '/sectores/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OportunidadesIndexRoute = OportunidadesIndexRouteImport.update({
+  id: '/oportunidades/',
+  path: '/oportunidades/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SectoresSectorRoute = SectoresSectorRouteImport.update({
+  id: '/sectores/$sector',
+  path: '/sectores/$sector',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OportunidadesSlugRoute = OportunidadesSlugRouteImport.update({
+  id: '/oportunidades/$slug',
+  path: '/oportunidades/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/casos-exito': typeof CasosExitoRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/guias': typeof GuiasRoute
+  '/oportunidades/$slug': typeof OportunidadesSlugRoute
+  '/sectores/$sector': typeof SectoresSectorRoute
+  '/oportunidades/': typeof OportunidadesIndexRoute
+  '/sectores/': typeof SectoresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/casos-exito': typeof CasosExitoRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/guias': typeof GuiasRoute
+  '/oportunidades/$slug': typeof OportunidadesSlugRoute
+  '/sectores/$sector': typeof SectoresSectorRoute
+  '/oportunidades': typeof OportunidadesIndexRoute
+  '/sectores': typeof SectoresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/casos-exito': typeof CasosExitoRoute
+  '/como-funciona': typeof ComoFuncionaRoute
+  '/guias': typeof GuiasRoute
+  '/oportunidades/$slug': typeof OportunidadesSlugRoute
+  '/sectores/$sector': typeof SectoresSectorRoute
+  '/oportunidades/': typeof OportunidadesIndexRoute
+  '/sectores/': typeof SectoresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/casos-exito'
+    | '/como-funciona'
+    | '/guias'
+    | '/oportunidades/$slug'
+    | '/sectores/$sector'
+    | '/oportunidades/'
+    | '/sectores/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/casos-exito'
+    | '/como-funciona'
+    | '/guias'
+    | '/oportunidades/$slug'
+    | '/sectores/$sector'
+    | '/oportunidades'
+    | '/sectores'
+  id:
+    | '__root__'
+    | '/'
+    | '/casos-exito'
+    | '/como-funciona'
+    | '/guias'
+    | '/oportunidades/$slug'
+    | '/sectores/$sector'
+    | '/oportunidades/'
+    | '/sectores/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CasosExitoRoute: typeof CasosExitoRoute
+  ComoFuncionaRoute: typeof ComoFuncionaRoute
+  GuiasRoute: typeof GuiasRoute
+  OportunidadesSlugRoute: typeof OportunidadesSlugRoute
+  SectoresSectorRoute: typeof SectoresSectorRoute
+  OportunidadesIndexRoute: typeof OportunidadesIndexRoute
+  SectoresIndexRoute: typeof SectoresIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/guias': {
+      id: '/guias'
+      path: '/guias'
+      fullPath: '/guias'
+      preLoaderRoute: typeof GuiasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/como-funciona': {
+      id: '/como-funciona'
+      path: '/como-funciona'
+      fullPath: '/como-funciona'
+      preLoaderRoute: typeof ComoFuncionaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/casos-exito': {
+      id: '/casos-exito'
+      path: '/casos-exito'
+      fullPath: '/casos-exito'
+      preLoaderRoute: typeof CasosExitoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +164,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sectores/': {
+      id: '/sectores/'
+      path: '/sectores'
+      fullPath: '/sectores/'
+      preLoaderRoute: typeof SectoresIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oportunidades/': {
+      id: '/oportunidades/'
+      path: '/oportunidades'
+      fullPath: '/oportunidades/'
+      preLoaderRoute: typeof OportunidadesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sectores/$sector': {
+      id: '/sectores/$sector'
+      path: '/sectores/$sector'
+      fullPath: '/sectores/$sector'
+      preLoaderRoute: typeof SectoresSectorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oportunidades/$slug': {
+      id: '/oportunidades/$slug'
+      path: '/oportunidades/$slug'
+      fullPath: '/oportunidades/$slug'
+      preLoaderRoute: typeof OportunidadesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CasosExitoRoute: CasosExitoRoute,
+  ComoFuncionaRoute: ComoFuncionaRoute,
+  GuiasRoute: GuiasRoute,
+  OportunidadesSlugRoute: OportunidadesSlugRoute,
+  SectoresSectorRoute: SectoresSectorRoute,
+  OportunidadesIndexRoute: OportunidadesIndexRoute,
+  SectoresIndexRoute: SectoresIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

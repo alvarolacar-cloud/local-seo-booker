@@ -11,7 +11,7 @@ export const Route = createFileRoute("/oportunidades/$slug")({
   loader: ({ params }) => {
     const opp = getOpportunity(params.slug);
     if (!opp) throw notFound();
-    return { opp };
+    return { opp: opp! };
   },
   head: ({ loaderData }) => {
     const o = loaderData?.opp;

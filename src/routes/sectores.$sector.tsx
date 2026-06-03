@@ -11,7 +11,7 @@ export const Route = createFileRoute("/sectores/$sector")({
   loader: ({ params }) => {
     const sector = getSector(params.sector);
     if (!sector) throw notFound();
-    return { sector };
+    return { sector: sector! };
   },
   head: ({ loaderData }) => {
     const s = loaderData?.sector;
