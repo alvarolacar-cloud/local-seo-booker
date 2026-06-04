@@ -8,6 +8,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site/Footer";
+import { SiteHeader } from "@/components/site/Header";
 import { sectors } from "@/data/sectors";
 import { cities } from "@/data/cities";
 import { opportunities } from "@/data/opportunities";
