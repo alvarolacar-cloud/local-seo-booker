@@ -69,12 +69,12 @@
   --card-foreground: oklch(0.18 0.02 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.02 250);
-  /* Brand: deep editorial navy */
-  --primary: oklch(0.17 0.06 258);
+  /* Brand: deep Skyscanner-style navy blue */
+  --primary: oklch(0.22 0.08 258);
   --primary-foreground: oklch(0.99 0.005 250);
-  /* CTA: warm gold accent */
-  --accent: oklch(0.74 0.13 78);
-  --accent-foreground: oklch(0.17 0.06 258);
+  /* CTA: amber/yellow accent */
+  --accent: oklch(0.78 0.16 75);
+  --accent-foreground: oklch(0.18 0.02 250);
   --secondary: oklch(0.96 0.01 250);
   --secondary-foreground: oklch(0.18 0.02 250);
   --muted: oklch(0.96 0.01 250);
