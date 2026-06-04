@@ -11,7 +11,9 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 import { SiteHeader } from "@/components/site/Header";
 import { NavChips } from "@/components/site/NavChips";
 import { SiteFooter } from "@/components/site/Footer";
-import { getOpportunity, type Opportunity } from "@/data/opportunities";
+import { getOpportunity, parseOpportunitySlug, buildSyntheticOpportunity, type Opportunity } from "@/data/opportunities";
+import { getSector } from "@/data/sectors";
+import { getCity } from "@/data/cities";
 import { cases } from "@/data/cases";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { useMemo, useState } from "react";
