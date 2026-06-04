@@ -46,9 +46,22 @@ const conversionBySector: Record<string, number> = {
 
 export const Route = createFileRoute("/oportunidades/$slug")({
   loader: ({ params }) => {
-    const opp = getOpportunity(params.slug);
-    if (!opp) throw notFound();
-    return { opp: opp! };
+    const existing = getOpportunity(params.slug);
+    if (existing) return { opp: existing };
+    const parsed = parseOpportunitySlug(params.slug);
+    if (!parsed) throw notFound();
+    const sector = getSector(parsed.sectorSlug);
+    const city = getCity(parsed.citySlug);
+    if (!sector || !city) throw notFound();
+    const opp = buildSyntheticOpportunity({
+      sectorSlug: sector.slug,
+      citySlug: city.slug,
+      sectorName: sector.name,
+      cityName: city.name,
+      sectorMonthlySearches: sector.monthlySearches,
+      keyword: sector.keyword,
+    });
+    return { opp };
   },
   head: ({ loaderData }) => {
     const o = loaderData?.opp;
