@@ -151,7 +151,7 @@ function Home() {
           </div>
 
           <div className="mx-auto max-w-5xl px-4 pt-16 pb-24 md:pt-24 md:pb-32">
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] text-white max-w-4xl">
+            <h1 className="text-[32px] font-extrabold leading-[1.05] text-white max-w-4xl">
               Detectamos oportunidades en Google sin cubrir. Encuentra la tuya.
             </h1>
 
