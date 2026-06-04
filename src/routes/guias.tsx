@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Clock, BookOpen, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
-import { NavChips } from "@/components/site/NavChips";
 import { SiteFooter } from "@/components/site/Footer";
 import serviceGmb from "@/assets/service-gmb.jpg";
 import serviceReviews from "@/assets/service-reviews.jpg";
@@ -43,7 +42,6 @@ function Guias() {
 
   return (
     <div className="min-h-screen bg-background">
-      <NavChips />
 
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-7xl px-4 py-12">
