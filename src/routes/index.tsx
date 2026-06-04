@@ -72,10 +72,10 @@ function Home() {
       <div className="bg-accent/15 border-b border-accent/25">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2.5 text-sm">
           <p className="font-medium">
-            Deja de adivinar. Encuentra el hueco con el plan <b>Pro</b>.
+            Solo trabajamos contigo si <b>podemos hacerte subir</b> en Google. Primero los datos.
           </p>
           <Link to="/oportunidades" className="inline-flex items-center gap-1 font-semibold hover:underline shrink-0">
-            Empezar <ArrowRight className="h-3.5 w-3.5" />
+            Pedir análisis <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
       </div>
@@ -95,18 +95,19 @@ function Home() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
                 </span>
-                <span>Datos en tiempo real de Google</span>
+                <span>Te elegimos por datos · No al revés</span>
               </div>
 
               <h1 className="text-balance text-5xl font-extrabold leading-[1.02] tracking-tight md:text-[64px]">
-                Posiciona al ritmo
+                Te ayudamos a escalar
                 <br />
-                de tu <span className="bg-gradient-to-r from-accent to-amber-300 bg-clip-text text-transparent">ambición</span>.
+                posiciones en <span className="bg-gradient-to-r from-accent to-amber-300 bg-clip-text text-transparent">Google</span>.
               </h1>
 
               <p className="mt-6 max-w-xl text-lg text-primary-foreground/80">
-                Negocios locales que usan datos reales de Google para detectar
-                oportunidades y convertirlas en clientes en cuestión de días.
+                Analizamos tu sector y ciudad, vemos el hueco real de ROI y solo
+                trabajamos contigo si podemos moverte. No vendemos SEO genérico:
+                <span className="text-primary-foreground"> elegimos negocios donde sabemos ganar.</span>
               </p>
 
               {/* Tabs */}
@@ -150,10 +151,13 @@ function Home() {
                   </div>
                   <Button asChild className="h-auto rounded-xl bg-accent px-8 text-accent-foreground hover:brightness-110 font-bold">
                     {canSearch
-                      ? <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>Buscar</Link>
-                      : <Link to="/oportunidades">Buscar</Link>}
+                      ? <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>Analizar mi negocio</Link>
+                      : <Link to="/oportunidades">Analizar mi negocio</Link>}
                   </Button>
                 </div>
+                <p className="px-3 pt-2 pb-1 text-[11px] text-white/55">
+                  Miramos competencia, búsquedas y CPC de tu zona. Si no hay oportunidad, te lo decimos.
+                </p>
               </div>
 
               {/* Chips */}
