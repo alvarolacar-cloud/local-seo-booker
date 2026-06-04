@@ -1,15 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
-  Search, MapPin, Briefcase, Compass,
-  BookOpen, Trophy, Route as RouteIcon, Home as HomeIcon,
-  ChevronDown, ChevronRight, FileSearch, Wrench, Stethoscope,
-  Scale, Scissors, UtensilsCrossed, Hammer, Calculator, Users,
-  Headphones, TrendingUp, Target, Sparkles,
+  Search, MapPin, Compass, BookOpen, Trophy, Route as RouteIcon, Home as HomeIcon,
+  ChevronDown, ChevronRight, ChevronLeft, Heart, Wrench, Stethoscope, Scale,
+  Scissors, UtensilsCrossed, Hammer, Calculator, Users, Headphones, Play,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { SiteHeader } from "@/components/site/Header";
 import { SiteFooter } from "@/components/site/Footer";
 import { sectors } from "@/data/sectors";
 import { cities } from "@/data/cities";
@@ -33,10 +30,7 @@ import editorialImg from "@/assets/report-map.jpg";
 import serviceContent from "@/assets/service-content.jpg";
 import serviceAudit from "@/assets/service-audit.jpg";
 import serviceGmb from "@/assets/service-gmb.jpg";
-import serviceReviews from "@/assets/service-reviews.jpg";
-import agency1 from "@/assets/agency-1.jpg";
 import reportHandshake from "@/assets/report-handshake.jpg";
-import reportPhone from "@/assets/report-phone.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -59,13 +53,14 @@ const navItems = [
   { id: "guias", label: "Guías", icon: BookOpen, to: "/guias" as const, novelty: false },
 ];
 
-const heroTabs = [
-  { id: "fontaneros", label: "Fontaneros", icon: Wrench },
-  { id: "dentistas", label: "Dentistas", icon: Stethoscope },
-  { id: "abogados", label: "Abogados", icon: Scale },
-  { id: "peluquerias", label: "Peluquerías", icon: Scissors },
-  { id: "restaurantes", label: "Restaurantes", icon: UtensilsCrossed },
-  { id: "reformas", label: "Reformas", icon: Hammer },
+const sectorChips = [
+  { slug: "fontaneros", label: "Fontaneros", Icon: Wrench },
+  { slug: "electricistas", label: "Electricistas", Icon: Wrench },
+  { slug: "dentistas", label: "Dentistas", Icon: Stethoscope },
+  { slug: "abogados", label: "Abogados", Icon: Scale },
+  { slug: "peluquerias", label: "Peluquerías", Icon: Scissors },
+  { slug: "restaurantes", label: "Restaurantes", Icon: UtensilsCrossed },
+  { slug: "reformas", label: "Reformas", Icon: Hammer },
 ];
 
 const cityImageMap: Record<string, string> = {
@@ -74,15 +69,19 @@ const cityImageMap: Record<string, string> = {
 };
 
 const sectorImageMap: Record<string, string> = {
-  fontaneros: sectorFontaneros,
-  dentistas: sectorDentistas,
-  abogados: sectorAbogadosImg,
-  peluquerias: sectorPeluquerias,
-  talleres: sectorTalleres,
-  reformas: sectorReformas,
-  electricistas: sectorElectricistas,
-  restaurantes: sectorRestaurantes,
+  fontaneros: sectorFontaneros, dentistas: sectorDentistas, abogados: sectorAbogadosImg,
+  peluquerias: sectorPeluquerias, talleres: sectorTalleres, reformas: sectorReformas,
+  electricistas: sectorElectricistas, restaurantes: sectorRestaurantes,
 };
+
+const partnerLogos = ["Inboundcycle", "SEMrush", "Webpositer", "Aukera", "Human Level", "Internet República"];
+
+const articles = [
+  { tag: "Guía 2026", title: "Los 10 sectores locales más rentables este año", excerpt: "Análisis sector por sector con volumen, competencia y CPC estimado.", img: editorialImg },
+  { tag: "SEO local", title: "Cómo posicionar tu ficha de Google Business en 30 días", excerpt: "Checklist práctico de señales locales que mueven la aguja en SERP.", img: serviceGmb },
+  { tag: "Casos reales", title: "De 0 a 8.100 visitas: un electricista en Barcelona", excerpt: "Estrategia de contenido + reseñas + citations paso a paso.", img: serviceContent },
+  { tag: "Benchmark", title: "Dentistas vs fisioterapeutas en SEO local", excerpt: "Volumen, intención de búsqueda y barreras de entrada.", img: serviceAudit },
+];
 
 const faqs = [
   { q: "¿Está Rankin disponible para sectores fuera de España?", a: "Por ahora trabajamos solo España (6 ciudades principales + sus áreas metropolitanas). Estamos ampliando a Portugal y Latinoamérica en 2026." },
@@ -91,319 +90,337 @@ const faqs = [
   { q: "¿Qué necesito saber antes de invertir en SEO local?", a: "Tres cosas: que tu sector tenga búsquedas reales en tu ciudad, que tengas ficha de Google Business activa y que aceptes que los resultados llegan entre 60 y 180 días." },
 ];
 
-const articles = [
-  { tag: "Más rentables", title: "Los 5 sectores con mejor ROI en SEO local en 2026", img: editorialImg, badge: "Sectores más rentables" },
-  { tag: "Valoración", title: "Cómo calculamos la oportunidad real de tu negocio", img: serviceAudit, badge: undefined },
-  { tag: "Captación", title: "Cómo conseguir leads cualificados desde Google Maps", img: serviceContent, badge: undefined },
-  { tag: "Captación", title: "Cómo encontrar clientes locales para tu negocio", img: serviceGmb, badge: undefined },
-];
-
 function Home() {
-  const [activeTab, setActiveTab] = useState(heroTabs[0].id);
-  const [query, setQuery] = useState("");
   const [sectorSlug, setSectorSlug] = useState("");
   const [citySlug, setCitySlug] = useState("");
-  const [trendingTab, setTrendingTab] = useState<"all" | "alta" | "baja">("all");
+  const [trendingTab, setTrendingTab] = useState<"all" | "alta" | "baja" | "cpc">("all");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [footerTab, setFooterTab] = useState<"oportunidades" | "sectores" | "ciudades">("oportunidades");
 
   const trending = useMemo(() => {
     if (trendingTab === "alta") return opportunities.filter((o) => o.competition === "Alta").slice(0, 8);
     if (trendingTab === "baja") return opportunities.filter((o) => o.competition !== "Alta").slice(0, 8);
+    if (trendingTab === "cpc") return [...opportunities].sort((a, b) => b.cpc - a.cpc).slice(0, 8);
     return opportunities.slice(0, 8);
   }, [trendingTab]);
 
   const canSearch = Boolean(sectorSlug && citySlug);
   const searchSlug = canSearch ? `${sectorSlug}-${citySlug}` : "";
 
+  const footerLinks: Record<typeof footerTab, { label: string; slug?: string }[]> = {
+    oportunidades: [
+      { label: "Fontaneros en Madrid", slug: "fontaneros-madrid" },
+      { label: "Dentistas en Barcelona", slug: "dentistas-barcelona" },
+      { label: "Abogados en Valencia", slug: "abogados-valencia" },
+      { label: "Peluquerías en Sevilla", slug: "peluquerias-sevilla" },
+      { label: "Talleres en Bilbao", slug: "talleres-bilbao" },
+      { label: "Reformas en Málaga", slug: "reformas-malaga" },
+      { label: "Electricistas en Barcelona", slug: "electricistas-barcelona" },
+      { label: "Restaurantes en Madrid", slug: "restaurantes-madrid" },
+    ],
+    sectores: sectors.slice(0, 8).map((s) => ({ label: `SEO para ${s.name.toLowerCase()}` })),
+    ciudades: cities.map((c) => ({ label: `SEO local en ${c.name}` })),
+  };
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* ===================== HERO ===================== */}
-      <section className="relative text-white">
-        <div className="absolute inset-0">
-          <img src={cityMadrid} alt="Skyline España" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/70 to-primary/90" />
+    <div className="min-h-screen bg-background text-foreground">
+      {/* ===================== TOP BAR ===================== */}
+      <header className="bg-primary text-primary-foreground">
+        <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-6 text-sm">
+          <Link to="/" className="flex items-center gap-2 font-bold tracking-tight">
+            <span className="text-xl">Rankin<span className="text-accent">.</span></span>
+          </Link>
+          <nav className="hidden items-center gap-6 text-white/90 md:flex">
+            <Link to="/oportunidades" className="hover:text-white">Oportunidades</Link>
+            <Link to="/casos-exito" className="hover:text-white">Casos de éxito</Link>
+            <Link to="/como-funciona" className="hover:text-white">Cómo funciona</Link>
+            <Link to="/guias" className="hover:text-white">Guías</Link>
+          </nav>
+          <div className="flex items-center gap-5 text-white/90">
+            <a href="#" className="hover:text-white">Iniciar sesión</a>
+            <a href="mailto:hola@rankin.es" className="hover:text-white">Contacto</a>
+          </div>
         </div>
-        <div className="relative">
-          <SiteHeader variant="transparent" />
-          <div className="mx-auto max-w-7xl px-4 pt-4 pb-3">
-            <nav className="flex flex-wrap items-center gap-2">
-              {navItems.map((t) => {
-                const Icon = t.icon;
-                return (
-                  <Link
-                    key={t.id}
-                    to={t.to}
-                    activeOptions={{ exact: t.to === "/" }}
-                    className="relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/30 text-white hover:bg-white/10 text-xs md:text-sm font-semibold transition"
-                    activeProps={{ className: "!bg-[#0066ff] !border-[#0066ff]" }}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    {t.label}
-                    {t.novelty && (
-                      <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#e91e63] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
-                        Novedad
-                      </span>
-                    )}
+      </header>
+
+      {/* ===================== HERO ===================== */}
+      <section className="relative isolate overflow-hidden">
+        <img src={cityMadrid} alt="Ciudad española al atardecer" className="absolute inset-0 -z-10 h-full w-full object-cover" />
+        <div className="absolute inset-0 -z-10 bg-foreground/55" />
+
+        {/* nav chips */}
+        <div className="mx-auto max-w-7xl px-6 pt-6">
+          <nav className="flex flex-wrap items-center gap-2">
+            {navItems.map((t) => {
+              const Icon = t.icon;
+              return (
+                <Link
+                  key={t.id}
+                  to={t.to}
+                  activeOptions={{ exact: t.to === "/" }}
+                  className="relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/30 text-white hover:bg-white/10 text-xs md:text-sm font-semibold transition"
+                  activeProps={{ className: "!bg-[#0066ff] !border-[#0066ff]" }}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  {t.label}
+                  {t.novelty && (
+                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#e91e63] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                      Novedad
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        <div className="mx-auto max-w-[1280px] px-6 pb-20 pt-12 text-center text-white">
+          <h1 className="text-balance text-[32px] font-extrabold leading-[1.05]">
+            Detectamos oportunidades en Google sin cubrir. Encuentra la tuya.
+          </h1>
+
+          <div className="mx-auto mt-8 max-w-3xl rounded-md bg-white p-0 text-foreground shadow-2xl">
+            {/* Tabs — solo Oportunidades */}
+            <div className="flex items-center justify-center gap-6 border-b border-border px-4 pt-3 text-sm">
+              <button className="-mb-px border-b-2 border-primary pb-3 font-semibold text-foreground">
+                Oportunidades
+              </button>
+            </div>
+
+            {/* Sector chips */}
+            <div className="flex flex-wrap items-center justify-center gap-1 px-3 pt-3 text-xs">
+              {sectorChips.map(({ slug, label, Icon }) => (
+                <button
+                  key={slug}
+                  onClick={() => setSectorSlug(slug)}
+                  className={`flex flex-col items-center gap-1 rounded-md px-3 py-2 transition ${
+                    sectorSlug === slug ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span>{label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Search — híbrido: sector + ciudad + botón */}
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-2 p-3">
+              <label className="flex items-center gap-2 rounded-md border border-border px-3 py-2.5">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+                <select
+                  value={sectorSlug}
+                  onChange={(e) => setSectorSlug(e.target.value)}
+                  className="flex-1 bg-transparent text-sm font-medium outline-none"
+                >
+                  <option value="">Selecciona sector</option>
+                  {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+                </select>
+              </label>
+              <label className="flex items-center gap-2 rounded-md border border-border px-3 py-2.5">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+                <select
+                  value={citySlug}
+                  onChange={(e) => setCitySlug(e.target.value)}
+                  className="flex-1 bg-transparent text-sm font-medium outline-none"
+                >
+                  <option value="">Selecciona ciudad</option>
+                  {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
+                </select>
+              </label>
+              <Button asChild className="h-11 px-6 rounded-md bg-[#0066ff] text-white hover:brightness-110 font-bold">
+                {canSearch ? (
+                  <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>
+                    <Search className="h-4 w-4" /> Buscar
                   </Link>
-                );
-              })}
-            </nav>
+                ) : (
+                  <Link to="/oportunidades">
+                    <Search className="h-4 w-4" /> Buscar
+                  </Link>
+                )}
+              </Button>
+            </div>
           </div>
 
-          <div className="mx-auto max-w-5xl px-4 pt-16 pb-24 md:pt-24 md:pb-32">
-            <h1 className="text-[32px] font-extrabold leading-[1.05] text-white max-w-4xl">
-              Detectamos oportunidades en Google sin cubrir. Encuentra la tuya.
-            </h1>
-
-            {/* Pill badge */}
-            <div className="mt-8 inline-flex items-center gap-2 bg-primary text-primary-foreground px-3.5 py-1.5 rounded-full text-xs md:text-sm font-semibold">
-              <Compass className="h-3.5 w-3.5" />
-              Oportunidades en Google
-              <ChevronDown className="h-3.5 w-3.5" />
-            </div>
-
-            {/* Search row — Skyscanner-style joined fields */}
-            <div className="mt-3 flex flex-col md:flex-row md:items-stretch gap-2 md:gap-1">
-              <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-[2px] md:gap-0 bg-white/20 md:bg-white/10 rounded-md overflow-hidden">
-                <label className="flex flex-col justify-center bg-white px-4 h-16 text-foreground md:rounded-l-md">
-                  <span className="text-[11px] text-muted-foreground font-medium">Sector</span>
-                  <select
-                    value={sectorSlug}
-                    onChange={(e) => setSectorSlug(e.target.value)}
-                    className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5"
-                  >
-                    <option value="">Selecciona industria</option>
-                    {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
-                  </select>
-                </label>
-                <label className="flex flex-col justify-center bg-white px-4 h-16 text-foreground md:border-l md:border-border/40">
-                  <span className="text-[11px] text-muted-foreground font-medium">Ciudad</span>
-                  <select
-                    value={citySlug}
-                    onChange={(e) => setCitySlug(e.target.value)}
-                    className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5"
-                  >
-                    <option value="">Selecciona ciudad</option>
-                    {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                  </select>
-                </label>
-                <label className="flex flex-col justify-center bg-white px-4 h-16 text-foreground md:border-l md:border-border/40">
-                  <span className="text-[11px] text-muted-foreground font-medium">Zona / barrios</span>
-                  <input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Todos los distritos"
-                    className="bg-transparent text-sm font-semibold focus:outline-none placeholder:text-foreground/70"
-                  />
-                </label>
-                <label className="flex flex-col justify-center bg-white px-4 h-16 text-foreground md:border-l md:border-border/40 md:rounded-r-md">
-                  <span className="text-[11px] text-muted-foreground font-medium">Volumen mínimo</span>
-                  <select defaultValue="500" className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5">
-                    <option value="100">100 búsq/mes</option>
-                    <option value="500">500 búsq/mes</option>
-                    <option value="1000">1.000 búsq/mes</option>
-                    <option value="5000">5.000 búsq/mes</option>
-                  </select>
-                </label>
-              </div>
-              {canSearch ? (
-                <Button asChild className="h-16 px-8 rounded-md bg-[#0066ff] text-white hover:brightness-110 font-bold text-base">
-                  <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>
-                    Buscar
-                  </Link>
-                </Button>
-              ) : (
-                <Button asChild className="h-16 px-8 rounded-md bg-[#0066ff] text-white hover:brightness-110 font-bold text-base">
-                  <Link to="/oportunidades">
-                    Buscar
-                  </Link>
-                </Button>
-              )}
-            </div>
-
-            {/* Trust signals — Skyscanner-style checkboxes */}
-            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-white text-sm font-semibold">
-              <label className="inline-flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" defaultChecked className="h-4 w-4 accent-[#0066ff] rounded-sm" />
-                Datos de Google KeywordPlanner
-              </label>
-              <label className="inline-flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" defaultChecked className="h-4 w-4 accent-[#0066ff] rounded-sm" />
-                Datos de Google Trends
-              </label>
-            </div>
-
+          <div className="mt-3 flex items-center justify-center gap-2 text-xs text-white/80">
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-foreground">
+              <Play className="h-3 w-3 fill-current" />
+            </span>
+            Cómo funciona Rankin en 90 segundos
           </div>
         </div>
       </section>
 
-      {/* ===================== STATS STRIP ===================== */}
-      <section className="bg-background border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 py-8 grid grid-cols-1 md:grid-cols-[1.3fr_1fr_1fr_1fr] gap-6 items-center">
-          <p className="text-sm md:text-base text-foreground/80">
-            Desde hace más de 5 años, <span className="font-bold">Rankin</span> es la referencia de confianza para negocios locales que quieren crecer con SEO en Google.
+      {/* ===================== STATS + LOGOS ===================== */}
+      <section className="border-b border-border bg-background">
+        <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-6 px-6 py-10 md:grid-cols-4">
+          <p className="text-sm leading-relaxed text-muted-foreground md:col-span-1">
+            Llevamos más de <b>5 años</b> analizando el SEO local en España, la marca de confianza para autónomos y agencias.
           </p>
           {[
             { v: "300K+", l: "Búsquedas locales analizadas" },
             { v: "13M+", l: "Datos de Keyword Planner" },
             { v: "+800", l: "Negocios ya posicionados" },
           ].map((s) => (
-            <div key={s.l} className="text-center md:text-left border-l border-border pl-6 first:border-l-0 first:pl-0 md:first:border-l md:first:pl-6">
-              <p className="text-2xl md:text-3xl font-extrabold text-primary">{s.v}</p>
-              <p className="text-xs text-muted-foreground">{s.l}</p>
+            <div key={s.l}>
+              <div className="text-2xl font-bold">{s.v}</div>
+              <div className="text-xs text-muted-foreground">{s.l}</div>
             </div>
           ))}
         </div>
-      </section>
 
-      {/* ===================== TRENDING ===================== */}
-      <section className="bg-background">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <div className="flex flex-wrap items-end justify-between gap-3 mb-3">
-            <h2 className="text-xl md:text-2xl font-extrabold">Trending en Rankin</h2>
-            <Link to="/oportunidades" className="text-sm font-semibold text-primary hover:underline">Ver todas</Link>
-          </div>
-          <div className="flex gap-5 border-b border-border mb-5 text-sm font-semibold">
-            {[
-              { id: "all", label: "Todas las oportunidades" },
-              { id: "alta", label: "Alta demanda" },
-              { id: "baja", label: "Baja competencia" },
-            ].map((t) => {
-              const active = trendingTab === t.id;
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => setTrendingTab(t.id as typeof trendingTab)}
-                  className={`relative py-3 transition ${active ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-                >
-                  {t.label}
-                  {active && <span className="absolute inset-x-0 -bottom-px h-0.5 bg-accent" />}
-                </button>
-              );
-            })}
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {trending.map((o) => {
-              const img = sectorImageMap[o.sectorSlug] ?? cityImageMap[o.citySlug];
-              return (
-                <Link
-                  key={o.slug}
-                  to="/oportunidades/$slug"
-                  params={{ slug: o.slug }}
-                  className="group block rounded-lg overflow-hidden border border-border bg-card hover:shadow-lg transition"
-                >
-                  <div className="relative h-40 overflow-hidden">
-                    {img && <img src={img} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />}
-                    <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded">
-                      {o.sectorName}
-                    </span>
-                  </div>
-                  <div className="p-3">
-                    <p className="text-xs text-muted-foreground">Desde</p>
-                    <p className="font-bold text-sm">{o.searches.toLocaleString("es-ES")} búsq/mes</p>
-                    <p className="text-xs text-muted-foreground mt-2 truncate">{o.cityName}</p>
-                    <p className="text-xs text-muted-foreground">CPC medio {o.cpc.toFixed(1)} € · {o.competition}</p>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== EDITORIAL BANNER ===================== */}
-      <section className="bg-secondary">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6 items-center">
-            <div className="relative rounded-lg overflow-hidden">
-              <img src={editorialImg} alt="Próximo informe" className="w-full h-64 md:h-72 object-cover" />
-              <div className="absolute top-3 left-3 bg-white rounded-md p-3 shadow-md text-foreground">
-                <p className="text-[11px] font-bold uppercase text-accent-foreground/70">Próximo informe</p>
-                <p className="font-extrabold text-sm">Reformas en Málaga</p>
-                <p className="text-xs text-muted-foreground">9.700 búsq/mes</p>
-                <p className="font-extrabold text-primary mt-1">Score 84/100</p>
-              </div>
-            </div>
-            <div>
-              <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Descubre tu próxima oportunidad en un informe</h2>
-              <p className="text-muted-foreground mb-5">
-                Cada semana publicamos nuevos análisis sector × ciudad con datos reales de Google. Únete a los negocios que ya han encontrado su hueco gracias a un informe Rankin.
-              </p>
-              <Link to="/oportunidades" className="text-sm font-semibold text-primary hover:underline">Más información sobre los informes →</Link>
-              <div className="mt-4">
-                <Button asChild className="bg-primary hover:bg-[var(--brand-deep)]">
-                  <Link to="/oportunidades">Próximo informe · 8 de junio</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== EXPLORA CIUDADES ===================== */}
-      <section className="bg-background">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <h2 className="text-xl md:text-2xl font-extrabold mb-1">Explora ciudades populares</h2>
-          <p className="text-sm text-muted-foreground mb-5">Ciudades españolas donde tenemos cobertura completa.</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {cities.map((c) => (
-              <Link
-                key={c.slug}
-                to="/oportunidades"
-                className="group block"
-              >
-                <div className="relative rounded-md overflow-hidden h-28">
-                  <img src={c.img} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
-                </div>
-                <p className="mt-2 text-sm font-bold text-center">{c.name}</p>
-              </Link>
+        <div className="mx-auto max-w-[1280px] px-6 pb-10">
+          <p className="text-center text-sm text-muted-foreground">Agencias y empresas que ya usan Rankin</p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-12 gap-y-4 text-lg font-semibold text-muted-foreground/70">
+            {partnerLogos.map((l) => (
+              <span key={l} className={l === "SEMrush" ? "italic" : l === "Aukera" ? "text-primary" : ""}>{l}</span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ===================== JOIN BAND ===================== */}
-      <section className="bg-secondary">
-        <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="bg-card border border-border rounded-lg p-6 md:p-8 grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-6 items-center overflow-hidden">
-            <div>
-              <p className="text-[11px] font-bold uppercase text-accent-foreground/70">Únete a Rankin</p>
-              <h3 className="text-xl md:text-2xl font-extrabold mt-1 mb-2">Sigue oportunidades, recibe alertas y compara informes — gratis.</h3>
-              <p className="text-sm text-muted-foreground mb-4">Crea tu cuenta y guarda los sectores y ciudades que te interesan. Te avisamos cuando se publica un nuevo análisis.</p>
-              <Button className="bg-primary hover:bg-[var(--brand-deep)]">Crear cuenta gratis</Button>
+      {/* ===================== TRENDING ===================== */}
+      <section className="mx-auto max-w-[1280px] px-6 py-10">
+        <div className="mb-3 flex items-end justify-between">
+          <h2 className="text-xl font-semibold">Tendencias en Rankin</h2>
+          <Link to="/oportunidades" className="text-sm font-medium text-primary hover:underline">Ver todas</Link>
+        </div>
+
+        <div className="mb-5 flex gap-6 border-b border-border text-sm">
+          {[
+            { id: "all", label: "Más buscados" },
+            { id: "baja", label: "Baja competencia" },
+            { id: "cpc", label: "CPC alto" },
+            { id: "alta", label: "Alta demanda" },
+          ].map((t) => {
+            const active = trendingTab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setTrendingTab(t.id as typeof trendingTab)}
+                className={`-mb-px border-b-2 pb-2 ${active ? "border-primary font-medium text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {trending.map((o) => {
+            const img = sectorImageMap[o.sectorSlug] ?? cityImageMap[o.citySlug];
+            return (
+              <Link
+                key={o.slug}
+                to="/oportunidades/$slug"
+                params={{ slug: o.slug }}
+                className="group block overflow-hidden rounded-md border border-border bg-card transition hover:shadow-lg"
+              >
+                <div className="relative h-36">
+                  {img && <img src={img} alt={`${o.sectorName} en ${o.cityName}`} loading="lazy" className="h-full w-full object-cover" />}
+                  <span className="absolute left-2 top-2 rounded bg-card/95 px-2 py-0.5 text-[11px] font-medium">{o.sectorName}</span>
+                  <button className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-card/90 text-muted-foreground hover:text-primary">
+                    <Heart className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="p-3">
+                  <div className="text-sm font-semibold">Desde {o.searches.toLocaleString("es-ES")}/mes búsq.</div>
+                  <div className="mt-0.5 text-xs text-muted-foreground">{o.sectorName} · {o.cityName}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">CPC medio {o.cpc.toFixed(1)} € · {o.competition}</div>
+                  <div className="mt-1 text-[11px] text-muted-foreground">Score: <b className="text-foreground">{o.score}</b></div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ===================== FEATURED OPPORTUNITY ===================== */}
+      <section className="bg-muted">
+        <div className="mx-auto grid max-w-[1280px] gap-8 px-6 py-14 md:grid-cols-2 md:items-center">
+          <div className="relative overflow-hidden rounded-md">
+            <img src={editorialImg} alt="Reformas en Málaga" loading="lazy" className="aspect-[4/3] w-full object-cover" />
+            <div className="absolute left-4 top-4 rounded-md bg-card p-3 shadow-md">
+              <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Próximo informe</div>
+              <div className="mt-1 text-sm font-semibold">Reformas integrales</div>
+              <div className="text-xs text-muted-foreground">Málaga</div>
+              <div className="mt-2 text-sm font-bold">9.700/mes búsq.</div>
+              <div className="text-xs text-muted-foreground">Score 84 · Comp. media</div>
             </div>
-            <div className="relative h-40 md:h-48 rounded-md overflow-hidden">
-              <img src={reportPhone} alt="App Rankin" className="absolute inset-0 w-full h-full object-cover" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-semibold">Descubre tu próxima oportunidad en un informe</h3>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Cada semana publicamos nuevos análisis sector × ciudad con datos reales de Google.
+              Únete y recibe alertas cuando aparezca un nicho a tu medida.
+            </p>
+            <Link to="/oportunidades" className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+              Saber más sobre oportunidades destacadas <ChevronRight className="h-4 w-4" />
+            </Link>
+            <div className="mt-6 inline-block rounded-md border border-border bg-card p-4">
+              <div className="text-xs uppercase tracking-wider text-muted-foreground">Próximo informe · 12 de junio</div>
+              <Link to="/oportunidades" className="mt-2 inline-block text-sm font-medium text-primary hover:underline">Reservar plaza →</Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ===================== DUAL TOOLS ===================== */}
-      <section className="bg-background">
-        <div className="mx-auto max-w-7xl px-4 py-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* ===================== POPULAR CITIES ===================== */}
+      <section className="mx-auto max-w-[1280px] px-6 py-14">
+        <h2 className="text-xl font-semibold">Explora ciudades populares</h2>
+        <div className="mt-2 flex gap-6 border-b border-border text-sm">
+          <button className="-mb-px border-b-2 border-primary pb-2 font-medium text-primary">Ciudades ES</button>
+          <button className="-mb-px border-b-2 border-transparent pb-2 text-muted-foreground hover:text-foreground">Ciudades LATAM</button>
+        </div>
+        <div className="relative mt-6">
+          <button className="absolute -left-3 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card shadow md:flex">
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            {cities.map((c) => (
+              <Link key={c.slug} to="/oportunidades" className="group">
+                <div className="overflow-hidden rounded-md">
+                  <img src={c.img} alt={c.name} loading="lazy" className="aspect-[4/5] w-full object-cover transition group-hover:scale-105" />
+                </div>
+                <div className="mt-2 text-sm font-semibold">{c.name}</div>
+                <div className="text-xs text-muted-foreground">{c.note}</div>
+              </Link>
+            ))}
+          </div>
+          <button className="absolute -right-3 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card shadow md:flex">
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Join banner */}
+        <div className="mt-10 grid items-center gap-4 rounded-md border border-border bg-muted px-6 py-5 md:grid-cols-[1fr_auto_auto]">
+          <div>
+            <div className="font-semibold">Únete a Rankin</div>
+            <p className="text-sm text-muted-foreground">Guarda búsquedas, recibe alertas de nuevos nichos y exporta informes en CSV.</p>
+          </div>
+          <div className="hidden h-16 w-40 rounded bg-gradient-to-r from-primary/20 to-primary/40 md:block" />
+          <a href="#" className="justify-self-start rounded-md border border-foreground/20 bg-card px-4 py-2 text-sm font-medium hover:bg-background md:justify-self-end">
+            Registrarse gratis
+          </a>
+        </div>
+      </section>
+
+      {/* ===================== TOOLS ===================== */}
+      <section className="bg-muted">
+        <div className="mx-auto grid max-w-[1280px] gap-4 px-6 py-12 md:grid-cols-2">
           {[
-            {
-              title: "Calcula tu potencial SEO", desc: "Estima cuántos clientes podrías captar al mes en tu sector y ciudad.",
-              cta: "Calculadora de potencial", icon: Calculator, img: serviceAudit, to: "/oportunidades" as const,
-            },
-            {
-              title: "Encuentra un especialista", desc: "Conecta con un consultor Rankin para auditar tu negocio sin compromiso.",
-              cta: "Hablar con un especialista", icon: Users, img: reportHandshake, to: "/como-funciona" as const,
-            },
-          ].map((b) => {
-            const Icon = b.icon;
+            { title: "Calcula tu potencial SEO", desc: "Estima tráfico y leads para tu sector + ciudad.", cta: "Calculadora SEO", icon: Calculator, img: serviceAudit, to: "/oportunidades" as const },
+            { title: "Habla con un especialista", desc: "Auditamos tu negocio sin compromiso y te decimos si tiene hueco.", cta: "Pedir auditoría", icon: Users, img: reportHandshake, to: "/como-funciona" as const },
+          ].map((t) => {
+            const Icon = t.icon;
             return (
-              <div key={b.title} className="relative rounded-lg overflow-hidden h-56 md:h-64">
-                <img src={b.img} alt={b.title} className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
-                <div className="relative h-full flex flex-col justify-end p-5 text-white">
-                  <h3 className="font-extrabold text-lg">{b.title}</h3>
-                  <p className="text-sm text-white/85 mb-3 max-w-md">{b.desc}</p>
-                  <Button asChild className="self-start bg-white text-foreground hover:bg-white/90 font-semibold">
-                    <Link to={b.to}>
-                      <Icon className="h-4 w-4 mr-1" /> {b.cta}
-                    </Link>
+              <div key={t.title} className="relative overflow-hidden rounded-md bg-foreground text-white">
+                <img src={t.img} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-50" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                <div className="relative flex h-56 flex-col justify-end p-6">
+                  <h3 className="text-lg font-semibold">{t.title}</h3>
+                  <p className="mt-1 text-sm text-white/80">{t.desc}</p>
+                  <Button asChild className="mt-3 w-fit rounded-md bg-white/15 px-4 py-2 text-sm font-medium backdrop-blur hover:bg-white/25">
+                    <Link to={t.to}><Icon className="h-4 w-4 mr-1" />{t.cta}</Link>
                   </Button>
                 </div>
               </div>
@@ -412,145 +429,133 @@ function Home() {
         </div>
       </section>
 
-      {/* ===================== SEO LOCAL EXPLICADO ===================== */}
-      <section className="bg-background">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <div className="flex items-end justify-between mb-5">
-            <h2 className="text-xl md:text-2xl font-extrabold">SEO Local Explicado</h2>
-            <Link to="/guias" className="text-sm font-semibold text-primary hover:underline">Más artículos</Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {articles.map((a) => (
-              <Link key={a.title} to="/guias" className="group block rounded-lg overflow-hidden border border-border bg-card hover:shadow-md transition">
-                <div className="relative h-36 overflow-hidden">
-                  <img src={a.img} alt={a.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
-                  {a.badge && (
-                    <span className="absolute bottom-2 left-2 bg-red-600 text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">
-                      {a.badge}
-                    </span>
-                  )}
-                </div>
-                <div className="p-3">
-                  <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{a.tag}</p>
-                  <p className="font-bold text-sm mt-1 leading-snug">{a.title}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+      {/* ===================== ARTICLES ===================== */}
+      <section className="mx-auto max-w-[1280px] px-6 py-14">
+        <div className="mb-5 flex items-end justify-between">
+          <h2 className="text-xl font-semibold">SEO local explicado</h2>
+          <Link to="/guias" className="text-sm font-medium text-primary hover:underline">Más artículos</Link>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {articles.map((a) => (
+            <Link key={a.title} to="/guias" className="group">
+              <div className="relative overflow-hidden rounded-md">
+                <img src={a.img} alt={a.title} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                <span className="absolute left-3 top-3 rounded bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground">{a.tag}</span>
+              </div>
+              <h3 className="mt-3 font-semibold leading-snug group-hover:text-primary">{a.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{a.excerpt}</p>
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* ===================== PODCAST BANNER ===================== */}
-      <section className="bg-secondary">
-        <div className="mx-auto max-w-7xl px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-4 items-stretch">
-            <div className="bg-card border border-border rounded-lg p-6">
-              <p className="text-xs font-semibold uppercase text-accent-foreground/70">En Rankin · Un podcast de SEO local</p>
-              <h3 className="font-extrabold text-lg mt-1 mb-2">Conversaciones honestas sobre cómo crecen los negocios locales en Google.</h3>
-              <div className="flex items-center gap-3 text-muted-foreground text-xs mb-3">
-                <span>Spotify</span><span>·</span><span>Apple Podcasts</span><span>·</span><span>YouTube</span>
-              </div>
-              <Button variant="outline" className="font-semibold">
-                <Headphones className="h-4 w-4 mr-1" /> Escuchar ahora
-              </Button>
-            </div>
-            <div className="relative rounded-lg overflow-hidden min-h-[180px] bg-red-600 text-white flex items-center justify-center">
-              <div className="text-center">
-                <p className="text-xs uppercase tracking-widest">en el</p>
-                <p className="text-4xl font-black tracking-tight">LOOP</p>
-                <p className="text-[10px] mt-1 opacity-80">© Rankin</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== DARK STATS BAND ===================== */}
-      <section className="relative text-white">
-        <div className="absolute inset-0">
-          <img src={agency1} alt="" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-primary/85" />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-12">
-          <h2 className="text-2xl md:text-3xl font-extrabold">Los negocios en Rankin captan un 14% más de clientes locales.*</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            {[
-              { icon: Target, t: "Audiencia local cualificada", d: "El 95% del tráfico proviene de búsquedas con intención de compra cercana." },
-              { icon: TrendingUp, t: "Convierte mejor", d: "Las llamadas y rutas a Google Maps aumentan de media un 180% en 6 meses." },
-              { icon: Sparkles, t: "Más oportunidad", d: "Detectamos huecos de demanda antes de que tu competencia los vea." },
-            ].map((b) => {
-              const Icon = b.icon;
-              return (
-                <div key={b.t}>
-                  <Icon className="h-6 w-6 text-accent mb-2" />
-                  <p className="font-bold">{b.t}</p>
-                  <p className="text-sm text-white/80 mt-1">{b.d}</p>
-                </div>
-              );
-            })}
-          </div>
-          <div className="mt-8">
-            <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-foreground">
-              Soluciones para tu negocio
+      {/* ===================== PODCAST STRIP ===================== */}
+      <section className="mx-auto max-w-[1280px] px-6 pb-14">
+        <div className="grid items-stretch overflow-hidden rounded-md border border-border md:grid-cols-2">
+          <div className="bg-card p-8">
+            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">El podcast</div>
+            <h3 className="mt-1 text-xl font-semibold">En la SERP: conversaciones de SEO local</h3>
+            <p className="mt-2 text-sm text-muted-foreground">Cada quincena hablamos con un profesional que ha levantado un negocio local gracias al SEO.</p>
+            <Button variant="outline" className="mt-4 rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-muted">
+              <Headphones className="h-4 w-4 mr-1" /> Escuchar episodios
             </Button>
           </div>
-          <p className="text-[11px] text-white/60 mt-4">*Datos internos sobre una muestra de 320 negocios locales activos entre 2024-2026.</p>
+          <div className="relative flex items-center justify-center bg-primary p-12 text-primary-foreground">
+            <svg className="absolute inset-0 h-full w-full opacity-20" viewBox="0 0 200 100" preserveAspectRatio="none">
+              <path d="M0,80 L20,60 L40,70 L60,40 L80,55 L100,30 L120,50 L140,25 L160,45 L180,20 L200,35 L200,100 L0,100 Z" fill="white" />
+            </svg>
+            <div className="relative text-right leading-none">
+              <div className="text-xs font-light uppercase tracking-widest opacity-80">en la</div>
+              <div className="text-5xl font-black tracking-tight">SERP</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== CTA STRIP ===================== */}
+      <section className="relative isolate overflow-hidden bg-foreground text-white">
+        <img src={editorialImg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" />
+        <div className="mx-auto grid max-w-[1280px] gap-6 px-6 py-14 md:grid-cols-3">
+          <div className="md:col-span-3">
+            <h3 className="text-2xl font-semibold">Capta más clientes locales que tu competencia</h3>
+          </div>
+          {[
+            { t: "Audiencia cualificada", d: "+95% de visitas con intención local clara." },
+            { t: "Capta prospectos", d: "Leads cualificados gracias a SEO local hipersegmentado." },
+            { t: "Más oportunidades", d: "Aparece antes en Google Maps y en el pack local." },
+          ].map((c) => (
+            <div key={c.t}>
+              <div className="font-semibold">{c.t}</div>
+              <p className="mt-1 text-sm text-white/70">{c.d}</p>
+            </div>
+          ))}
+          <div className="md:col-span-3">
+            <Button asChild className="rounded-md bg-white/15 px-5 py-2.5 text-sm font-medium backdrop-blur hover:bg-white/25">
+              <Link to="/como-funciona">Explorar planes</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* ===================== FAQ ===================== */}
-      <section className="bg-background">
-        <div className="mx-auto max-w-7xl px-4 py-12 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8">
-          <div>
-            <h2 className="text-xl md:text-2xl font-extrabold">SEO local: lo básico que todo negocio debe saber</h2>
-            <p className="text-sm text-muted-foreground mt-2">Preguntas frecuentes de los negocios que llegan a Rankin.</p>
-            <div className="mt-4">
-              <Button asChild variant="outline">
-                <Link to="/guias">Ver todas las guías <FileSearch className="h-4 w-4 ml-1" /></Link>
-              </Button>
-            </div>
-          </div>
-          <div className="border border-border rounded-lg bg-card divide-y divide-border">
-            {faqs.map((f, i) => {
-              const open = openFaq === i;
-              return (
-                <div key={f.q}>
-                  <button
-                    onClick={() => setOpenFaq(open ? null : i)}
-                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
-                  >
-                    <span className="font-semibold text-sm">{f.q}</span>
-                    <ChevronDown className={`h-4 w-4 shrink-0 transition ${open ? "rotate-180" : ""}`} />
-                  </button>
-                  {open && <p className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed">{f.a}</p>}
-                </div>
-              );
-            })}
-          </div>
+      <section className="mx-auto grid max-w-[1280px] gap-10 px-6 py-14 md:grid-cols-[1fr_2fr]">
+        <div>
+          <h3 className="text-xl font-semibold">Fundamentos del SEO local: preguntas clave para autónomos y agencias</h3>
+        </div>
+        <div className="divide-y divide-border rounded-md border border-border bg-card">
+          {faqs.map((f, i) => {
+            const open = openFaq === i;
+            return (
+              <div key={f.q}>
+                <button
+                  onClick={() => setOpenFaq(open ? null : i)}
+                  className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium"
+                >
+                  {f.q}
+                  <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition ${open ? "rotate-180" : ""}`} />
+                </button>
+                {open && <p className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed">{f.a}</p>}
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* ===================== SECTOR SHORTCUTS ===================== */}
-      <section className="bg-background border-t border-border">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-2">
-            {sectors.slice(0, 12).map((s) => (
-              <Link
-                key={s.slug}
-                to="/oportunidades"
-                className="text-sm text-primary hover:underline py-1"
-              >
-                SEO para {s.name.toLowerCase()}
-              </Link>
+      {/* ===================== FOOTER TOP TABS ===================== */}
+      <div className="border-t border-border bg-muted">
+        <div className="mx-auto max-w-[1280px] px-6 pt-8">
+          <div className="flex gap-6 border-b border-border text-sm">
+            {[
+              { id: "oportunidades", label: "Oportunidades" },
+              { id: "sectores", label: "Sectores" },
+              { id: "ciudades", label: "Ciudades" },
+            ].map((t) => {
+              const active = footerTab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setFooterTab(t.id as typeof footerTab)}
+                  className={`-mb-px border-b-2 pb-2 ${active ? "border-primary font-medium text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+                >
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-2 py-6 text-xs text-muted-foreground md:grid-cols-4">
+            {footerLinks[footerTab].map((l) => (
+              l.slug ? (
+                <Link key={l.label} to="/oportunidades/$slug" params={{ slug: l.slug }} className="hover:text-primary">{l.label}</Link>
+              ) : (
+                <Link key={l.label} to="/oportunidades" className="hover:text-primary">{l.label}</Link>
+              )
             ))}
+            <Link to="/oportunidades" className="font-medium text-primary">Ver más →</Link>
           </div>
         </div>
-      </section>
+      </div>
 
       <SiteFooter />
     </div>
   );
 }
-
-// kept (unused vars below avoid "noUnused" if any)
-export const _ = { Briefcase, ChevronRight };
