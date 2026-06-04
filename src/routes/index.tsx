@@ -12,6 +12,7 @@ import { SiteFooter } from "@/components/site/Footer";
 import { sectors } from "@/data/sectors";
 import { cities } from "@/data/cities";
 import { opportunities } from "@/data/opportunities";
+import { cases } from "@/data/cases";
 import heroOwner from "@/assets/hero-owner.jpg";
 import sectorAbogados1 from "@/assets/sector-abogados-1.jpg";
 import sectorAbogados2 from "@/assets/sector-abogados-2.jpg";
