@@ -150,68 +150,85 @@ function Home() {
             </nav>
           </div>
 
-          <div className="mx-auto max-w-4xl px-4 pt-16 pb-24 md:pt-24 md:pb-32 text-center">
-            <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
-              La plataforma <span className="text-accent">#1</span> de oportunidades SEO local en España
+          <div className="mx-auto max-w-5xl px-4 pt-16 pb-24 md:pt-24 md:pb-32">
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] text-white max-w-4xl">
+              Miles de oportunidades en Google sin cubrir. Encuentra la tuya.
             </h1>
 
-            {/* Search card */}
-            <div className="mt-10 bg-white/95 backdrop-blur rounded-lg shadow-2xl p-3 md:p-4 text-foreground">
-              {/* Hero sector tabs */}
-              <div className="flex items-center justify-center gap-1 md:gap-2 mb-3 overflow-x-auto pb-1">
-                {heroTabs.map((t) => {
-                  const Icon = t.icon;
-                  const active = activeTab === t.id;
-                  return (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => { setActiveTab(t.id); setSectorSlug(t.id); }}
-                      className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md text-[11px] md:text-xs font-semibold shrink-0 transition ${
-                        active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-secondary"
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                      {t.label}
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_auto] gap-2">
-                <label className="flex items-center gap-2 border border-border rounded-md px-3 h-12 bg-background focus-within:border-primary">
-                  <Search className="h-4 w-4 text-muted-foreground" />
-                  <input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Busca tu sector o palabra clave"
-                    className="flex-1 bg-transparent text-sm focus:outline-none"
-                  />
-                </label>
-                <label className="flex items-center gap-2 border border-border rounded-md px-3 h-12 bg-background focus-within:border-primary">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <select
-                    value={citySlug}
-                    onChange={(e) => setCitySlug(e.target.value)}
-                    className="flex-1 bg-transparent text-sm font-semibold focus:outline-none"
-                  >
-                    <option value="">Ciudad</option>
-                    {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                  </select>
-                </label>
-                {canSearch ? (
-                  <Button asChild className="h-12 px-6 bg-accent text-accent-foreground hover:brightness-95 font-bold">
-                    <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>
-                      <Search className="h-4 w-4 mr-1" /> Buscar
-                    </Link>
-                  </Button>
-                ) : (
-                  <Button asChild className="h-12 px-6 bg-accent text-accent-foreground hover:brightness-95 font-bold">
-                    <Link to="/oportunidades">
-                      <Search className="h-4 w-4 mr-1" /> Buscar
-                    </Link>
-                  </Button>
-                )}
-              </div>
+            {/* Pill badge */}
+            <div className="mt-8 inline-flex items-center gap-2 bg-primary text-primary-foreground px-3.5 py-1.5 rounded-full text-xs md:text-sm font-semibold">
+              <Compass className="h-3.5 w-3.5" />
+              Oportunidades en Google
+              <ChevronDown className="h-3.5 w-3.5" />
+            </div>
+
+            {/* Search row — 4 fields */}
+            <div className="mt-3 grid grid-cols-1 md:grid-cols-[1.1fr_1.1fr_1.1fr_0.9fr_auto] gap-2">
+              <label className="flex flex-col justify-center bg-white rounded-md px-4 h-16 text-foreground border border-white/10">
+                <span className="text-[11px] text-muted-foreground font-medium">Sector</span>
+                <select
+                  value={sectorSlug}
+                  onChange={(e) => setSectorSlug(e.target.value)}
+                  className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5"
+                >
+                  <option value="">Selecciona industria</option>
+                  {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+                </select>
+              </label>
+              <label className="flex flex-col justify-center bg-white rounded-md px-4 h-16 text-foreground border border-white/10">
+                <span className="text-[11px] text-muted-foreground font-medium">Ciudad</span>
+                <select
+                  value={citySlug}
+                  onChange={(e) => setCitySlug(e.target.value)}
+                  className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5"
+                >
+                  <option value="">Selecciona ciudad</option>
+                  {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
+                </select>
+              </label>
+              <label className="flex flex-col justify-center bg-white rounded-md px-4 h-16 text-foreground border border-white/10">
+                <span className="text-[11px] text-muted-foreground font-medium">Zona / barrios</span>
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Todos los distritos"
+                  className="bg-transparent text-sm font-semibold focus:outline-none placeholder:text-foreground/70"
+                />
+              </label>
+              <label className="flex flex-col justify-center bg-white rounded-md px-4 h-16 text-foreground border border-white/10">
+                <span className="text-[11px] text-muted-foreground font-medium">Volumen mínimo</span>
+                <select defaultValue="500" className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5">
+                  <option value="100">100 búsq/mes</option>
+                  <option value="500">500 búsq/mes</option>
+                  <option value="1000">1.000 búsq/mes</option>
+                  <option value="5000">5.000 búsq/mes</option>
+                </select>
+              </label>
+              {canSearch ? (
+                <Button asChild className="h-16 px-8 bg-primary text-primary-foreground hover:brightness-110 font-bold text-base">
+                  <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>
+                    Buscar
+                  </Link>
+                </Button>
+              ) : (
+                <Button asChild className="h-16 px-8 bg-primary text-primary-foreground hover:brightness-110 font-bold text-base">
+                  <Link to="/oportunidades">
+                    Buscar
+                  </Link>
+                </Button>
+              )}
+            </div>
+
+            {/* Trust signals */}
+            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-white/90 text-sm">
+              <label className="inline-flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" defaultChecked className="h-4 w-4 accent-primary rounded" />
+                Datos de Google KeywordPlanner
+              </label>
+              <label className="inline-flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" defaultChecked className="h-4 w-4 accent-primary rounded" />
+                Datos de Google Trends
+              </label>
             </div>
           </div>
         </div>
