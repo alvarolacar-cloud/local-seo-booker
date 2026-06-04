@@ -117,8 +117,8 @@ function Home() {
           </div>
 
 
-          <h1 className="font-serif text-4xl md:text-6xl leading-[1.05] tracking-tight max-w-4xl">
-            Miles de oportunidades en Google <em className="text-accent not-italic font-serif">sin cubrir</em>. Encuentra la tuya.
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl">
+            Miles de oportunidades en Google sin cubrir. Encuentra la tuya.
           </h1>
 
           {/* Buscador grande */}
@@ -237,7 +237,7 @@ function Home() {
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/10" />
             <div className="relative h-full flex flex-col justify-center p-6 md:p-10 max-w-xl">
-              <h2 className="font-serif text-white text-4xl md:text-5xl leading-tight">
+              <h2 className="text-white text-3xl md:text-4xl font-extrabold leading-tight">
                 Así trabajamos contigo<br />paso a paso
               </h2>
               <p className="text-white/85 mt-3 text-sm md:text-base">
