@@ -151,10 +151,13 @@ function Home() {
                   </div>
                   <Button asChild className="h-auto rounded-xl bg-accent px-8 text-accent-foreground hover:brightness-110 font-bold">
                     {canSearch
-                      ? <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>Buscar</Link>
-                      : <Link to="/oportunidades">Buscar</Link>}
+                      ? <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>Analizar mi negocio</Link>
+                      : <Link to="/oportunidades">Analizar mi negocio</Link>}
                   </Button>
                 </div>
+                <p className="px-3 pt-2 pb-1 text-[11px] text-white/55">
+                  Miramos competencia, búsquedas y CPC de tu zona. Si no hay oportunidad, te lo decimos.
+                </p>
               </div>
 
               {/* Chips */}
