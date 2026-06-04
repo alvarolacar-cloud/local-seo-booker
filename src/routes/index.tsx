@@ -141,31 +141,6 @@ function Home() {
         <img src={cityMadrid} alt="Ciudad española al atardecer" className="absolute inset-0 -z-10 h-full w-full object-cover" />
         <div className="absolute inset-0 -z-10 bg-foreground/55" />
 
-        {/* nav chips */}
-        <div className="mx-auto max-w-7xl px-6 pt-6">
-          <nav className="flex flex-wrap items-center gap-2">
-            {navItems.map((t) => {
-              const Icon = t.icon;
-              return (
-                <Link
-                  key={t.id}
-                  to={t.to}
-                  activeOptions={{ exact: t.to === "/" }}
-                  className="relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/30 text-white hover:bg-white/10 text-xs md:text-sm font-semibold transition"
-                  activeProps={{ className: "!bg-[#0066ff] !border-[#0066ff]" }}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                  {t.label}
-                  {t.novelty && (
-                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 bg-[#e91e63] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
-                      Novedad
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
 
         <div className="mx-auto max-w-[1280px] px-6 pb-20 pt-12 text-center text-white">
           <h1 className="text-balance text-[32px] font-extrabold leading-[1.05]">
