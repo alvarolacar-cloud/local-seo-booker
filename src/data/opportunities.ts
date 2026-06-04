@@ -158,3 +158,78 @@ export const opportunities: Opportunity[] = [
 ];
 
 export const getOpportunity = (slug: string) => opportunities.find((o) => o.slug === slug);
+
+// Resolves the slug into sector+city slug parts.
+export function parseOpportunitySlug(slug: string): { sectorSlug: string; citySlug: string } | undefined {
+  const dash = slug.indexOf("-");
+  if (dash < 0) return undefined;
+  return { sectorSlug: slug.slice(0, dash), citySlug: slug.slice(dash + 1) };
+}
+
+
+// Seeded pseudo-random so the same slug always renders the same numbers.
+function seeded(seed: string) {
+  let h = 2166136261;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return () => {
+    h ^= h << 13; h ^= h >>> 17; h ^= h << 5;
+    return ((h >>> 0) % 10000) / 10000;
+  };
+}
+
+export function buildSyntheticOpportunity(params: {
+  sectorSlug: string; citySlug: string;
+  sectorName: string; cityName: string;
+  sectorMonthlySearches: number;
+  keyword: string;
+}): Opportunity {
+  const { sectorSlug, citySlug, sectorName, cityName, sectorMonthlySearches, keyword } = params;
+  const slug = `${sectorSlug}-${citySlug}`;
+  const rnd = seeded(slug);
+
+  // City weight (bigger cities get more share of sector demand)
+  const cityWeight: Record<string, number> = {
+    madrid: 0.42, barcelona: 0.32, valencia: 0.14, sevilla: 0.11, malaga: 0.10, bilbao: 0.08,
+  };
+  const w = cityWeight[citySlug] ?? 0.07;
+  const searches = Math.max(400, Math.round(sectorMonthlySearches * w * (0.85 + rnd() * 0.3)));
+
+  const cpc = +(1 + rnd() * 5).toFixed(1);
+  const competition: "Baja" | "Media" | "Alta" = searches > 8000 ? "Alta" : searches > 3000 ? "Media" : "Baja";
+  const score = Math.round(60 + rnd() * 35);
+
+  const trend = months.map((m, i) => ({
+    month: m,
+    value: Math.round(searches * (0.7 + i * 0.03) * (0.85 + rnd() * 0.3) / 12 * 12),
+  }));
+
+  const districtPool = [
+    "Centro", "Norte", "Sur", "Este", "Oeste", "Casco Antiguo", "Ensanche", "Zona Universitaria",
+  ];
+  const districts = districtPool.slice(0, 5).map((name) => ({
+    name, potential: Math.round(55 + rnd() * 40),
+  }));
+
+  const base = keyword.replace(/\[ciudad\]/gi, cityName.toLowerCase()).trim();
+  const variants = [
+    base,
+    `${base} barato`,
+    `${base} urgente`,
+    `${base} cerca de mí`,
+    `mejor ${base}`,
+  ];
+  const topKeywords = variants.map((kw, i) => ({
+    kw: kw.includes(cityName.toLowerCase()) ? kw : `${kw} ${cityName.toLowerCase()}`,
+    volume: Math.max(120, Math.round(searches * (0.32 - i * 0.05) * (0.7 + rnd() * 0.6))),
+  }));
+
+  return {
+    slug, sectorSlug, citySlug, sectorName, cityName,
+    searches, cpc, competition, score,
+    trend, districts, topKeywords,
+    topServices: ["Servicio principal", "Atención urgente", "Presupuestos sin compromiso", "Cobertura local"],
+  };
+}

@@ -11,7 +11,9 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 import { SiteHeader } from "@/components/site/Header";
 import { NavChips } from "@/components/site/NavChips";
 import { SiteFooter } from "@/components/site/Footer";
-import { getOpportunity, type Opportunity } from "@/data/opportunities";
+import { getOpportunity, parseOpportunitySlug, buildSyntheticOpportunity, type Opportunity } from "@/data/opportunities";
+import { getSector } from "@/data/sectors";
+import { getCity } from "@/data/cities";
 import { cases } from "@/data/cases";
 import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { useMemo, useState } from "react";
@@ -44,9 +46,22 @@ const conversionBySector: Record<string, number> = {
 
 export const Route = createFileRoute("/oportunidades/$slug")({
   loader: ({ params }) => {
-    const opp = getOpportunity(params.slug);
-    if (!opp) throw notFound();
-    return { opp: opp! };
+    const existing = getOpportunity(params.slug);
+    if (existing) return { opp: existing };
+    const parsed = parseOpportunitySlug(params.slug);
+    if (!parsed) throw notFound();
+    const sector = getSector(parsed.sectorSlug);
+    const city = getCity(parsed.citySlug);
+    if (!sector || !city) throw notFound();
+    const opp = buildSyntheticOpportunity({
+      sectorSlug: sector.slug,
+      citySlug: city.slug,
+      sectorName: sector.name,
+      cityName: city.name,
+      sectorMonthlySearches: sector.monthlySearches,
+      keyword: sector.keyword,
+    });
+    return { opp };
   },
   head: ({ loaderData }) => {
     const o = loaderData?.opp;
