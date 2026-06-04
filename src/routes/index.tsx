@@ -331,7 +331,7 @@ function Home() {
       {/* Sección extra de cards — 4 barrios destacados (ÚNICA adición) */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 py-10">
-          <h2 className="font-serif text-3xl md:text-4xl mb-1">Algunos sectores con oportunidades en Google</h2>
+          <h2 className="text-2xl font-extrabold mb-1">Algunos sectores con oportunidades en Google</h2>
           <p className="text-sm text-muted-foreground mb-6">Búsquedas reales que nadie está cubriendo bien en Google Maps.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {opportunities.slice(0, 4).map((o) => {
@@ -411,7 +411,7 @@ function Home() {
       {/* FAQ en 2 columnas */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 py-10">
-          <h2 className="font-serif text-3xl md:text-4xl mb-6">Trabajar con Rankin</h2>
+          <h2 className="text-2xl font-extrabold mb-6">Trabajar con Rankin</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-1">
             {faqs.map((f, i) => {
               const open = openFaq === i;
@@ -435,7 +435,7 @@ function Home() {
       {/* Explora por ciudad */}
       <section className="bg-background">
         <div className="mx-auto max-w-7xl px-4 pb-16">
-          <h2 className="font-serif text-3xl md:text-4xl mb-1">Explora oportunidades en tu sector</h2>
+          <h2 className="text-2xl font-extrabold mb-1">Explora oportunidades en tu sector</h2>
           <p className="text-sm text-muted-foreground mb-5">Oportunidades activas por ciudad en los sectores con más demanda.</p>
           <div className="flex flex-wrap gap-2 mb-6">
             {sectorTabsList.map((c) => {
