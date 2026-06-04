@@ -162,56 +162,58 @@ function Home() {
               <ChevronDown className="h-3.5 w-3.5" />
             </div>
 
-            {/* Search row — 4 fields */}
-            <div className="mt-3 grid grid-cols-1 md:grid-cols-[1.1fr_1.1fr_1.1fr_0.9fr_auto] gap-2">
-              <label className="flex flex-col justify-center bg-white rounded-md px-4 h-16 text-foreground border border-white/10">
-                <span className="text-[11px] text-muted-foreground font-medium">Sector</span>
-                <select
-                  value={sectorSlug}
-                  onChange={(e) => setSectorSlug(e.target.value)}
-                  className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5"
-                >
-                  <option value="">Selecciona industria</option>
-                  {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
-                </select>
-              </label>
-              <label className="flex flex-col justify-center bg-white rounded-md px-4 h-16 text-foreground border border-white/10">
-                <span className="text-[11px] text-muted-foreground font-medium">Ciudad</span>
-                <select
-                  value={citySlug}
-                  onChange={(e) => setCitySlug(e.target.value)}
-                  className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5"
-                >
-                  <option value="">Selecciona ciudad</option>
-                  {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                </select>
-              </label>
-              <label className="flex flex-col justify-center bg-white rounded-md px-4 h-16 text-foreground border border-white/10">
-                <span className="text-[11px] text-muted-foreground font-medium">Zona / barrios</span>
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Todos los distritos"
-                  className="bg-transparent text-sm font-semibold focus:outline-none placeholder:text-foreground/70"
-                />
-              </label>
-              <label className="flex flex-col justify-center bg-white rounded-md px-4 h-16 text-foreground border border-white/10">
-                <span className="text-[11px] text-muted-foreground font-medium">Volumen mínimo</span>
-                <select defaultValue="500" className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5">
-                  <option value="100">100 búsq/mes</option>
-                  <option value="500">500 búsq/mes</option>
-                  <option value="1000">1.000 búsq/mes</option>
-                  <option value="5000">5.000 búsq/mes</option>
-                </select>
-              </label>
+            {/* Search row — Skyscanner-style joined fields */}
+            <div className="mt-3 flex flex-col md:flex-row md:items-stretch gap-2 md:gap-1">
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-[2px] md:gap-0 bg-white/20 md:bg-white/10 rounded-md overflow-hidden">
+                <label className="flex flex-col justify-center bg-white px-4 h-16 text-foreground md:rounded-l-md">
+                  <span className="text-[11px] text-muted-foreground font-medium">Sector</span>
+                  <select
+                    value={sectorSlug}
+                    onChange={(e) => setSectorSlug(e.target.value)}
+                    className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5"
+                  >
+                    <option value="">Selecciona industria</option>
+                    {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+                  </select>
+                </label>
+                <label className="flex flex-col justify-center bg-white px-4 h-16 text-foreground md:border-l md:border-border/40">
+                  <span className="text-[11px] text-muted-foreground font-medium">Ciudad</span>
+                  <select
+                    value={citySlug}
+                    onChange={(e) => setCitySlug(e.target.value)}
+                    className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5"
+                  >
+                    <option value="">Selecciona ciudad</option>
+                    {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
+                  </select>
+                </label>
+                <label className="flex flex-col justify-center bg-white px-4 h-16 text-foreground md:border-l md:border-border/40">
+                  <span className="text-[11px] text-muted-foreground font-medium">Zona / barrios</span>
+                  <input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Todos los distritos"
+                    className="bg-transparent text-sm font-semibold focus:outline-none placeholder:text-foreground/70"
+                  />
+                </label>
+                <label className="flex flex-col justify-center bg-white px-4 h-16 text-foreground md:border-l md:border-border/40 md:rounded-r-md">
+                  <span className="text-[11px] text-muted-foreground font-medium">Volumen mínimo</span>
+                  <select defaultValue="500" className="bg-transparent text-sm font-semibold focus:outline-none -ml-0.5">
+                    <option value="100">100 búsq/mes</option>
+                    <option value="500">500 búsq/mes</option>
+                    <option value="1000">1.000 búsq/mes</option>
+                    <option value="5000">5.000 búsq/mes</option>
+                  </select>
+                </label>
+              </div>
               {canSearch ? (
-                <Button asChild className="h-16 px-8 bg-primary text-primary-foreground hover:brightness-110 font-bold text-base">
+                <Button asChild className="h-16 px-8 rounded-md bg-[#0066ff] text-white hover:brightness-110 font-bold text-base">
                   <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>
                     Buscar
                   </Link>
                 </Button>
               ) : (
-                <Button asChild className="h-16 px-8 bg-primary text-primary-foreground hover:brightness-110 font-bold text-base">
+                <Button asChild className="h-16 px-8 rounded-md bg-[#0066ff] text-white hover:brightness-110 font-bold text-base">
                   <Link to="/oportunidades">
                     Buscar
                   </Link>
@@ -219,17 +221,18 @@ function Home() {
               )}
             </div>
 
-            {/* Trust signals */}
-            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-white/90 text-sm">
+            {/* Trust signals — Skyscanner-style checkboxes */}
+            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-white text-sm font-semibold">
               <label className="inline-flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" defaultChecked className="h-4 w-4 accent-primary rounded" />
+                <input type="checkbox" defaultChecked className="h-4 w-4 accent-[#0066ff] rounded-sm" />
                 Datos de Google KeywordPlanner
               </label>
               <label className="inline-flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" defaultChecked className="h-4 w-4 accent-primary rounded" />
+                <input type="checkbox" defaultChecked className="h-4 w-4 accent-[#0066ff] rounded-sm" />
                 Datos de Google Trends
               </label>
             </div>
+
           </div>
         </div>
       </section>
