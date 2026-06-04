@@ -98,12 +98,8 @@
   --sidebar-border: oklch(0.9 0.01 250);
   --sidebar-ring: oklch(0.32 0.14 255);
 
-  --brand-deep: oklch(0.13 0.05 258);
-  --brand-gold: oklch(0.74 0.13 78);
+  --brand-deep: oklch(0.25 0.12 258);
   --shadow-card: 0 2px 8px oklch(0.18 0.02 250 / 0.08);
-  --shadow-premium: 0 20px 60px -20px oklch(0.17 0.06 258 / 0.35);
-  --font-serif: "Instrument Serif", "Times New Roman", serif;
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 .dark {
@@ -149,14 +145,5 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .font-serif {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.01em;
   }
 }
