@@ -12,6 +12,7 @@ import { SiteFooter } from "@/components/site/Footer";
 import { sectors } from "@/data/sectors";
 import { cities } from "@/data/cities";
 import { opportunities } from "@/data/opportunities";
+import heroOwner from "@/assets/hero-owner.jpg";
 import sectorAbogados1 from "@/assets/sector-abogados-1.jpg";
 import sectorAbogados2 from "@/assets/sector-abogados-2.jpg";
 import cityMadrid from "@/assets/city-madrid.jpg";
@@ -89,10 +90,45 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* HERO azul marino — Skyscanner clone */}
+      {/* HERO photo full-bleed — estilo Flippa */}
+      <section className="relative isolate text-white overflow-hidden">
+        <img
+          src={heroOwner}
+          alt="Dueña de un negocio local en su tienda"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/75 to-primary/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent" />
+
+        <div className="relative">
+          <SiteHeader variant="transparent" />
+          <div className="mx-auto max-w-7xl px-4 pt-12 pb-20 md:pt-20 md:pb-28">
+            <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight max-w-3xl">
+              Negocios locales<br />que merecen aparecer los primeros.
+            </h1>
+            <p className="mt-5 text-base md:text-lg text-white/85 max-w-xl leading-relaxed">
+              Rankin detecta los huecos de Google donde tu sector tiene demanda real y la competencia está floja. Informes de oportunidad para negocios locales.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button asChild className="h-12 px-6 bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-base shadow-lg">
+                <Link to="/oportunidades">Ver oportunidades</Link>
+              </Button>
+              <Button asChild variant="outline" className="h-12 px-6 border-white/50 text-white hover:bg-white/10 hover:text-white bg-transparent font-semibold">
+                <Link to="/como-funciona">Cómo funciona</Link>
+              </Button>
+            </div>
+            <p className="mt-8 text-[11px] uppercase tracking-[0.2em] text-white/60">
+              Datos de Google Keyword Planner · Search Console · Google Trends
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Buscador — banda navy */}
       <section className="bg-primary text-primary-foreground">
-        <SiteHeader variant="transparent" />
-        <div className="mx-auto max-w-7xl px-4 pt-6 pb-10 md:pt-10">
+        <div className="mx-auto max-w-7xl px-4 pt-8 pb-10">
           {/* Tabs categorías = navegación principal */}
           <div className="flex flex-wrap items-center gap-2 mb-6">
             {navItems.map((t) => {
@@ -116,10 +152,11 @@ function Home() {
             })}
           </div>
 
+          <h2 className="text-2xl md:text-3xl font-extrabold leading-tight max-w-3xl mb-1">
+            Encuentra tu oportunidad en Google
+          </h2>
+          <p className="text-sm text-white/70">Sector + ciudad. Te devolvemos el informe con búsquedas, competencia y plan.</p>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight max-w-4xl">
-            Miles de oportunidades en Google sin cubrir. Encuentra la tuya.
-          </h1>
 
           {/* Buscador grande */}
           <div className="mt-6">
