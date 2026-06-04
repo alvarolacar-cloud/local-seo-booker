@@ -125,7 +125,7 @@ function Home() {
       <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
         <div className="mx-auto max-w-[1280px] px-6 pt-16 pb-32 text-center">
           <h1 className="text-balance text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight">
-            <span className="text-accent">Oportunidades</span> de SEO local sin cubrir
+            Oportunidades en Google para tu Empresa
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-base md:text-lg text-primary-foreground/80">
             Datos reales de más de 170 sectores y 150 ciudades en España.
