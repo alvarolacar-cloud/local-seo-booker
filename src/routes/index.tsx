@@ -8,6 +8,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site/Footer";
+import { SiteHeader } from "@/components/site/Header";
 import { sectors } from "@/data/sectors";
 import { cities } from "@/data/cities";
 import { opportunities } from "@/data/opportunities";
@@ -118,23 +119,7 @@ function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* ===================== TOP BAR ===================== */}
-      <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-6 text-sm">
-          <Link to="/" className="flex items-center gap-2 font-bold tracking-tight">
-            <span className="text-xl">Rankin<span className="text-accent">.</span></span>
-          </Link>
-          <nav className="hidden items-center gap-6 text-white/90 md:flex">
-            <Link to="/oportunidades" className="hover:text-white">Oportunidades</Link>
-            <Link to="/casos-exito" className="hover:text-white">Casos de éxito</Link>
-            <Link to="/como-funciona" className="hover:text-white">Cómo funciona</Link>
-            <Link to="/guias" className="hover:text-white">Guías</Link>
-          </nav>
-          <div className="flex items-center gap-5 text-white/90">
-            <a href="#" className="hover:text-white">Iniciar sesión</a>
-            <a href="mailto:hola@rankin.es" className="hover:text-white">Contacto</a>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* ===================== HERO ===================== */}
       <section className="relative isolate overflow-hidden">
