@@ -580,11 +580,32 @@ function Home() {
           </div>
         </div>
       </section>
-
-
-
+      {/* CTA FINAL — banda navy ancha estilo Flippa footer-cta */}
+      <section className="bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-7xl px-4 py-16 md:py-20 text-center">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-accent font-bold mb-3">Empieza por tu sector</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold leading-[1.05] tracking-tight max-w-3xl mx-auto">
+            Tu próximo cliente te está buscando en Google ahora mismo.
+          </h2>
+          <p className="text-white/75 mt-5 max-w-xl mx-auto text-sm md:text-base">
+            Descubre cuántas búsquedas hay sin cubrir en tu ciudad y qué necesitas para llevarte la mayoría.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3 justify-center">
+            <Button asChild className="h-12 px-7 bg-accent text-accent-foreground hover:bg-accent/90 font-bold text-base shadow-lg">
+              <Link to="/oportunidades">Ver oportunidades en mi sector</Link>
+            </Button>
+            <Button asChild variant="outline" className="h-12 px-7 border-white/40 text-white hover:bg-white/10 hover:text-white bg-transparent font-semibold">
+              <Link to="/como-funciona">Cómo funciona</Link>
+            </Button>
+          </div>
+          <p className="mt-8 text-[11px] uppercase tracking-[0.2em] text-white/40">
+            Sin permanencia · Informe en 48 h · Datos de Google
+          </p>
+        </div>
+      </section>
 
       <SiteFooter />
+
     </div>
   );
 }
