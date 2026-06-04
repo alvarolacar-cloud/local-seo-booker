@@ -517,8 +517,7 @@ function Home() {
             {sectors.slice(0, 12).map((s) => (
               <Link
                 key={s.slug}
-                to="/sectores/$sector"
-                params={{ sector: s.slug }}
+                to="/oportunidades"
                 className="text-sm text-primary hover:underline py-1"
               >
                 SEO para {s.name.toLowerCase()}
