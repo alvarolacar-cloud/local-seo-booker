@@ -49,8 +49,15 @@ function compBadge(c: "Baja" | "Media" | "Alta") {
 }
 
 function OportunidadesIndex() {
+  const navigate = useNavigate();
   const [sectorSlug, setSectorSlug] = useState<string>("");
   const [citySlug, setCitySlug] = useState<string>("");
+
+  const canSearch = Boolean(sectorSlug && citySlug);
+  const handleSearch = () => {
+    if (!canSearch) return;
+    navigate({ to: "/oportunidades/$slug", params: { slug: `${sectorSlug}-${citySlug}` } });
+  };
 
   const featuredOpps = opportunities.slice(0, 6);
   const featuredCases = cases.slice(0, 4);
