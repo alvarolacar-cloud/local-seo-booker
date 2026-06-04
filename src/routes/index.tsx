@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
-  Search, MapPin, Compass, BookOpen, Trophy, Route as RouteIcon, Home as HomeIcon,
+  Search, MapPin,
   ChevronDown, ChevronRight, ChevronLeft, Heart, Wrench, Stethoscope, Scale,
   Scissors, UtensilsCrossed, Hammer, Calculator, Users, Headphones, Play,
 } from "lucide-react";
