@@ -366,85 +366,149 @@ function Home() {
 
 
 
-      {/* Sección extra de cards — 4 barrios destacados (ÚNICA adición) */}
-      <section className="bg-background">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <h2 className="text-2xl font-extrabold mb-1">Algunos sectores con oportunidades en Google</h2>
-          <p className="text-sm text-muted-foreground mb-6">Búsquedas reales que nadie está cubriendo bien en Google Maps.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {opportunities.slice(0, 4).map((o) => {
-              const img = sectorImageMap[o.sectorSlug] ?? cityImageMap[o.citySlug];
-              return (
-                <Link
-                  key={o.slug}
-                  to="/oportunidades/$slug"
-                  params={{ slug: o.slug }}
-                  className="group block rounded-lg overflow-hidden border border-border bg-card hover:shadow-lg transition"
-                >
-                  <div className="relative h-40 overflow-hidden">
-                    {img && (
-                      <img src={img} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                    <div className="absolute bottom-3 left-3 text-white">
-                      <p className="text-[11px] uppercase tracking-wide opacity-80">{o.cityName}</p>
-                      <p className="font-bold text-lg leading-tight">{o.sectorName}</p>
-                    </div>
-                    <span className="absolute top-3 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-0.5 rounded">
-                      {o.sectorName.toLowerCase()} en {o.cityName.toLowerCase()}
-                    </span>
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold">{o.searches.toLocaleString("es-ES")} búsq/mes</span>
-                      <span className="text-muted-foreground">Comp. {o.competition.toLowerCase()}</span>
-                    </div>
-                    <p className="text-sm font-semibold text-primary mt-3 flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Ver informe <ChevronRight className="h-4 w-4" />
-                    </p>
-                  </div>
-                </Link>
-              );
-            })}
+      {/* LIVE OPPORTUNITIES — tabla estilo Flippa "Live deals" */}
+      <section className="bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-7xl px-4 py-14">
+          <div className="flex items-end justify-between flex-wrap gap-4 mb-6">
+            <div>
+              <p className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-accent font-bold mb-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" /> Live · Actualizado hoy
+              </p>
+              <h2 className="text-3xl md:text-4xl font-extrabold leading-tight">Oportunidades en directo</h2>
+              <p className="text-sm text-white/70 mt-1 max-w-xl">Sectores y ciudades con búsquedas reales que la competencia no está cubriendo. Datos de Google, actualizados cada semana.</p>
+            </div>
+            <Button asChild variant="outline" className="border-white/40 text-white hover:bg-white/10 hover:text-white bg-transparent">
+              <Link to="/oportunidades">Ver todas <ChevronRight className="h-4 w-4" /></Link>
+            </Button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-            {opportunities.slice(4, 8).map((o) => {
-              const img = sectorImageMap[o.sectorSlug] ?? cityImageMap[o.citySlug];
+
+          <div className="rounded-lg border border-white/10 overflow-hidden bg-white/[0.03] backdrop-blur">
+            <div className="hidden md:grid grid-cols-[1.4fr_1fr_0.9fr_0.7fr_0.9fr_1.1fr_0.6fr] gap-4 px-5 py-3 text-[11px] uppercase tracking-wider text-white/50 font-semibold border-b border-white/10">
+              <span>Sector</span>
+              <span>Ciudad</span>
+              <span className="text-right">Búsq./mes</span>
+              <span className="text-right">CPC</span>
+              <span>Competencia</span>
+              <span>Score</span>
+              <span></span>
+            </div>
+            {opportunities.slice(0, 8).map((o) => {
+              const compColor = o.competition === "Baja"
+                ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+                : o.competition === "Media"
+                ? "bg-amber-500/15 text-amber-300 border-amber-500/30"
+                : "bg-rose-500/15 text-rose-300 border-rose-500/30";
               return (
                 <Link
                   key={o.slug}
                   to="/oportunidades/$slug"
                   params={{ slug: o.slug }}
-                  className="group block rounded-lg overflow-hidden border border-border bg-card hover:shadow-lg transition"
+                  className="grid grid-cols-2 md:grid-cols-[1.4fr_1fr_0.9fr_0.7fr_0.9fr_1.1fr_0.6fr] gap-4 px-5 py-4 items-center border-b border-white/5 last:border-0 hover:bg-white/[0.04] transition group"
                 >
-                  <div className="relative h-40 overflow-hidden">
-                    {img && (
-                      <img src={img} alt={`${o.sectorName} en ${o.cityName}`} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                    <div className="absolute bottom-3 left-3 text-white">
-                      <p className="text-[11px] uppercase tracking-wide opacity-80">{o.cityName}</p>
-                      <p className="font-bold text-lg leading-tight">{o.sectorName}</p>
-                    </div>
-                    <span className="absolute top-3 right-3 bg-accent text-accent-foreground text-[11px] font-bold px-2 py-0.5 rounded">
-                      {o.sectorName.toLowerCase()} en {o.cityName.toLowerCase()}
+                  <span className="font-bold text-white md:text-base">{o.sectorName}</span>
+                  <span className="text-white/80 text-sm">{o.cityName}</span>
+                  <span className="text-white/90 font-mono text-sm md:text-right">{o.searches.toLocaleString("es-ES")}</span>
+                  <span className="text-white/70 font-mono text-sm md:text-right">{o.cpc.toFixed(1).replace(".", ",")} €</span>
+                  <span>
+                    <span className={`inline-flex items-center text-[11px] font-bold px-2 py-0.5 rounded border ${compColor}`}>
+                      {o.competition}
                     </span>
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold">{o.searches.toLocaleString("es-ES")} búsq/mes</span>
-                      <span className="text-muted-foreground">Comp. {o.competition.toLowerCase()}</span>
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <div className="flex-1 h-1.5 bg-white/10 rounded overflow-hidden max-w-[120px]">
+                      <div className="h-full bg-accent" style={{ width: `${o.score}%` }} />
                     </div>
-                    <p className="text-sm font-semibold text-primary mt-3 flex items-center gap-1 group-hover:gap-2 transition-all">
-                      Ver informe <ChevronRight className="h-4 w-4" />
-                    </p>
-                  </div>
+                    <span className="font-mono text-xs text-white/90 w-7 text-right">{o.score}</span>
+                  </span>
+                  <span className="text-accent font-semibold text-sm flex items-center gap-1 justify-end group-hover:gap-2 transition-all">
+                    Ver <ChevronRight className="h-4 w-4" />
+                  </span>
                 </Link>
               );
             })}
           </div>
         </div>
       </section>
+
+      {/* DOS CARDS OSCURAS — adaptación "Global brokers powered by AI" */}
+      <section className="bg-background">
+        <div className="mx-auto max-w-7xl px-4 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="relative overflow-hidden rounded-xl bg-primary text-primary-foreground p-8 md:p-10 min-h-[340px] flex flex-col">
+              <span className="text-[11px] uppercase tracking-[0.2em] text-accent font-bold mb-3">01 · Datos</span>
+              <h3 className="text-2xl md:text-3xl font-extrabold leading-tight mb-3">Datos reales de Google, no estimaciones.</h3>
+              <p className="text-white/75 text-sm md:text-base leading-relaxed mb-6 max-w-md">
+                Cruzamos Google Search Console, Keyword Planner, Trends y Business Profile para detectar qué busca la gente cerca de ti y dónde la competencia falla.
+              </p>
+              <div className="mt-auto flex flex-wrap gap-2">
+                {["Search Console", "Keyword Planner", "Trends", "Business Profile"].map((t) => (
+                  <span key={t} className="text-xs font-semibold px-3 py-1.5 rounded-full bg-white/10 border border-white/15">{t}</span>
+                ))}
+              </div>
+              <div className="absolute -right-12 -bottom-12 w-56 h-56 rounded-full bg-accent/20 blur-3xl" />
+            </div>
+
+            <div className="relative overflow-hidden rounded-xl bg-[var(--brand-deep)] text-white p-8 md:p-10 min-h-[340px] flex flex-col">
+              <span className="text-[11px] uppercase tracking-[0.2em] text-accent font-bold mb-3">02 · Plan</span>
+              <h3 className="text-2xl md:text-3xl font-extrabold leading-tight mb-3">Un plan SEO accionable, no un PDF de 80 páginas.</h3>
+              <p className="text-white/75 text-sm md:text-base leading-relaxed mb-6 max-w-md">
+                Te entregamos las 5 acciones que mueven la aguja en tu sector y ciudad: qué publicar, qué reseñas pedir, qué barrios atacar y en qué orden.
+              </p>
+              <div className="mt-auto">
+                <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold">
+                  <Link to="/como-funciona">Ver cómo trabajamos <ChevronRight className="h-4 w-4" /></Link>
+                </Button>
+              </div>
+              <div className="absolute -left-12 -top-12 w-56 h-56 rounded-full bg-accent/10 blur-3xl" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PROVEN RESULTS — casos reales estilo Flippa "Proven exits" */}
+      <section className="bg-secondary">
+        <div className="mx-auto max-w-7xl px-4 py-16">
+          <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-bold mb-2">Resultados probados</p>
+              <h2 className="text-3xl md:text-4xl font-extrabold leading-tight">Negocios que ya están arriba.</h2>
+            </div>
+            <Button asChild variant="outline">
+              <Link to="/casos-exito">Todos los casos <ChevronRight className="h-4 w-4" /></Link>
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {cases.slice(0, 3).map((c) => (
+              <Link
+                key={c.slug}
+                to="/casos-exito"
+                className="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl hover:-translate-y-0.5 transition-all"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img src={c.img} alt={c.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-3 left-3 right-3 text-white">
+                    <p className="text-[10px] uppercase tracking-wide opacity-80">{c.sector} · {c.city}</p>
+                    <p className="font-bold text-lg leading-tight">{c.name}</p>
+                  </div>
+                </div>
+                <div className="p-5">
+                  <p className="text-2xl md:text-3xl font-extrabold text-primary leading-none">{c.growth.split(" ")[0]}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{c.growth.split(" ").slice(1).join(" ")}</p>
+                  <p className="text-sm text-foreground mt-4 leading-relaxed italic">"{c.quote}"</p>
+                  <p className="text-xs text-muted-foreground mt-3">— {c.author}</p>
+                  <p className="text-sm font-semibold text-primary mt-4 flex items-center gap-1 group-hover:gap-2 transition-all">
+                    Ver caso <ChevronRight className="h-4 w-4" />
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
 
       {/* FAQ en 2 columnas */}
       <section className="bg-background">
