@@ -7,9 +7,8 @@ const navItems: { label: string; to?: string; href?: string; hasMenu?: boolean; 
   { label: "Ciudades", href: "#ciudades", hasMenu: true },
   { label: "Guías", to: "/guias", badge: "NEW" },
   { label: "Casos de éxito", to: "/casos-exito" },
-  { label: "Cómo funciona", to: "/como-funciona", hasMenu: true },
   { label: "Informes", href: "#informes", hasMenu: true },
-  { label: "Planes", href: "#planes", hasMenu: true, cta: true },
+  { label: "Cómo funciona", to: "/como-funciona", hasMenu: true, cta: true },
 ];
 
 export function SiteHeader({ variant = "solid" }: { variant?: "solid" | "transparent" }) {
