@@ -147,11 +147,21 @@ function Home() {
               />
               <FieldStatic label="Zona / barrios" value="Todos los distritos" />
               <FieldStatic label="Volumen mínimo" value="500 búsq/mes" />
-              <Button asChild className="h-14 md:px-8 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-md text-base font-semibold">
-                <Link to="/oportunidades">
-                  Buscar
-                </Link>
-              </Button>
+              {(() => {
+                const match = sectorSlug && citySlug
+                  ? opportunities.find((o) => o.sectorSlug === sectorSlug && o.citySlug === citySlug)
+                  : null;
+                const btnClass = "h-14 md:px-8 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-md text-base font-semibold";
+                return match ? (
+                  <Button asChild className={btnClass}>
+                    <Link to="/oportunidades/$slug" params={{ slug: match.slug }}>Buscar</Link>
+                  </Button>
+                ) : (
+                  <Button asChild className={btnClass}>
+                    <Link to="/oportunidades">Buscar</Link>
+                  </Button>
+                );
+              })()}
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-1 pt-3">
               <label className="flex items-center gap-2 text-xs text-white/70 cursor-pointer">
