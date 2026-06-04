@@ -148,18 +148,15 @@ function Home() {
               <FieldStatic label="Zona / barrios" value="Todos los distritos" />
               <FieldStatic label="Volumen mínimo" value="500 búsq/mes" />
               {(() => {
-                const match = sectorSlug && citySlug
-                  ? opportunities.find((o) => o.sectorSlug === sectorSlug && o.citySlug === citySlug)
-                  : null;
+                const canSearch = Boolean(sectorSlug && citySlug);
+                const slug = `${sectorSlug}-${citySlug}`;
                 const btnClass = "h-14 md:px-8 bg-[#0066ff] hover:bg-[#0052cc] text-white rounded-md text-base font-semibold";
-                return match ? (
+                return canSearch ? (
                   <Button asChild className={btnClass}>
-                    <Link to="/oportunidades/$slug" params={{ slug: match.slug }}>Buscar</Link>
+                    <Link to="/oportunidades/$slug" params={{ slug }}>Buscar</Link>
                   </Button>
                 ) : (
-                  <Button asChild className={btnClass}>
-                    <Link to="/oportunidades">Buscar</Link>
-                  </Button>
+                  <Button className={btnClass} disabled>Buscar</Button>
                 );
               })()}
             </div>
