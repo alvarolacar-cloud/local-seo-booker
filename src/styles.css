@@ -69,12 +69,12 @@
   --card-foreground: oklch(0.18 0.02 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.02 250);
-  /* Brand: deep Skyscanner-style navy blue */
-  --primary: oklch(0.22 0.08 258);
+  /* Brand: deep editorial navy */
+  --primary: oklch(0.17 0.06 258);
   --primary-foreground: oklch(0.99 0.005 250);
-  /* CTA: amber/yellow accent */
-  --accent: oklch(0.78 0.16 75);
-  --accent-foreground: oklch(0.18 0.02 250);
+  /* CTA: warm gold accent */
+  --accent: oklch(0.74 0.13 78);
+  --accent-foreground: oklch(0.17 0.06 258);
   --secondary: oklch(0.96 0.01 250);
   --secondary-foreground: oklch(0.18 0.02 250);
   --muted: oklch(0.96 0.01 250);
@@ -98,8 +98,12 @@
   --sidebar-border: oklch(0.9 0.01 250);
   --sidebar-ring: oklch(0.32 0.14 255);
 
-  --brand-deep: oklch(0.25 0.12 258);
+  --brand-deep: oklch(0.13 0.05 258);
+  --brand-gold: oklch(0.74 0.13 78);
   --shadow-card: 0 2px 8px oklch(0.18 0.02 250 / 0.08);
+  --shadow-premium: 0 20px 60px -20px oklch(0.17 0.06 258 / 0.35);
+  --font-serif: "Instrument Serif", "Times New Roman", serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 .dark {
@@ -145,5 +149,14 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 }
