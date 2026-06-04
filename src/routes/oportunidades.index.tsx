@@ -6,7 +6,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteHeader } from "@/components/site/Header";
-import { NavChips } from "@/components/site/NavChips";
 import { SiteFooter } from "@/components/site/Footer";
 import { opportunities } from "@/data/opportunities";
 import { cities } from "@/data/cities";
@@ -64,7 +63,6 @@ function OportunidadesIndex() {
 
   return (
     <div className="min-h-screen bg-background">
-      <NavChips />
 
       {/* HERO con buscador (se mantiene) */}
       <section className="relative bg-primary">
