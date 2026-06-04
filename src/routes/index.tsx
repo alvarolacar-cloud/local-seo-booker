@@ -121,86 +121,69 @@ function Home() {
       {/* ===================== TOP BAR ===================== */}
       <SiteHeader />
 
-      {/* ===================== HERO ===================== */}
-      <section className="relative isolate overflow-hidden">
-        <img src={cityMadrid} alt="Ciudad española al atardecer" className="absolute inset-0 -z-10 h-full w-full object-cover" />
-        <div className="absolute inset-0 -z-10 bg-foreground/55" />
-
-
-        <div className="mx-auto max-w-[1280px] px-6 pb-20 pt-12 text-center text-white">
-          <h1 className="text-balance text-[32px] font-extrabold leading-[1.05]">
-            Detectamos oportunidades en Google sin cubrir. Encuentra la tuya.
+      {/* ===================== HERO (Statista-style) ===================== */}
+      <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-[1280px] px-6 pt-16 pb-32 text-center">
+          <h1 className="text-balance text-4xl md:text-6xl font-extrabold leading-[1.05] tracking-tight">
+            <span className="text-accent">Oportunidades</span> de SEO local sin cubrir
           </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-base md:text-lg text-primary-foreground/80">
+            Datos reales de más de 170 sectores y 150 ciudades en España.
+          </p>
 
-          <div className="mx-auto mt-8 max-w-3xl rounded-md bg-white p-0 text-foreground shadow-2xl">
-            {/* Tabs — solo Oportunidades */}
-            <div className="flex items-center justify-center gap-6 border-b border-border px-4 pt-3 text-sm">
-              <button className="-mb-px border-b-2 border-primary pb-3 font-semibold text-foreground">
-                Oportunidades
-              </button>
+          {/* Search bar */}
+          <div className="mx-auto mt-10 flex max-w-3xl items-stretch overflow-hidden rounded-md bg-white shadow-2xl">
+            <div className="flex flex-1 items-center gap-2 px-4">
+              <select
+                value={sectorSlug}
+                onChange={(e) => setSectorSlug(e.target.value)}
+                className="flex-1 min-w-0 bg-transparent py-4 text-sm font-medium text-foreground outline-none"
+              >
+                <option value="">Selecciona sector</option>
+                {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+              </select>
+              <span className="h-6 w-px bg-border" />
+              <select
+                value={citySlug}
+                onChange={(e) => setCitySlug(e.target.value)}
+                className="flex-1 min-w-0 bg-transparent py-4 text-sm font-medium text-foreground outline-none"
+              >
+                <option value="">Selecciona ciudad</option>
+                {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
+              </select>
             </div>
-
-            {/* Sector chips */}
-            <div className="flex flex-wrap items-center justify-center gap-1 px-3 pt-3 text-xs">
-              {sectorChips.map(({ slug, label, Icon }) => (
-                <button
-                  key={slug}
-                  onClick={() => setSectorSlug(slug)}
-                  className={`flex flex-col items-center gap-1 rounded-md px-3 py-2 transition ${
-                    sectorSlug === slug ? "bg-muted text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  }`}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{label}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Search — híbrido: sector + ciudad + botón */}
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-2 p-3">
-              <label className="flex items-center gap-2 rounded-md border border-border px-3 py-2.5">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                <select
-                  value={sectorSlug}
-                  onChange={(e) => setSectorSlug(e.target.value)}
-                  className="flex-1 bg-transparent text-sm font-medium outline-none"
-                >
-                  <option value="">Selecciona sector</option>
-                  {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
-                </select>
-              </label>
-              <label className="flex items-center gap-2 rounded-md border border-border px-3 py-2.5">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                <select
-                  value={citySlug}
-                  onChange={(e) => setCitySlug(e.target.value)}
-                  className="flex-1 bg-transparent text-sm font-medium outline-none"
-                >
-                  <option value="">Selecciona ciudad</option>
-                  {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                </select>
-              </label>
-              <Button asChild className="h-11 px-6 rounded-md bg-[#0066ff] text-white hover:brightness-110 font-bold">
-                {canSearch ? (
-                  <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>
-                    <Search className="h-4 w-4" /> Buscar
-                  </Link>
-                ) : (
-                  <Link to="/oportunidades">
-                    <Search className="h-4 w-4" /> Buscar
-                  </Link>
-                )}
-              </Button>
-            </div>
+            <Button asChild className="h-auto rounded-none rounded-r-md bg-[#0066ff] px-8 text-white hover:brightness-110 font-bold">
+              {canSearch ? (
+                <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>
+                  Buscar <Search className="ml-2 h-4 w-4" />
+                </Link>
+              ) : (
+                <Link to="/oportunidades">
+                  Buscar <Search className="ml-2 h-4 w-4" />
+                </Link>
+              )}
+            </Button>
           </div>
 
-          <div className="mt-3 flex items-center justify-center gap-2 text-xs text-white/80">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-white text-foreground">
-              <Play className="h-3 w-3 fill-current" />
-            </span>
-            Cómo funciona Rankin en 90 segundos
+          {/* Chips: sectores populares */}
+          <div className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-2">
+            {sectorChips.map(({ slug, label }) => (
+              <button
+                key={slug}
+                onClick={() => setSectorSlug(slug)}
+                className="rounded-md bg-white/10 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/20 transition"
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </div>
+
+        {/* Diagonal cut bottom */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-16 bg-background"
+          style={{ clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 50% 0)" }}
+        />
       </section>
 
       {/* ===================== STATS + LOGOS ===================== */}
