@@ -159,23 +159,13 @@ export const opportunities: Opportunity[] = [
 
 export const getOpportunity = (slug: string) => opportunities.find((o) => o.slug === slug);
 
-// Builds a synthetic opportunity for any sector + city combo not present in the curated dataset.
-// Allows /oportunidades/{sector}-{city} to always render an informe.
-export function getOrBuildOpportunity(slug: string): Opportunity | undefined {
-  const existing = getOpportunity(slug);
-  if (existing) return existing;
-
-  // Lazy import-free lookup via slug split
+// Resolves the slug into sector+city slug parts.
+export function parseOpportunitySlug(slug: string): { sectorSlug: string; citySlug: string } | undefined {
   const dash = slug.indexOf("-");
   if (dash < 0) return undefined;
-  const sectorSlug = slug.slice(0, dash);
-  const citySlug = slug.slice(dash + 1);
-
-  // Required minimal info — pulled from data modules via dynamic require pattern would break SSR,
-  // so callers should pass sector/city names. We accept slug only and use deterministic fallbacks.
-  // The route uses helpers from sectors/cities data directly (see loader).
-  return undefined;
+  return { sectorSlug: slug.slice(0, dash), citySlug: slug.slice(dash + 1) };
 }
+
 
 // Seeded pseudo-random so the same slug always renders the same numbers.
 function seeded(seed: string) {
