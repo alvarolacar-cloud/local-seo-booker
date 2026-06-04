@@ -94,10 +94,14 @@ function OportunidadesIndex() {
                 options={cities.map((c) => ({ value: c.slug, label: c.name }))} />
               <Field label="Zona / barrios" value="Todos los distritos" />
               <Field label="Volumen mínimo" value="500 búsq/mes · Cualquiera" />
-              <Button asChild className="h-full md:w-14 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md">
-                <Link to="/oportunidades/$slug" params={{ slug: opportunities[0].slug }}>
-                  <Search className="h-5 w-5" />
-                </Link>
+              <Button
+                type="button"
+                onClick={handleSearch}
+                disabled={!canSearch}
+                className="h-full md:w-14 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md disabled:opacity-60"
+                aria-label="Ver informe de oportunidad"
+              >
+                <Search className="h-5 w-5" />
               </Button>
             </div>
             <label className="flex items-center gap-2 text-xs text-foreground/70 px-3 pt-3 pb-1 cursor-pointer">
