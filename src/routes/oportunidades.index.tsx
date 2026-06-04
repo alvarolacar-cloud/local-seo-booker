@@ -63,6 +63,8 @@ function OportunidadesIndex() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SiteHeader />
+
 
       {/* HERO con buscador (se mantiene) */}
       <section className="relative bg-primary">

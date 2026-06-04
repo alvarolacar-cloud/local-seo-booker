@@ -151,6 +151,8 @@ const services = [
 function ComoFunciona() {
   return (
     <div className="min-h-screen bg-background">
+      <SiteHeader />
+
 
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-7xl px-4 py-12">
