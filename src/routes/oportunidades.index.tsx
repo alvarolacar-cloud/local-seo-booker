@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   MapPin, ArrowRight, Search, Briefcase, ChevronRight, Phone,
   BarChart3, Target, Rocket,
