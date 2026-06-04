@@ -72,10 +72,10 @@ function Home() {
       <div className="bg-accent/15 border-b border-accent/25">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2.5 text-sm">
           <p className="font-medium">
-            Deja de adivinar. Encuentra el hueco con el plan <b>Pro</b>.
+            Solo trabajamos contigo si <b>podemos hacerte subir</b> en Google. Primero los datos.
           </p>
           <Link to="/oportunidades" className="inline-flex items-center gap-1 font-semibold hover:underline shrink-0">
-            Empezar <ArrowRight className="h-3.5 w-3.5" />
+            Pedir análisis <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
       </div>
