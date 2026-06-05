@@ -1,65 +1,51 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  Search, ArrowRight, ArrowUpRight, Check, Wrench, Stethoscope, Scale, Scissors,
-  UtensilsCrossed, Hammer, Zap, HeartPulse, Briefcase, Car, Sparkles, TrendingUp,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, TrendingUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site/Footer";
 import { SiteHeader } from "@/components/site/Header";
 import { sectors } from "@/data/sectors";
 import { cities } from "@/data/cities";
-
-import howPost from "@/assets/service-audit.jpg";
-import howHire from "@/assets/service-content.jpg";
-import howPay from "@/assets/service-gmb.jpg";
+import { opportunities } from "@/data/opportunities";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rankin — Oportunidades en Google para tu Empresa" },
-      { name: "description", content: "Datos reales de Google para detectar huecos de SEO local en tu sector y ciudad. Informes accionables para negocios y agencias." },
-      { property: "og:title", content: "Rankin — Oportunidades en Google" },
-      { property: "og:description", content: "Sector + ciudad + datos reales. Encuentra el hueco." },
+      { title: "Rankin — Te ayudamos a escalar posiciones en Google" },
+      { name: "description", content: "Analizamos tu sector y ciudad, vemos el hueco real de ROI y solo trabajamos contigo si podemos moverte. SEO local con datos reales, no humo." },
+      { property: "og:title", content: "Rankin — Te ayudamos a escalar en Google" },
+      { property: "og:description", content: "Datos reales por sector y ciudad. Solo trabajamos contigo si podemos hacerte subir." },
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
   component: Home,
 });
 
-const sectorCards = [
-  { label: "Fontanería", Icon: Wrench, hint: "+2.4k búsquedas/mes" },
-  { label: "Electricistas", Icon: Zap, hint: "Oportunidad alta" },
-  { label: "Dentistas", Icon: Stethoscope, hint: "CPC competitivo" },
-  { label: "Abogados", Icon: Scale, hint: "+1.2k búsquedas/mes" },
-  { label: "Peluquerías", Icon: Scissors, hint: "Demanda estable" },
-  { label: "Restaurantes", Icon: UtensilsCrossed, hint: "Local intent alta" },
-  { label: "Reformas", Icon: Hammer, hint: "Estacional ↑" },
-  { label: "Talleres", Icon: Car, hint: "Conversión alta" },
-  { label: "Sanidad", Icon: HeartPulse, hint: "Alta intención" },
-  { label: "Profesionales", Icon: Briefcase, hint: "Nicho B2B" },
+const featuredSectors = [
+  { slug: "fontaneros", name: "Fontanería", hint: "+2.4k búsquedas/mes" },
+  { slug: "dentistas", name: "Clínicas dentales", hint: "CPC 4,8€ · alta intención" },
+  { slug: "abogados", name: "Abogados", hint: "+1.2k búsquedas/mes" },
+  { slug: "restaurantes", name: "Restaurantes", hint: "Local intent extrema" },
+  { slug: "peluquerias", name: "Peluquerías", hint: "Competencia floja" },
+  { slug: "talleres", name: "Talleres mecánicos", hint: "Conversión alta" },
+  { slug: "reformas", name: "Reformas", hint: "Ticket alto, ROI claro" },
+  { slug: "electricistas", name: "Electricistas", hint: "Demanda estable" },
 ];
-
-const sectorChips = ["Fontaneros", "Dentistas", "Abogados", "Restaurantes"];
-const partnerLogos = ["Inboundcycle", "SEMrush", "Webpositer", "Aukera", "Human Level", "Internet República"];
 
 const testimonials = [
-  { quote: "Detectamos un nicho de búsquedas que nadie estaba cubriendo y montamos un plan en 2 semanas. En 4 meses ya rankeábamos top 3.", name: "Sandra Ortiz", role: "CEO · Reformas Aurea" },
-  { quote: "Rankin se convirtió en nuestra fuente de verdad para decidir en qué ciudades abrir antes que la competencia.", name: "David Pradas", role: "Director comercial · DentalPro" },
-  { quote: "He trabajado con varias herramientas SEO y ninguna explica tan bien el potencial real por sector y ciudad como Rankin.", name: "Mathieu García", role: "SEO Lead · Agencia Norte" },
-  { quote: "Pasamos de adivinar a tener un mapa claro. Sabemos qué keywords atacar y en qué orden, sin perder presupuesto.", name: "Roger Cabrera", role: "Head of Growth · Talleres Bilbao" },
-  { quote: "El equipo de Rankin entiende el negocio local de verdad. No vende humo, vende datos accionables.", name: "Ana Vila", role: "Fundadora · Clínica Vila" },
-  { quote: "La confianza en Rankin es altísima. Cada informe nos abre 2 o 3 oportunidades que no habíamos visto.", name: "Carlos Pedrero", role: "CMO · Grupo Lares" },
+  { quote: "Detectamos un nicho que nadie cubría. En 4 meses estábamos en top 3.", name: "Sandra Ortiz", role: "CEO · Reformas Aurea" },
+  { quote: "Rankin es nuestra fuente de verdad para decidir en qué ciudades abrir.", name: "David Pradas", role: "Director · DentalPro" },
+  { quote: "Cada informe abre 2 o 3 oportunidades que no habíamos visto.", name: "Carlos Pedrero", role: "CMO · Grupo Lares" },
 ];
 
-const badges = ["Top 50 SEO Tools", "Líder España", "Mejor soporte", "Mayor usabilidad", "Mejor inversión", "Resultados rápidos"];
+const today = new Date().toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+const lead = opportunities.find((o) => o.slug === "dentistas-barcelona") ?? opportunities[0];
 
 function Home() {
   const [sectorSlug, setSectorSlug] = useState("");
   const [citySlug, setCitySlug] = useState("");
   const [audience, setAudience] = useState<"negocio" | "agencia">("negocio");
-  const [howAudience, setHowAudience] = useState<"negocio" | "agencia">("negocio");
 
   const canSearch = Boolean(sectorSlug && citySlug);
   const searchSlug = canSearch ? `${sectorSlug}-${citySlug}` : "";
@@ -68,429 +54,368 @@ function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <SiteHeader />
 
-      {/* ============== PROMO BAR ============== */}
-      <div className="bg-accent/15 border-b border-accent/25">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2.5 text-sm">
-          <p className="font-medium">
-            Solo trabajamos contigo si <b>podemos hacerte subir</b> en Google. Primero los datos.
-          </p>
-          <Link to="/oportunidades" className="inline-flex items-center gap-1 font-semibold hover:underline shrink-0">
-            Pedir análisis <ArrowRight className="h-3.5 w-3.5" />
+      {/* ============== MASTHEAD STRIP ============== */}
+      <div className="border-y border-border bg-background">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          <span>Rankin · Edición {today}</span>
+          <span className="hidden md:inline">Datos reales de Google · sector × ciudad</span>
+          <Link to="/oportunidades" className="text-foreground underline decoration-accent decoration-2 underline-offset-4 hover:text-accent">
+            Pedir análisis
           </Link>
         </div>
       </div>
 
       {/* ============== HERO ============== */}
-      <section className="relative overflow-hidden bg-primary text-primary-foreground">
-        {/* glow */}
-        <div className="pointer-events-none absolute -top-40 left-1/3 h-[600px] w-[600px] rounded-full bg-accent/25 blur-[140px]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.06),transparent_60%)]" />
-
-        <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-24 md:pt-28 md:pb-32">
-          <div className="grid items-center gap-14 lg:grid-cols-12">
-            {/* Left */}
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 pt-16 pb-20 md:pt-24 md:pb-28">
+          <div className="grid gap-16 lg:grid-cols-12">
+            {/* LEFT — editorial column */}
             <div className="lg:col-span-7">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-                </span>
-                <span>Te elegimos por datos · No al revés</span>
+              <div className="mb-8 inline-flex items-center gap-2 border border-foreground/20 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.3em]">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                Elegimos negocios donde sabemos ganar
               </div>
 
-              <h1 className="text-balance text-5xl font-extrabold leading-[1.02] tracking-tight md:text-[64px]">
-                Te ayudamos a escalar
-                <br />
-                posiciones en <span className="bg-gradient-to-r from-accent to-amber-300 bg-clip-text text-transparent">Google</span>.
+              <h1 className="text-balance text-[56px] font-extrabold leading-[0.95] tracking-[-0.03em] md:text-[88px]">
+                Te ayudamos a escalar{" "}
+                <span className="relative whitespace-nowrap text-accent">
+                  posiciones
+                </span>{" "}
+                en Google.
               </h1>
 
-              <p className="mt-6 max-w-xl text-lg text-primary-foreground/80">
+              <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
                 Analizamos tu sector y ciudad, vemos el hueco real de ROI y solo
-                trabajamos contigo si podemos moverte. No vendemos SEO genérico:
-                <span className="text-primary-foreground"> elegimos negocios donde sabemos ganar.</span>
+                trabajamos contigo si podemos moverte.{" "}
+                <span className="text-foreground">
+                  No vendemos SEO genérico: elegimos negocios donde sabemos ganar.
+                </span>
               </p>
 
-              {/* Tabs */}
-              <div className="mt-8 inline-flex rounded-full bg-white/10 p-1 text-sm font-semibold backdrop-blur">
+              {/* Audience tabs */}
+              <div className="mt-10 inline-flex border border-border bg-card p-1">
                 <button
                   onClick={() => setAudience("negocio")}
-                  className={`px-5 py-2 rounded-full transition ${audience === "negocio" ? "bg-white text-primary shadow-sm" : "text-white/75 hover:text-white"}`}
+                  className={`px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest transition ${audience === "negocio" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
                 >
-                  Quiero posicionar mi negocio
+                  Para mi negocio
                 </button>
                 <button
                   onClick={() => setAudience("agencia")}
-                  className={`px-5 py-2 rounded-full transition ${audience === "agencia" ? "bg-white text-primary shadow-sm" : "text-white/75 hover:text-white"}`}
+                  className={`px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest transition ${audience === "agencia" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
                 >
-                  Soy agencia / consultor
+                  Soy agencia
                 </button>
               </div>
 
               {/* Search */}
-              <div className="mt-4 max-w-2xl rounded-2xl border border-white/10 bg-white/[0.06] p-2 backdrop-blur-xl">
-                <div className="flex flex-col items-stretch gap-2 md:flex-row">
-                  <div className="flex flex-1 items-center gap-2 rounded-xl bg-white/95 px-4">
-                    <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <select
-                      value={sectorSlug}
-                      onChange={(e) => setSectorSlug(e.target.value)}
-                      className="min-w-0 flex-1 bg-transparent py-3.5 text-sm font-medium text-foreground outline-none"
-                    >
-                      <option value="">Sector</option>
-                      {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
-                    </select>
-                    <span className="h-5 w-px bg-border" />
-                    <select
-                      value={citySlug}
-                      onChange={(e) => setCitySlug(e.target.value)}
-                      className="min-w-0 flex-1 bg-transparent py-3.5 text-sm font-medium text-foreground outline-none"
-                    >
-                      <option value="">Ciudad</option>
-                      {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                    </select>
-                  </div>
-                  <Button asChild className="h-auto rounded-xl bg-accent px-8 text-accent-foreground hover:brightness-110 font-bold">
-                    {canSearch
-                      ? <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>Analizar mi negocio</Link>
-                      : <Link to="/oportunidades">Analizar mi negocio</Link>}
-                  </Button>
-                </div>
-                <p className="px-3 pt-2 pb-1 text-[11px] text-white/55">
-                  Miramos competencia, búsquedas y CPC de tu zona. Si no hay oportunidad, te lo decimos.
-                </p>
+              <div className="mt-4 flex max-w-2xl flex-col items-stretch gap-0 border border-foreground/20 bg-card md:flex-row">
+                <label className="flex flex-1 flex-col gap-1 border-b border-border px-5 py-3 md:border-b-0 md:border-r">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Sector</span>
+                  <select
+                    value={sectorSlug}
+                    onChange={(e) => setSectorSlug(e.target.value)}
+                    className="bg-transparent text-sm font-semibold text-foreground outline-none"
+                  >
+                    <option value="">Elige sector</option>
+                    {sectors.map((s) => <option key={s.slug} value={s.slug}>{s.name}</option>)}
+                  </select>
+                </label>
+                <label className="flex flex-1 flex-col gap-1 px-5 py-3">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Ciudad</span>
+                  <select
+                    value={citySlug}
+                    onChange={(e) => setCitySlug(e.target.value)}
+                    className="bg-transparent text-sm font-semibold text-foreground outline-none"
+                  >
+                    <option value="">Elige ciudad</option>
+                    {cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
+                  </select>
+                </label>
+                <Button asChild className="h-auto rounded-none bg-primary px-8 text-[11px] font-bold uppercase tracking-widest text-primary-foreground hover:bg-accent hover:text-accent-foreground">
+                  {canSearch
+                    ? <Link to="/oportunidades/$slug" params={{ slug: searchSlug }}>Analizar →</Link>
+                    : <Link to="/oportunidades">Analizar →</Link>}
+                </Button>
               </div>
-
-              {/* Chips */}
-              <div className="mt-5 flex flex-wrap items-center gap-2 text-xs">
-                <span className="font-semibold uppercase tracking-wider text-white/50">Populares:</span>
-                {sectorChips.map((c) => (
-                  <button key={c} className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 font-medium text-white/85 transition hover:border-accent/50 hover:bg-white/10">
-                    {c}
-                  </button>
-                ))}
-              </div>
+              <p className="mt-3 max-w-2xl text-xs text-muted-foreground">
+                Miramos competencia, búsquedas y CPC de tu zona. Si no hay oportunidad, te lo decimos.
+              </p>
             </div>
 
-            {/* Right: dashboard mock */}
-            <div className="relative hidden lg:col-span-5 lg:block">
-              <div className="absolute -inset-6 rounded-[2rem] bg-accent/20 blur-3xl" />
-              <div className="relative rounded-2xl border border-white/10 bg-[oklch(0.22_0.04_265)]/80 p-5 shadow-2xl backdrop-blur-xl">
-                <div className="mb-5 flex items-center justify-between">
-                  <div className="flex gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-red-400/60" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400/60" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/60" />
-                  </div>
-                  <span className="font-mono text-[10px] text-white/40">rankin / dentistas-valencia</span>
-                </div>
-
-                <div className="mb-4 flex items-end justify-between">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-wider text-white/50">Oportunidad detectada</div>
-                    <div className="mt-1 text-3xl font-extrabold">+12.400€<span className="ml-1 text-sm font-semibold text-emerald-400">/mes</span></div>
-                  </div>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-2 py-1 text-[10px] font-bold text-emerald-300">
-                    <TrendingUp className="h-3 w-3" /> +38%
+            {/* RIGHT — featured oportunidad lead story */}
+            <aside className="lg:col-span-5">
+              <div className="border-l border-border lg:pl-10">
+                <div className="mb-4 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
+                  <span>Caso destacado · Nº 12.04</span>
+                  <span className="inline-flex items-center gap-1 text-accent">
+                    <TrendingUp className="h-3 w-3" /> +{Math.round((lead.trend.at(-1)!.value / lead.trend[0].value - 1) * 100)}%
                   </span>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="rounded-lg border border-white/5 bg-white/[0.03] p-3">
-                    <div className="text-[9px] uppercase text-white/40">Volumen</div>
-                    <div className="mt-1 text-sm font-bold">2.9k</div>
-                  </div>
-                  <div className="rounded-lg border border-accent/20 bg-accent/10 p-3">
-                    <div className="text-[9px] uppercase text-accent">Hueco</div>
-                    <div className="mt-1 text-sm font-bold text-accent">Top 4</div>
-                  </div>
-                  <div className="rounded-lg border border-white/5 bg-white/[0.03] p-3">
-                    <div className="text-[9px] uppercase text-white/40">CPC</div>
-                    <div className="mt-1 text-sm font-bold">3,2€</div>
-                  </div>
-                </div>
+                <Link to="/oportunidades/$slug" params={{ slug: lead.slug }} className="group block">
+                  <h2 className="text-3xl font-bold leading-tight tracking-tight transition group-hover:text-accent md:text-4xl">
+                    {lead.sectorName} · {lead.cityName}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {lead.searches.toLocaleString("es-ES")} búsquedas/mes con competencia <b className="text-foreground">{lead.competition.toLowerCase()}</b> y CPC medio de {lead.cpc.toString().replace(".", ",")}€. Hueco real para entrar en top 4 en 90 días.
+                  </p>
+                </Link>
 
-                <div className="mt-3 flex h-32 items-end gap-1.5 rounded-lg border border-white/5 bg-white/[0.02] p-3">
-                  {[30, 45, 38, 60, 52, 75, 68, 88, 72, 95, 82, 100].map((h, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 rounded-t bg-gradient-to-t from-accent/30 to-accent"
-                      style={{ height: `${h}%` }}
+                {/* spec sheet */}
+                <dl className="mt-8 grid grid-cols-3 border-y border-border">
+                  <div className="border-r border-border py-4">
+                    <dt className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Volumen</dt>
+                    <dd className="mt-1 text-2xl font-bold tracking-tight">{(lead.searches / 1000).toFixed(1)}k</dd>
+                  </div>
+                  <div className="border-r border-border py-4 pl-4">
+                    <dt className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Hueco</dt>
+                    <dd className="mt-1 text-2xl font-bold tracking-tight text-accent">Top {Math.max(2, 10 - Math.round(lead.score / 12))}</dd>
+                  </div>
+                  <div className="py-4 pl-4">
+                    <dt className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">CPC</dt>
+                    <dd className="mt-1 text-2xl font-bold tracking-tight">{lead.cpc.toString().replace(".", ",")}€</dd>
+                  </div>
+                </dl>
+
+                {/* sparkline */}
+                <div className="mt-6">
+                  <svg viewBox="0 0 300 80" className="h-20 w-full" preserveAspectRatio="none">
+                    <polyline
+                      fill="none"
+                      stroke="oklch(0.52 0.11 255)"
+                      strokeWidth="1.5"
+                      points={lead.trend
+                        .map((p, i) => {
+                          const max = Math.max(...lead.trend.map((t) => t.value));
+                          const min = Math.min(...lead.trend.map((t) => t.value));
+                          const x = (i / (lead.trend.length - 1)) * 300;
+                          const y = 80 - ((p.value - min) / (max - min || 1)) * 70 - 5;
+                          return `${x},${y}`;
+                        })
+                        .join(" ")}
                     />
-                  ))}
+                  </svg>
+                  <div className="mt-2 flex justify-between text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+                    <span>{lead.trend[0].month}</span>
+                    <span>{lead.trend[6].month}</span>
+                    <span>{lead.trend.at(-1)!.month}</span>
+                  </div>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between text-[10px] text-white/40">
-                  <span>Ene</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
-                </div>
+                <Link
+                  to="/oportunidades/$slug"
+                  params={{ slug: lead.slug }}
+                  className="mt-6 inline-flex items-center gap-2 border-b border-foreground pb-1 text-[11px] font-bold uppercase tracking-widest hover:text-accent hover:border-accent"
+                >
+                  Leer informe completo <ArrowRight className="h-3 w-3" />
+                </Link>
               </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      {/* ============== LOGOS STRIP ============== */}
+      <section className="border-b border-border">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-12 gap-y-3 px-4 py-6 text-[11px] font-bold uppercase tracking-[0.25em] text-muted-foreground">
+          <span className="text-foreground">Confían en nuestros datos →</span>
+          <span>Inboundcycle</span>
+          <span>SEMrush</span>
+          <span>Webpositer</span>
+          <span>Aukera</span>
+          <span>Human Level</span>
+          <span>Internet República</span>
+        </div>
+      </section>
+
+      {/* ============== SECTORES — INDEX TABLE ============== */}
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 py-24">
+          <div className="mb-12 grid gap-8 md:grid-cols-12 md:items-end">
+            <div className="md:col-span-8">
+              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Índice de sectores</p>
+              <h2 className="text-balance text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+                Dónde hay hueco<br />ahora mismo.
+              </h2>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============== LOGOS ============== */}
-      <section className="border-y border-border bg-card/50">
-        <div className="mx-auto max-w-7xl px-4 py-10">
-          <p className="text-center text-[11px] font-bold uppercase tracking-[0.25em] text-muted-foreground">
-            Empresas que confían en nuestros datos
-          </p>
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-x-12 gap-y-5 opacity-60 grayscale">
-            {partnerLogos.map((l) => (
-              <span key={l} className="text-lg font-bold tracking-tight text-foreground/70">{l}</span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============== SECTORES (BENTO) ============== */}
-      <section className="mx-auto max-w-7xl px-4 py-24">
-        <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div className="max-w-2xl">
-            <p className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">Sectores</p>
-            <h2 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
-              Explora oportunidades por sector
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Analizamos más de 50 nichos de mercado para detectar dónde la competencia es más débil.
+            <p className="text-sm leading-relaxed text-muted-foreground md:col-span-4">
+              Analizamos más de 50 nichos. Estos son los que muestran mayor diferencial entre demanda real y oferta competitiva.
             </p>
           </div>
-          <Link to="/oportunidades" className="group inline-flex items-center gap-2 border-b-2 border-accent pb-1 text-sm font-bold">
-            Ver todos los sectores
-            <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-          </Link>
-        </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {sectorCards.map(({ label, Icon, hint }) => (
-            <Link
-              key={label}
-              to="/oportunidades"
-              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-[0_10px_30px_-10px_color-mix(in_oklab,var(--accent)_30%,transparent)]"
-            >
-              <div className="mb-8 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent transition group-hover:bg-accent group-hover:text-accent-foreground">
-                <Icon className="h-5 w-5" />
-              </div>
-              <div className="text-base font-bold">{label}</div>
-              <div className="mt-1 text-xs text-muted-foreground">{hint}</div>
-              <ArrowUpRight className="absolute right-4 top-4 h-4 w-4 text-muted-foreground/30 transition group-hover:text-accent" />
+          <ul className="border-t border-border">
+            {featuredSectors.map((s, i) => (
+              <li key={s.slug} className="border-b border-border">
+                <Link
+                  to="/oportunidades"
+                  className="group grid grid-cols-12 items-center gap-4 py-6 transition hover:bg-card"
+                >
+                  <span className="col-span-1 font-mono text-xs text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="col-span-5 text-xl font-bold tracking-tight transition group-hover:text-accent md:text-2xl">{s.name}</span>
+                  <span className="col-span-5 text-sm text-muted-foreground">{s.hint}</span>
+                  <ArrowUpRight className="col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-10 flex justify-end">
+            <Link to="/oportunidades" className="inline-flex items-center gap-2 border-b border-foreground pb-1 text-[11px] font-bold uppercase tracking-widest hover:text-accent hover:border-accent">
+              Ver el índice completo <ArrowRight className="h-3 w-3" />
             </Link>
-          ))}
+          </div>
         </div>
       </section>
 
       {/* ============== CÓMO FUNCIONA ============== */}
-      <section className="border-t border-border bg-card/40">
+      <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-7xl px-4 py-24">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-            <div className="max-w-xl">
-              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">Proceso</p>
-              <h2 className="text-4xl font-bold tracking-tight md:text-5xl">Cómo funciona</h2>
+          <div className="mb-16 grid gap-8 md:grid-cols-12 md:items-end">
+            <div className="md:col-span-8">
+              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Metodología</p>
+              <h2 className="text-balance text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+                Solo ganamos si tú ganas.
+              </h2>
             </div>
-            <div className="inline-flex rounded-full border border-border bg-background p-1 text-sm font-semibold">
-              <button
-                onClick={() => setHowAudience("negocio")}
-                className={`px-5 py-2 rounded-full transition ${howAudience === "negocio" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
-              >
-                Para negocios
-              </button>
-              <button
-                onClick={() => setHowAudience("agencia")}
-                className={`px-5 py-2 rounded-full transition ${howAudience === "agencia" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
-              >
-                Para agencias
-              </button>
-            </div>
+            <p className="text-sm leading-relaxed text-primary-foreground/70 md:col-span-4">
+              Tres pasos. Sin permanencias, sin discursos. Si los números no te cuadran, no te cobramos.
+            </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <ol className="grid gap-0 border-t border-white/15 md:grid-cols-3">
             {[
-              { step: "01", title: "Analizar tu sector es gratis", desc: "Elige sector y ciudad. Te mostramos volumen, competencia y CPC en segundos.", img: howPost, cta: true },
-              { step: "02", title: "Recibe tu informe accionable", desc: "Detectamos los huecos donde hay demanda real y la competencia está floja.", img: howHire },
-              { step: "03", title: "Posiciona y mide resultados", desc: "Ejecuta el plan paso a paso. Te avisamos cuando aparezcan nuevas oportunidades.", img: howPay },
-            ].map((s) => (
-              <div key={s.step} className="group">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-background">
-                  <img src={s.img} alt="" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-                  <span className="absolute left-4 top-4 rounded-full bg-background/90 px-3 py-1 font-mono text-xs font-bold backdrop-blur">
-                    {s.step}
-                  </span>
-                </div>
-                <h3 className="mt-6 text-xl font-bold">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-                {s.cta && (
-                  <Button asChild variant="ghost" className="mt-4 -ml-3 font-bold text-foreground hover:text-accent">
-                    <Link to="/oportunidades">Hacer análisis <ArrowRight className="ml-1 h-4 w-4" /></Link>
-                  </Button>
-                )}
-              </div>
+              { n: "01", t: "Auditoría de hueco", d: "Eliges sector y ciudad. Te enseñamos volumen, competencia, CPC e intención en segundos. Gratis siempre." },
+              { n: "02", t: "Validación de ROI", d: "Si no vemos retorno claro en 90 días para tu negocio, te lo decimos. No aceptamos el proyecto." },
+              { n: "03", t: "Escalado táctico", d: "Plan ejecutable de contenido, ficha y enlaces. Te avisamos cuando aparezcan nuevas oportunidades." },
+            ].map((s, i) => (
+              <li key={s.n} className={`py-10 ${i < 2 ? "md:border-r" : ""} border-white/15 md:pr-10 ${i > 0 ? "md:pl-10" : ""}`}>
+                <div className="font-mono text-xs font-bold uppercase tracking-widest text-accent">{s.n}</div>
+                <h3 className="mt-6 text-2xl font-bold tracking-tight md:text-3xl">{s.t}</h3>
+                <p className="mt-4 text-sm leading-relaxed text-primary-foreground/70">{s.d}</p>
+              </li>
             ))}
+          </ol>
+
+          <div className="mt-12 flex flex-wrap items-center gap-4">
+            <Button asChild className="h-auto rounded-none bg-accent px-7 py-4 text-[11px] font-bold uppercase tracking-widest text-accent-foreground hover:brightness-110">
+              <Link to="/oportunidades">Hacer mi análisis gratis</Link>
+            </Button>
+            <Link to="/como-funciona" className="text-[11px] font-bold uppercase tracking-widest text-primary-foreground/70 underline-offset-4 hover:text-accent hover:underline">
+              Ver metodología completa →
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ============== POTENCIAL ============== */}
-      <section className="mx-auto max-w-7xl px-4 py-24">
-        <div className="overflow-hidden rounded-3xl border border-border bg-primary text-primary-foreground">
-          <div className="grid items-center gap-10 p-10 md:grid-cols-2 md:p-16">
-            <div>
-              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">Calculadora</p>
-              <h3 className="text-3xl font-bold tracking-tight md:text-4xl">Calcula el potencial<br />de tu sector</h3>
-              <p className="mt-5 max-w-md text-primary-foreground/75">
-                Estimamos búsquedas mensuales, dificultad y retorno aproximado en base a los datos reales de Google de tu sector y ciudad.
-              </p>
-              <div className="mt-7 flex items-stretch overflow-hidden rounded-xl border border-white/10 bg-white/5 p-1.5 backdrop-blur">
-                <input
-                  placeholder="ej: dentistas en Valencia"
-                  className="flex-1 bg-transparent px-4 py-3 text-sm outline-none placeholder:text-white/40"
-                />
-                <Button asChild className="rounded-lg bg-accent px-6 text-accent-foreground hover:brightness-110 font-bold">
-                  <Link to="/oportunidades">Calcular</Link>
-                </Button>
-              </div>
-              <p className="mt-3 text-xs text-white/40">* Basado en el algoritmo de Rankin de dificultad local.</p>
-            </div>
-
-            <div className="relative rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] uppercase tracking-wider text-white/50">Estimación retorno</div>
-                  <div className="mt-1 text-3xl font-extrabold">+12.400€<span className="ml-1 text-sm font-semibold text-emerald-400">/mes</span></div>
-                </div>
-                <Sparkles className="h-5 w-5 text-accent" />
-              </div>
-              <svg viewBox="0 0 300 140" className="mt-4 w-full">
-                <defs>
-                  <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="oklch(0.78 0.16 75)" stopOpacity="0.6" />
-                    <stop offset="100%" stopColor="oklch(0.78 0.16 75)" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path d="M0,120 C60,100 90,40 150,30 C210,20 240,100 300,120 L300,140 L0,140 Z" fill="url(#g)" />
-                <path d="M0,120 C60,100 90,40 150,30 C210,20 240,100 300,120" stroke="oklch(0.78 0.16 75)" strokeWidth="2" fill="none" />
-                <circle cx="150" cy="30" r="5" fill="oklch(0.78 0.16 75)" />
-              </svg>
-              <div className="mt-2 flex justify-between text-[10px] uppercase tracking-wider text-white/40">
-                <span>Bajo</span><span>Medio</span><span>Alto</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============== PRICING ============== */}
-      <section className="border-t border-border bg-card/40">
+      {/* ============== PRICING — COMPARATIVE SPREAD ============== */}
+      <section className="border-b border-border">
         <div className="mx-auto max-w-7xl px-4 py-24">
-          <div className="mx-auto mb-14 max-w-2xl text-center">
-            <p className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">Planes</p>
-            <h2 className="text-4xl font-bold tracking-tight md:text-5xl">Planes flexibles para cada etapa</h2>
-            <p className="mt-4 text-muted-foreground">Sin permanencia. Cancela cuando quieras.</p>
+          <div className="mb-16 max-w-2xl">
+            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Planes</p>
+            <h2 className="text-balance text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
+              Acceso a los datos.<br />Sin letra pequeña.
+            </h2>
           </div>
 
-          <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+          <div className="grid border border-border md:grid-cols-2">
             {/* Básico */}
-            <div className="rounded-3xl border border-border bg-background p-10">
-              <div className="mb-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">Básico</div>
-              <div className="text-sm text-muted-foreground">Para explorar oportunidades en tu sector.</div>
-              <div className="mt-6 text-5xl font-extrabold">Gratis</div>
-              <ul className="mt-8 space-y-3 text-sm">
-                {["Análisis sector + ciudad", "Volumen y competencia básica", "1 informe estándar al mes", "Acceso a guías gratuitas"].map((f) => (
+            <div className="border-b border-border p-10 md:border-b-0 md:border-r md:p-14">
+              <div className="flex items-baseline justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-muted-foreground">Básico</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Sin tarjeta</span>
+              </div>
+              <div className="mt-6 flex items-baseline gap-2">
+                <span className="text-6xl font-extrabold tracking-tight">Gratis</span>
+              </div>
+              <p className="mt-4 text-sm text-muted-foreground">Para explorar el potencial de un sector en una ciudad.</p>
+              <ul className="mt-10 space-y-3 border-t border-border pt-8 text-sm">
+                {["1 sector + 1 ciudad", "Volumen, competencia y CPC", "1 informe estándar / mes", "Acceso a guías SEO local"].map((f) => (
                   <li key={f} className="flex items-start gap-3">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
                     <span>{f}</span>
                   </li>
                 ))}
               </ul>
-              <Button asChild className="mt-10 w-full bg-foreground py-6 font-bold text-background hover:bg-foreground/90">
+              <Button asChild variant="outline" className="mt-10 h-auto w-full rounded-none border-foreground py-4 text-[11px] font-bold uppercase tracking-widest hover:bg-foreground hover:text-background">
                 <Link to="/oportunidades">Empezar gratis</Link>
               </Button>
             </div>
 
             {/* Pro */}
-            <div className="relative rounded-3xl border border-accent bg-primary p-10 text-primary-foreground shadow-[0_20px_60px_-20px_color-mix(in_oklab,var(--accent)_50%,transparent)] md:-mt-2 md:mb-2">
-              <span className="absolute -top-3 right-8 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-widest text-accent-foreground">
+            <div className="relative bg-primary p-10 text-primary-foreground md:p-14">
+              <span className="absolute right-0 top-0 bg-accent px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-accent-foreground">
                 Más popular
               </span>
-              <div className="mb-2 text-xs font-bold uppercase tracking-widest text-accent">Pro</div>
-              <div className="text-sm text-primary-foreground/70">Todo lo del básico + datos avanzados y alertas.</div>
-              <div className="mt-6 text-5xl font-extrabold">29€<span className="text-lg font-medium text-primary-foreground/60">/mes</span></div>
-              <ul className="mt-8 space-y-3 text-sm">
-                {["Todo lo de Básico", "Informes ilimitados sector × ciudad", "Alertas de nuevas oportunidades", "CPC, intención y dificultad detallados", "Soporte prioritario"].map((f) => (
+              <div className="flex items-baseline justify-between">
+                <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-accent">Pro</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-primary-foreground/60">Cancela cuando quieras</span>
+              </div>
+              <div className="mt-6 flex items-baseline gap-2">
+                <span className="text-6xl font-extrabold tracking-tight">29€</span>
+                <span className="text-base font-medium text-primary-foreground/60">/mes</span>
+              </div>
+              <p className="mt-4 text-sm text-primary-foreground/70">Para tomar decisiones con datos. Cada semana.</p>
+              <ul className="mt-10 space-y-3 border-t border-white/15 pt-8 text-sm">
+                {["Sectores y ciudades ilimitados", "Alertas de nuevas oportunidades", "Estimación de ROI personalizada", "Intención de búsqueda y dificultad real", "Soporte prioritario 1-a-1"].map((f) => (
                   <li key={f} className="flex items-start gap-3">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
                     <span>{f}</span>
                   </li>
                 ))}
               </ul>
-              <Button asChild className="mt-10 w-full bg-accent py-6 font-bold text-accent-foreground hover:brightness-110">
+              <Button asChild className="mt-10 h-auto w-full rounded-none bg-accent py-4 text-[11px] font-bold uppercase tracking-widest text-accent-foreground hover:brightness-110">
                 <Link to="/oportunidades">Seleccionar Pro</Link>
               </Button>
             </div>
           </div>
 
-          <div className="mt-10 text-center">
-            <Link to="/como-funciona" className="text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
-              Comparar planes en detalle
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ============== TESTIMONIOS ============== */}
-      <section className="mx-auto max-w-7xl px-4 py-24">
-        <div className="mb-14 max-w-2xl">
-          <p className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">Testimonios</p>
-          <h2 className="text-4xl font-bold tracking-tight md:text-5xl">Resultados reales en Rankin</h2>
-        </div>
-        <div className="grid gap-5 md:grid-cols-3">
-          {testimonials.map((t) => (
-            <figure key={t.name} className="flex flex-col rounded-2xl border border-border bg-card p-7 transition hover:border-accent/40 hover:shadow-md">
-              <blockquote className="flex-1 text-[15px] leading-relaxed text-foreground/90">"{t.quote}"</blockquote>
-              <figcaption className="mt-8 flex items-center gap-3 border-t border-border pt-5">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-xs font-bold text-accent-foreground">
-                  {t.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
-                </span>
-                <span>
-                  <span className="block text-sm font-bold">{t.name}</span>
-                  <span className="block text-xs text-muted-foreground">{t.role}</span>
-                </span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      {/* ============== BADGES ============== */}
-      <section className="border-t border-border bg-card/40">
-        <div className="mx-auto max-w-7xl px-4 py-16">
-          <p className="text-center text-[11px] font-bold uppercase tracking-[0.25em] text-muted-foreground">
-            Reconocidos por el sector
+          <p className="mt-6 text-center text-xs text-muted-foreground">
+            <Link to="/como-funciona" className="underline underline-offset-4 hover:text-accent">Comparar planes en detalle</Link>
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            {badges.map((b) => (
-              <div
-                key={b}
-                className="flex h-24 w-28 flex-col items-center justify-center gap-1 rounded-xl border border-border bg-background px-3 text-center text-[11px] font-semibold leading-tight"
-              >
-                <span className="text-base text-accent">★</span>
-                {b}
-              </div>
+        </div>
+      </section>
+
+      {/* ============== PULL QUOTES ============== */}
+      <section className="border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 py-24">
+          <p className="mb-12 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Resultados reales</p>
+          <div className="grid gap-0 border-t border-border md:grid-cols-3">
+            {testimonials.map((t, i) => (
+              <figure key={t.name} className={`py-10 ${i < 2 ? "md:border-r" : ""} border-border md:pr-10 ${i > 0 ? "md:pl-10" : ""}`}>
+                <span className="font-display text-5xl leading-none text-accent">"</span>
+                <blockquote className="mt-2 text-xl font-medium leading-relaxed tracking-tight">
+                  {t.quote}
+                </blockquote>
+                <figcaption className="mt-8 border-t border-border pt-4 text-[11px] font-bold uppercase tracking-widest">
+                  <div>{t.name}</div>
+                  <div className="mt-1 text-muted-foreground">{t.role}</div>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ============== BANNER FINAL ============== */}
-      <section className="mx-auto max-w-7xl px-4 py-20">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-accent px-10 py-20 text-center text-accent-foreground">
-          <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/20 blur-3xl" />
-          <div className="pointer-events-none absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
-          <div className="relative">
-            <h3 className="text-balance text-4xl font-black leading-tight tracking-tight md:text-6xl">
-              Encuentra el hueco que<br />tu negocio necesita
-            </h3>
-            <Button asChild className="mt-10 bg-primary px-8 py-6 text-base font-bold text-primary-foreground hover:bg-primary/90">
-              <Link to="/oportunidades">Ver oportunidades ahora</Link>
+      {/* ============== FINAL CTA — FULL BAND ============== */}
+      <section className="bg-primary text-primary-foreground">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-24 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-8">
+            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Pedir análisis</p>
+            <h2 className="text-balance text-4xl font-bold leading-[1.02] tracking-tight md:text-6xl">
+              Dinos qué haces y dónde.<br />Te decimos si vale la pena.
+            </h2>
+            <p className="mt-6 max-w-xl text-base text-primary-foreground/70">
+              Análisis de oportunidad gratuito. Si no vemos hueco real para tu negocio, te lo decimos sin venderte nada.
+            </p>
+          </div>
+          <div className="md:col-span-4 md:text-right">
+            <Button asChild className="h-auto rounded-none bg-accent px-8 py-5 text-[11px] font-bold uppercase tracking-widest text-accent-foreground hover:brightness-110">
+              <Link to="/oportunidades">Pedir mi análisis →</Link>
             </Button>
+            <p className="mt-4 text-[11px] uppercase tracking-widest text-primary-foreground/50">
+              Respuesta en 48h · sin compromiso
+            </p>
           </div>
         </div>
       </section>
