@@ -23,14 +23,42 @@ export const Route = createFileRoute("/")({
 });
 
 const featuredSectors = [
-  { slug: "fontaneros", name: "Fontanería", hint: "+2.4k búsquedas/mes" },
-  { slug: "dentistas", name: "Clínicas dentales", hint: "CPC 4,8€ · alta intención" },
-  { slug: "abogados", name: "Abogados", hint: "+1.2k búsquedas/mes" },
-  { slug: "restaurantes", name: "Restaurantes", hint: "Local intent extrema" },
-  { slug: "peluquerias", name: "Peluquerías", hint: "Competencia floja" },
-  { slug: "talleres", name: "Talleres mecánicos", hint: "Conversión alta" },
-  { slug: "reformas", name: "Reformas", hint: "Ticket alto, ROI claro" },
-  { slug: "electricistas", name: "Electricistas", hint: "Demanda estable" },
+  {
+    slug: "dentistas",
+    name: "Clínicas dentales",
+    why: "Ticket alto y recurrente",
+    detail: "CPC 4,8€ y un paciente vale miles. Cada posición ganada se paga sola en semanas.",
+  },
+  {
+    slug: "reformas",
+    name: "Reformas integrales",
+    why: "Presupuestos de 5 cifras",
+    detail: "Un solo cliente cubre un año de SEO. Búsquedas con intención clarísima de contratar.",
+  },
+  {
+    slug: "abogados",
+    name: "Abogados",
+    why: "Urgencia y alto valor",
+    detail: "Penal, laboral, extranjería. El usuario busca hoy y contrata hoy. Margen real en local.",
+  },
+  {
+    slug: "fontaneros",
+    name: "Fontanería y urgencias",
+    why: "Competencia floja, demanda dura",
+    detail: "+2.4k búsquedas/mes con SEO local mal hecho por casi todos. Hueco evidente.",
+  },
+  {
+    slug: "clinicas-esteticas",
+    name: "Clínicas estéticas",
+    why: "LTV y márgenes brutales",
+    detail: "Tratamientos recurrentes, ticket medio alto y mercado en expansión sostenida.",
+  },
+  {
+    slug: "talleres",
+    name: "Talleres mecánicos",
+    why: "Conversión local clarísima",
+    detail: "El 80% busca 'cerca de mí'. Quien sale primero, se lleva la cita. Sin más.",
+  },
 ];
 
 const testimonials = [
@@ -229,18 +257,18 @@ function Home() {
         </div>
       </section>
 
-      {/* ============== SECTORES — INDEX TABLE ============== */}
+      {/* ============== SECTORES SELECCIONADOS ============== */}
       <section className="border-b border-border">
         <div className="mx-auto max-w-7xl px-4 py-24">
           <div className="mb-12 grid gap-8 md:grid-cols-12 md:items-end">
             <div className="md:col-span-8">
-              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Índice de sectores</p>
+              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-accent">Sectores que trabajamos</p>
               <h2 className="text-balance text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-                Dónde hay hueco<br />ahora mismo.
+                No trabajamos<br />con cualquiera.
               </h2>
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground md:col-span-4">
-              Analizamos más de 50 nichos. Estos son los que muestran mayor diferencial entre demanda real y oferta competitiva.
+              Hemos elegido estos nichos por una razón concreta: ROI claro, competencia floja o intención de búsqueda altísima. Si estás en uno de ellos, podemos moverte.
             </p>
           </div>
 
@@ -249,20 +277,26 @@ function Home() {
               <li key={s.slug} className="border-b border-border">
                 <Link
                   to="/oportunidades"
-                  className="group grid grid-cols-12 items-center gap-4 py-6 transition hover:bg-card"
+                  className="group grid grid-cols-12 items-start gap-4 py-8 transition hover:bg-card"
                 >
-                  <span className="col-span-1 font-mono text-xs text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="col-span-5 text-xl font-bold tracking-tight transition group-hover:text-accent md:text-2xl">{s.name}</span>
-                  <span className="col-span-5 text-sm text-muted-foreground">{s.hint}</span>
-                  <ArrowUpRight className="col-span-1 ml-auto h-5 w-5 text-muted-foreground transition group-hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  <span className="col-span-2 font-mono text-xs text-muted-foreground md:col-span-1">{String(i + 1).padStart(2, "0")}</span>
+                  <div className="col-span-10 md:col-span-5">
+                    <div className="text-xl font-bold tracking-tight transition group-hover:text-accent md:text-2xl">{s.name}</div>
+                    <div className="mt-1 text-[11px] font-bold uppercase tracking-widest text-accent">{s.why}</div>
+                  </div>
+                  <p className="col-span-10 text-sm leading-relaxed text-muted-foreground md:col-span-5">{s.detail}</p>
+                  <ArrowUpRight className="col-span-2 ml-auto h-5 w-5 text-muted-foreground transition group-hover:text-accent group-hover:-translate-y-0.5 group-hover:translate-x-0.5 md:col-span-1" />
                 </Link>
               </li>
             ))}
           </ul>
 
-          <div className="mt-10 flex justify-end">
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
+            <p className="max-w-md text-xs text-muted-foreground">
+              ¿Tu sector no está? Escríbenos. Si vemos hueco real, lo añadimos. Si no, te lo decimos.
+            </p>
             <Link to="/oportunidades" className="inline-flex items-center gap-2 border-b border-foreground pb-1 text-[11px] font-bold uppercase tracking-widest hover:text-accent hover:border-accent">
-              Ver el índice completo <ArrowRight className="h-3 w-3" />
+              Ver oportunidades por ciudad <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
         </div>
